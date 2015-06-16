@@ -16,7 +16,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer session.Close()
-	coll := session.DB("testing").C("test")
+	coll := session.DB("dossier-incomes").C("parlamentari")
 	// Create a politician
 	exps := make([]incomes.SpesaElettorale, 0)
 	exp := incomes.SpesaElettorale{"biglietti da visità", "camera", 10}
