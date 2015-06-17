@@ -11,7 +11,7 @@ type VoceReddito struct {
 	Voce        string `voce-730`
 	Dichiarante int
 	Coniuge     int
-	Totale      int
+	Totale      float32
 }
 
 // BeneImmobile modella la singola voce della sezione beni immobili.
@@ -96,4 +96,10 @@ type Politician struct {
 	ModelloRedditi          string `modello-redditi`
 	QuadriPresentati        string `quadri-presentati`
 	Note                    []string
+}
+
+type PoliticianVerioned struct {
+	Politician
+	// Different versions of this document as document ids in a different collection.
+	Versions []bson.ObjectId `versions`
 }

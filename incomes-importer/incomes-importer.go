@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -33,6 +34,23 @@ var config = &oauth.Config{
 	TokenURL:     "https://accounts.google.com/o/oauth2/token",
 }
 
+// SanitizeFloat parse lines form GDocs csv
+// converting float number in a format understandable by
+// strconv.ParseFloat() and that is not problematic
+// when spitting on commas.
+// "12.000,00" --> 12000.00
+func SanitizeFloat(line string) string {
+	// "12.000,00" --> "12000,00"
+	reDot := regexp.MustCompile("([0-9]+)\\.([0-9]+)")
+	line = reDot.ReplaceAllString(line, "$1$2")
+	// "12000,00" --> "12000.00"
+	reComma := regexp.MustCompile("(\"[0-9]+),([0-9]+\")")
+	line = reComma.ReplaceAllString(line, "$1.$2")
+	// "12000,00" --> 12000.00
+	return strings.Trim(line, `"`)
+
+}
+
 // ParseTitle extract Opid Surname and year of declaration
 // out of file name.
 func ParseTitle(p *incomes.Politician, title string) error {
@@ -49,10 +67,9 @@ func ParseTitle(p *incomes.Politician, title string) error {
 
 // ParseInfo parses data from "Dichiarante" sheet.
 // Official API doesn't support multi sheet download so we
-// manually add "&gid=0"
+// manually add "&gid=11"
 func ParseInfo(p *incomes.Politician, exportUrl string) error {
 	url := exportUrl + "&gid=11"
-	stracer.Traceln("Url to download:", exportUrl, url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -64,7 +81,34 @@ func ParseInfo(p *incomes.Politician, exportUrl string) error {
 		fmt.Println(line)
 	}
 	if err := scanner.Err(); err != nil {
-		stracer.Traceln("Error scanning:", err)
+		return err
+	}
+	return nil
+}
+
+// Parse730 create diffent entries for "VociReddito".
+// Official API doesn't support multi sheet download so we
+// manually add "&gid=11"
+func Parse730(p *incomes.Politician, exportUrl string) error {
+	redditi := make([]incomes.VoceReddito, 5)
+	url := exportUrl + "&gid=0"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		line := scanner.Text()
+		line = SanitizeFloat(line)
+		fmt.Println(line)
+		i++
+		if i == 5 {
+			break
+		}
+	}
+	if err := scanner.Err(); err != nil {
 		return err
 	}
 	return nil
@@ -81,6 +125,10 @@ func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
 		return politician, err
 	}
 	err = ParseInfo(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	err = Parse730(&politician, exportUrl)
 	if err != nil {
 		return politician, err
 	}
