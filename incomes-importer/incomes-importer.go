@@ -47,7 +47,7 @@ func SanitizeFloat(line string) string {
 	reComma := regexp.MustCompile("(\"[0-9]+),([0-9]+\")")
 	line = reComma.ReplaceAllString(line, "$1.$2")
 	// "12000,00" --> 12000.00
-	return strings.Trim(line, `"`)
+	return strings.Replace(line, `"`, ``, -1)
 
 }
 
@@ -86,11 +86,11 @@ func ParseInfo(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-// Parse730 create diffent entries for "VociReddito".
+// ParseVociReddito create diffent entries for "VociReddito".
 // Official API doesn't support multi sheet download so we
 // manually add "&gid=11"
-func Parse730(p *incomes.Politician, exportUrl string) error {
-	redditi := make([]incomes.VoceReddito, 5)
+func ParseVociReddito(p *incomes.Politician, exportUrl string) error {
+	redditi := make([]incomes.VoceReddito, 0, 5)
 	url := exportUrl + "&gid=0"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -100,17 +100,43 @@ func Parse730(p *incomes.Politician, exportUrl string) error {
 	scanner := bufio.NewScanner(resp.Body)
 	i := 0
 	for scanner.Scan() {
+		// Jump first line.
+		if i == 0 {
+			i++
+			continue
+		}
 		line := scanner.Text()
 		line = SanitizeFloat(line)
-		fmt.Println(line)
+		fields := strings.Split(line, ",")
+		dichiarante, err := strconv.ParseFloat(fields[1], 32)
+		if err != nil {
+			return err
+		}
+		coniuge, err := strconv.ParseFloat(fields[2], 32)
+		if err != nil {
+			return err
+		}
+		totale, err := strconv.ParseFloat(fields[3], 32)
+		if err != nil {
+			return err
+		}
+		voceReddito := incomes.VoceReddito{
+			Voce:        fields[0],
+			Dichiarante: float32(dichiarante),
+			Coniuge:     float32(coniuge),
+			Totale:      float32(totale),
+		}
+		redditi = append(redditi, voceReddito)
+		fmt.Println(fields)
 		i++
-		if i == 5 {
+		if i == 6 {
 			break
 		}
 	}
 	if err := scanner.Err(); err != nil {
 		return err
 	}
+	p.VociReddito = redditi
 	return nil
 }
 
@@ -128,7 +154,7 @@ func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
 	if err != nil {
 		return politician, err
 	}
-	err = Parse730(&politician, exportUrl)
+	err = ParseVociReddito(&politician, exportUrl)
 	if err != nil {
 		return politician, err
 	}

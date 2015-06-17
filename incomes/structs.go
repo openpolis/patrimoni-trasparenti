@@ -9,8 +9,8 @@ import (
 // RecordReddito modella la singola voce del modello 730.
 type VoceReddito struct {
 	Voce        string `voce-730`
-	Dichiarante int
-	Coniuge     int
+	Dichiarante float32
+	Coniuge     float32
 	Totale      float32
 }
 
