@@ -78,7 +78,7 @@ type Politician struct {
 	ProvinciaNascita           string           `bson:"provincia-nascita"`
 	StatoCivile                string           `stato-civile`              // FIXME does this work for bson and json?
 	AnnoDichiarazione          int              `anno-dichiarazione`        // The year of declaration
-	OpId                       int              `bson:"op-id" json:"op-id"` // The id in http://api3.openpolis.it
+	OpId                       string           `bson:"op-id" json:"op-id"` // The id in http://api3.openpolis.it
 	VociReddito                []VoceReddito    `reddito-730`
 	BeniImmobili               []BeneImmobile   `beni-immobili`
 	BeniMobili                 []BeneMobile     `beni-mobili`

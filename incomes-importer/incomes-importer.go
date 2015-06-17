@@ -4,13 +4,18 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
+	"strconv"
+	"strings"
 
+	"bufio"
+
+	"bitbucket.org/eraclitux/openpolis/incomes"
 	"code.google.com/p/goauth2/oauth"
+	"github.com/eraclitux/stracer"
 	drive "google.golang.org/api/drive/v2"
+	"gopkg.in/mgo.v2"
 )
 
 // NOTE Use "gid" parameter to get different tabs into same spreadsheet:
@@ -28,21 +33,58 @@ var config = &oauth.Config{
 	TokenURL:     "https://accounts.google.com/o/oauth2/token",
 }
 
-func DownloadFile(file drive.File) (string, error) {
-	resp, err := http.Get(file.ExportLinks["text/csv"])
+// ParseTitle extract Opid Surname and year of declaration
+// out of file name.
+func ParseTitle(p *incomes.Politician, title string) error {
+	values := strings.Split(title, "_")
+	p.OpId = values[0]
+	p.Cognome = values[2]
+	year, err := strconv.Atoi(values[1])
 	if err != nil {
-		fmt.Printf("An error occurred: %v\n", err)
-		return "", err
+		return err
+	}
+	p.AnnoDichiarazione = year
+	return nil
+}
+
+// ParseInfo parses data from "Dichiarante" sheet.
+// Official API doesn't support multi sheet download so we
+// manually add "&gid=0"
+func ParseInfo(p *incomes.Politician, exportUrl string) error {
+	url := exportUrl + "&gid=11"
+	stracer.Traceln("Url to download:", exportUrl, url)
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Printf("An error occurred: %v\n", err)
-		return "", err
+	scanner := bufio.NewScanner(resp.Body)
+	for scanner.Scan() {
+		line := scanner.Text()
+		fmt.Println(line)
 	}
-	fmt.Println(string(body))
-	return string(body), nil
+	if err := scanner.Err(); err != nil {
+		stracer.Traceln("Error scanning:", err)
+		return err
+	}
+	return nil
+}
 
+func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
+	// XXX It seems that once read value are zeroed O.o
+	fileName := file.Title
+	exportUrl := file.ExportLinks["text/csv"]
+	stracer.Traceln("Parsing:", fileName, exportUrl)
+	politician := incomes.Politician{}
+	err := ParseTitle(&politician, fileName)
+	if err != nil {
+		return politician, err
+	}
+	err = ParseInfo(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	return politician, nil
 }
 
 func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
@@ -69,14 +111,19 @@ func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
 	return fs, nil
 }
 func main() {
-	var pKeyFlag string
+	var pKeyFlag, mongoHost string
 	flag.StringVar(&pKeyFlag, "client-secret", "", "API Client secret")
+	flag.StringVar(&mongoHost, "mongo-host", "mongo30", "MongoDB address")
 	flag.Parse()
 	if flag.NFlag() == 0 {
-		flag.Usage()
-		os.Exit(2)
+		log.Fatal("client-secret is mandatory")
 	}
 	config.ClientSecret = pKeyFlag
+	session, err := mgo.Dial(mongoHost)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer session.Close()
 
 	// Generate a URL to visit for authorization.
 	authUrl := config.AuthCodeURL("state")
@@ -90,7 +137,7 @@ func main() {
 	log.Printf("Enter verification code: ")
 	var code string
 	fmt.Scanln(&code)
-	_, err := t.Exchange(code)
+	_, err = t.Exchange(code)
 	if err != nil {
 		log.Fatalf("An error occurred exchanging the code: %v\n", err)
 	}
@@ -101,9 +148,14 @@ func main() {
 		log.Fatalf("An error occurred creating Drive client: %v\n", err)
 	}
 	files, _ := GetDeclarations(service)
-	for _, f := range files {
-		fmt.Println(f.Title, f.ExportLinks["text/csv"])
+	for _, f := range files[:10] {
+		if strings.HasPrefix(f.Title, "Note") {
+			continue
+		}
+		politician, err := DownloadAndParsePolitician(f)
+		if err != nil {
+			stracer.Traceln("Error parsing Politician{}:", err)
+		}
+		stracer.Traceln("Parsed Politician{}:", politician)
 	}
-	DownloadFile(*files[0])
-
 }
