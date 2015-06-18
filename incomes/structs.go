@@ -29,29 +29,29 @@ type BeneImmobile struct {
 type BeneMobile struct {
 	Persona              string
 	Tipologia            string
-	CavalliFiscali       string `cv_fiscali`
-	AnnoImmatricolazione int    `anno_immatricolazione`
+	CavalliFiscali       int `cv_fiscali`
+	AnnoImmatricolazione int `anno_immatricolazione`
 	Annotazioni          string
 }
 
 // Sede è una struct utilizzata da altri oggetti.
-type sede struct {
+type Sede struct {
 	CittaSede     string `citta_sede`
 	ProvinciaSede string `provincia_sede`
 }
 
 // Partecipazione modella la singola participazioe societaria.
 type Partecipazione struct {
-	sede
+	Sede          `bson:",inline"`
 	Persona       string
 	Denominazione string
-	NumeroQuote   int `numero_azioni`
+	NumeroQuote   string `numero_azioni_quote`
 	Annotazioni   string
 }
 
 // Ruolo modella il sigolo ruolo di amministrazione di società.
 type Ruolo struct {
-	sede
+	Sede           `bson:",inline"`
 	Persona        string
 	Denominazione  string
 	NaturaIncarico string

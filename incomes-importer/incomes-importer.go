@@ -96,17 +96,16 @@ func ParseInfo(p *incomes.Politician, exportUrl string) error {
 		case 3:
 			date, err := incomes.ParseDate(values[1])
 			if err != nil {
-				stracer.Traceln("Error parsing date in line:", line, "for:", p)
+				log.Println("[ERROR] parsing date in line:", line, "for:", p, "today date will be set.")
+				stracer.Tracef("invalid value \"%s\"\n", values[1])
 			}
 			p.DataNascita = date
 		case 4:
 			p.StatoCivile = values[1]
 		case 5:
-			p.ComuneNascita = values[1]
-			p.ProvinciaNascita = ""
+			p.ComuneNascita, p.ProvinciaNascita = incomes.ExtractDistrict(values[1])
 		case 6:
-			p.ComuneResidenza = values[1]
-			p.ProvinciaResidenza = ""
+			p.ComuneResidenza, p.ProvinciaResidenza = incomes.ExtractDistrict(values[1])
 		}
 		i++
 	}
@@ -138,6 +137,12 @@ func ParseVociReddito(p *incomes.Politician, exportUrl string) error {
 		line := scanner.Text()
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
+		if i == 7 {
+			p.TotaleVociRedditoDichiarante = incomes.ParseFloat(fields[1])
+			p.TotaleVociRedditoConiuge = incomes.ParseFloat(fields[2])
+			p.TotaleVociReddito = incomes.ParseFloat(fields[3])
+			break
+		}
 		dichiarante := incomes.ParseFloat(fields[1])
 		coniuge := incomes.ParseFloat(fields[2])
 		totale := incomes.ParseFloat(fields[3])
@@ -149,17 +154,148 @@ func ParseVociReddito(p *incomes.Politician, exportUrl string) error {
 		}
 		redditi = append(redditi, voceReddito)
 		i++
-		if i == 7 {
-			p.TotaleVociRedditoDichiarante = incomes.ParseFloat(fields[1])
-			p.TotaleVociRedditoConiuge = incomes.ParseFloat(fields[2])
-			p.TotaleVociReddito = incomes.ParseFloat(fields[3])
-			break
-		}
 	}
 	if err := scanner.Err(); err != nil {
 		return err
 	}
 	p.VociReddito = redditi
+	return nil
+}
+
+func ParseBeniImmobili(p *incomes.Politician, exportUrl string) error {
+	beni := make([]incomes.BeneImmobile, 0, 5)
+	url := exportUrl + "&gid=1"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		// Jump first lines.
+		if i <= 1 {
+			i++
+			continue
+		}
+		line := scanner.Text()
+		fields := strings.Split(line, ",")
+		bene := incomes.BeneImmobile{
+			Persona:     fields[0],
+			Diritto:     fields[1],
+			Descrizione: fields[2],
+			Provincia:   fields[3],
+			Comune:      fields[4],
+			Annotazioni: fields[5],
+		}
+		beni = append(beni, bene)
+		i++
+	}
+	p.BeniImmobili = beni
+	return nil
+}
+
+func ParseBeniMobili(p *incomes.Politician, exportUrl string) error {
+	beni := make([]incomes.BeneMobile, 0, 5)
+	url := exportUrl + "&gid=2"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		// Jump first lines.
+		if i <= 1 {
+			i++
+			continue
+		}
+		line := scanner.Text()
+		fields := strings.Split(line, ",")
+		cav, err := incomes.Atoi(fields[2])
+		if err != nil {
+			log.Println("[ERROR] converting to int 'CavalliFiscali' for", p, err, "will be zero.")
+		}
+		year, err := incomes.Atoi(fields[3])
+		if err != nil {
+			log.Println("[ERROR] converting to int 'AnnoImmatricolazione' for", p, err, "will be zero.")
+		}
+		bene := incomes.BeneMobile{
+			Persona:              fields[0],
+			Tipologia:            fields[1],
+			CavalliFiscali:       cav,
+			AnnoImmatricolazione: year,
+			Annotazioni:          fields[4],
+		}
+		beni = append(beni, bene)
+		i++
+	}
+	p.BeniMobili = beni
+	return nil
+}
+
+func ParsePartecipazioni(p *incomes.Politician, exportUrl string) error {
+	ruoli := make([]incomes.Partecipazione, 0, 5)
+	url := exportUrl + "&gid=3"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		// Jump first lines.
+		if i <= 1 {
+			i++
+			continue
+		}
+		line := scanner.Text()
+		fields := strings.Split(line, ",")
+		ruolo := incomes.Partecipazione{
+			Sede:          incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
+			Persona:       fields[0],
+			Denominazione: fields[1],
+			NumeroQuote:   fields[4],
+			Annotazioni:   fields[5],
+		}
+		ruoli = append(ruoli, ruolo)
+		i++
+	}
+	p.Partecipazioni = ruoli
+	return nil
+}
+
+func ParseAmmministrazioni(p *incomes.Politician, exportUrl string) error {
+	ruoli := make([]incomes.Ruolo, 0, 5)
+	url := exportUrl + "&gid=4"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		// Jump first lines.
+		if i <= 1 {
+			i++
+			continue
+		}
+		line := scanner.Text()
+		fields := strings.Split(line, ",")
+		ruolo := incomes.Ruolo{
+			Sede:           incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
+			Persona:        fields[0],
+			Denominazione:  fields[1],
+			NaturaIncarico: fields[4],
+			Annotazioni:    fields[5],
+		}
+		ruoli = append(ruoli, ruolo)
+		i++
+	}
+	p.Amministrazioni = ruoli
 	return nil
 }
 
@@ -178,6 +314,22 @@ func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
 		return politician, err
 	}
 	err = ParseVociReddito(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	err = ParseBeniImmobili(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	err = ParseBeniMobili(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	err = ParsePartecipazioni(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	err = ParseAmmministrazioni(&politician, exportUrl)
 	if err != nil {
 		return politician, err
 	}
@@ -224,6 +376,9 @@ func fileIsInvalid(title string) bool {
 	if strings.HasPrefix(title, "Note") {
 		return true
 	}
+	if strings.HasPrefix(title, "Master") {
+		return true
+	}
 	return false
 }
 
@@ -265,14 +420,14 @@ func main() {
 		log.Fatalf("An error occurred creating Drive client: %v\n", err)
 	}
 	files, _ := GetDeclarations(service)
-	for _, f := range files[:10] {
+	for _, f := range files[:20] {
 		if fileIsInvalid(f.Title) {
 			continue
 		}
 		politician, err := DownloadAndParsePolitician(f)
 		if err != nil {
-			stracer.Traceln("Error parsing Politician{}:", politician, err)
 			log.Println("Error parsing", politician)
+			stracer.Traceln("Error parsing Politician{}:", politician, err)
 		}
 		log.Println("Parsed:", politician)
 		wg.Add(1)

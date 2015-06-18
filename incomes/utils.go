@@ -2,6 +2,7 @@ package incomes
 
 import (
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/eraclitux/stracer"
@@ -27,14 +28,35 @@ func ParseDate(d string) (time.Time, error) {
 func ParseFloat(s string) float32 {
 	value, err := strconv.ParseFloat(s, 32)
 	if err != nil {
+		// Empty string is zero for us not an error.
+		if e, ok := err.(*strconv.NumError); ok && e.Num == "" {
+			return 0
+		}
 		stracer.Traceln("Error converting to float", s, err)
-		return 0.0
+		return 0
 	}
 	return float32(value)
+}
+
+// Atoi extends strconv.Atoi returning 0 in case of empty string.
+func Atoi(s string) (int, error) {
+	n, err := strconv.Atoi(s)
+	if err != nil {
+		// Empty string is zero for us not an error.
+		if e, ok := err.(*strconv.NumError); ok && e.Num == "" {
+			return 0, nil
+		} else {
+			return 0, err
+		}
+	}
+	return n, nil
 }
 
 // ExtractDistrict takes a string in the format "City (dst)"
 // and returns city and district as two strings.
 func ExtractDistrict(s string) (city, district string) {
-	return "", ""
+	a := strings.Split(s, " (")
+	city = a[0]
+	district = strings.TrimRight(a[1], ")")
+	return
 }
