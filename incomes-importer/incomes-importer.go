@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 
 	"bufio"
 
@@ -24,6 +25,8 @@ import (
 
 // Get only files into 'Dichiarazioni' dir.
 const queryString = `'0ByZ65N5BuOCtflhXT1psaDFQTkdTSjVOV2pDb3pCbTM5dFd6SkxKSGUwZl8tYWM0bExJc3c' in parents`
+
+var wg sync.WaitGroup
 
 var config = &oauth.Config{
 	ClientId:     "106955451643-c82ao8ihbtslp7h08k7ujjrktvu0grun.apps.googleusercontent.com",
@@ -74,11 +77,38 @@ func ParseInfo(p *incomes.Politician, exportUrl string) error {
 	if err != nil {
 		return err
 	}
+	i := 0
 	defer resp.Body.Close()
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
+		// Jump first line.
+		if i == 0 {
+			i++
+			continue
+		}
 		line := scanner.Text()
-		fmt.Println(line)
+		values := strings.Split(line, ",")
+		switch i {
+		case 1:
+			p.Cognome = values[1]
+		case 2:
+			p.Nome = values[1]
+		case 3:
+			date, err := incomes.ParseDate(values[1])
+			if err != nil {
+				stracer.Traceln("Error parsing date in line:", line, "for:", p)
+			}
+			p.DataNascita = date
+		case 4:
+			p.StatoCivile = values[1]
+		case 5:
+			p.ComuneNascita = values[1]
+			p.ProvinciaNascita = ""
+		case 6:
+			p.ComuneResidenza = values[1]
+			p.ProvinciaResidenza = ""
+		}
+		i++
 	}
 	if err := scanner.Err(); err != nil {
 		return err
@@ -108,28 +138,21 @@ func ParseVociReddito(p *incomes.Politician, exportUrl string) error {
 		line := scanner.Text()
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
-		dichiarante, err := strconv.ParseFloat(fields[1], 32)
-		if err != nil {
-			return err
-		}
-		coniuge, err := strconv.ParseFloat(fields[2], 32)
-		if err != nil {
-			return err
-		}
-		totale, err := strconv.ParseFloat(fields[3], 32)
-		if err != nil {
-			return err
-		}
+		dichiarante := incomes.ParseFloat(fields[1])
+		coniuge := incomes.ParseFloat(fields[2])
+		totale := incomes.ParseFloat(fields[3])
 		voceReddito := incomes.VoceReddito{
 			Voce:        fields[0],
-			Dichiarante: float32(dichiarante),
-			Coniuge:     float32(coniuge),
-			Totale:      float32(totale),
+			Dichiarante: dichiarante,
+			Coniuge:     coniuge,
+			Totale:      totale,
 		}
 		redditi = append(redditi, voceReddito)
-		fmt.Println(fields)
 		i++
-		if i == 6 {
+		if i == 7 {
+			p.TotaleVociRedditoDichiarante = incomes.ParseFloat(fields[1])
+			p.TotaleVociRedditoConiuge = incomes.ParseFloat(fields[2])
+			p.TotaleVociReddito = incomes.ParseFloat(fields[3])
 			break
 		}
 	}
@@ -173,7 +196,6 @@ func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
 		q.Q(queryString)
 		r, err := q.Do()
 		if err != nil {
-			fmt.Printf("An error occurred: %v\n", err)
 			return fs, err
 		}
 		fs = append(fs, r.Items...)
@@ -184,6 +206,27 @@ func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
 	}
 	return fs, nil
 }
+
+// SendToMongo insert a single Politician{} into db.
+func SendToMongo(mSession *mgo.Session, p incomes.Politician) {
+	session := mSession.Copy()
+	defer session.Close()
+	coll := session.DB("dossier_incomes").C("parlamentari")
+	err := coll.Insert(p)
+	if err != nil {
+		log.Println("Error inserting", p, "into MongoDB:", err)
+		return
+	}
+	log.Println(p, "sended to Mongo.")
+}
+
+func fileIsInvalid(title string) bool {
+	if strings.HasPrefix(title, "Note") {
+		return true
+	}
+	return false
+}
+
 func main() {
 	var pKeyFlag, mongoHost string
 	flag.StringVar(&pKeyFlag, "client-secret", "", "API Client secret")
@@ -223,13 +266,20 @@ func main() {
 	}
 	files, _ := GetDeclarations(service)
 	for _, f := range files[:10] {
-		if strings.HasPrefix(f.Title, "Note") {
+		if fileIsInvalid(f.Title) {
 			continue
 		}
 		politician, err := DownloadAndParsePolitician(f)
 		if err != nil {
-			stracer.Traceln("Error parsing Politician{}:", err)
+			stracer.Traceln("Error parsing Politician{}:", politician, err)
+			log.Println("Error parsing", politician)
 		}
-		stracer.Traceln("Parsed Politician{}:", politician)
+		log.Println("Parsed:", politician)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			SendToMongo(session, politician)
+		}()
 	}
+	wg.Wait()
 }
