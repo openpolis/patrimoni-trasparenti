@@ -8,7 +8,7 @@ import (
 
 // RecordReddito modella la singola voce del modello 730.
 type VoceReddito struct {
-	Voce        string `voce-730`
+	Voce        string `voce_730`
 	Dichiarante float32
 	Coniuge     float32
 	Totale      float32
@@ -17,7 +17,7 @@ type VoceReddito struct {
 // BeneImmobile modella la singola voce della sezione beni immobili.
 type BeneImmobile struct {
 	Persona     string
-	Diritto     string `natura-diritto`
+	Diritto     string `natura_diritto`
 	Descrizione string
 	Provincia   string
 	Comune      string
@@ -28,15 +28,15 @@ type BeneImmobile struct {
 type BeneMobile struct {
 	Persona              string
 	Tipologia            string
-	CavalliFiscali       string `cv-fiscali`
-	AnnoImmatricolazione int    `anno-immatricolazione`
+	CavalliFiscali       string `cv_fiscali`
+	AnnoImmatricolazione int    `anno_immatricolazione`
 	Annotazioni          string
 }
 
 // Sede è una struct utilizzata da altri oggetti.
 type sede struct {
-	CittaSede     string `citta-sede`
-	ProvinciaSede string `provincia-sede`
+	CittaSede     string `citta_sede`
+	ProvinciaSede string `provincia_sede`
 }
 
 // Partecipazione modella la singola participazioe societaria.
@@ -44,7 +44,7 @@ type Partecipazione struct {
 	sede
 	Persona       string
 	Denominazione string
-	NumeroQuote   int `numero-azioni`
+	NumeroQuote   int `numero_azioni`
 	Annotazioni   string
 }
 
@@ -73,28 +73,28 @@ type Politician struct {
 	Id                         bson.ObjectId `bson:"_id,omitempty" json:"id"`
 	Nome                       string
 	Cognome                    string
-	DataNascita                time.Time        `data-nascita`
-	ComuneNascita              string           `bson:"comune-nascita" json:"comune-nascita"`
-	ProvinciaNascita           string           `bson:"provincia-nascita"`
-	StatoCivile                string           `stato-civile`              // FIXME does this work for bson and json?
-	AnnoDichiarazione          int              `anno-dichiarazione`        // The year of declaration
-	OpId                       string           `bson:"op-id" json:"op-id"` // The id in http://api3.openpolis.it
-	VociReddito                []VoceReddito    `reddito-730`
-	BeniImmobili               []BeneImmobile   `beni-immobili`
-	BeniMobili                 []BeneMobile     `beni-mobili`
-	Partecipazioni             []Partecipazione `partecipazioni-soc`
-	Amministrazioni            []Ruolo          `amministrazioni-soc`
-	ContributiElettorali       []Contributo     `contributi-elettorali`
-	TotaleContributiElettorali int              `totale-contributi-elettorali`
-	SpeseElettorali            []Contributo     `spese-elettorali`
+	DataNascita                time.Time        `data_nascita`
+	ComuneNascita              string           `comune_nascita`
+	ProvinciaNascita           string           `provincia_nascita`
+	StatoCivile                string           `stato_civile`       // FIXME does this work for bson and json?
+	AnnoDichiarazione          int              `anno_dichiarazione` // The year of declaration
+	OpId                       string           `op_id`              // The id in http://api3.openpolis.it
+	VociReddito                []VoceReddito    `reddito_730`
+	BeniImmobili               []BeneImmobile   `beni_immobili`
+	BeniMobili                 []BeneMobile     `beni_mobili`
+	Partecipazioni             []Partecipazione `partecipazioni_soc`
+	Amministrazioni            []Ruolo          `amministrazioni_soc`
+	ContributiElettorali       []Contributo     `contributi_elettorali`
+	TotaleContributiElettorali int              `totale_contributi_elettorali`
+	SpeseElettorali            []Contributo     `spese_elettorali`
 	// FIXME Remove this and calculate it with aggregation?
-	TotaleSpeseElettorali int `totale-spese-elettorali`
-	QuotaForfettariaSpese int `quota-forfettaria-spese`
+	TotaleSpeseElettorali int `totale_spese_elettorali`
+	QuotaForfettariaSpese int `quota_forfettaria_spese`
 
-	DichiarazioneElettorale bool   `dichiarazione-elettorale`
-	DichiarazioneConiuge    bool   `dichiarazione-coniuge`
-	ModelloRedditi          string `modello-redditi`
-	QuadriPresentati        string `quadri-presentati`
+	DichiarazioneElettorale bool   `dichiarazione_elettorale`
+	DichiarazioneConiuge    bool   `dichiarazione_coniuge`
+	ModelloRedditi          string `modello_redditi`
+	QuadriPresentati        string `quadri_presentati`
 	Note                    []string
 }
 
