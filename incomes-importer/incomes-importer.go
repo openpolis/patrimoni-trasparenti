@@ -213,10 +213,6 @@ func ParseBeniMobili(p *incomes.Politician, exportUrl string) error {
 		}
 		line := scanner.Text()
 		fields := strings.Split(line, ",")
-		cav, err := incomes.Atoi(fields[2])
-		if err != nil {
-			log.Println("[ERROR] converting to int 'CavalliFiscali' for", p, err, "will be zero.")
-		}
 		year, err := incomes.Atoi(fields[3])
 		if err != nil {
 			log.Println("[ERROR] converting to int 'AnnoImmatricolazione' for", p, err, "will be zero.")
@@ -224,7 +220,7 @@ func ParseBeniMobili(p *incomes.Politician, exportUrl string) error {
 		bene := incomes.BeneMobile{
 			Persona:              fields[0],
 			Tipologia:            fields[1],
-			CavalliFiscali:       cav,
+			CavalliFiscali:       fields[2],
 			AnnoImmatricolazione: year,
 			Annotazioni:          fields[4],
 		}

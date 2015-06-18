@@ -29,8 +29,8 @@ type BeneImmobile struct {
 type BeneMobile struct {
 	Persona              string
 	Tipologia            string
-	CavalliFiscali       int `cv_fiscali`
-	AnnoImmatricolazione int `anno_immatricolazione`
+	CavalliFiscali       string `cavalli_fiscali`
+	AnnoImmatricolazione int    `anno_immatricolazione`
 	Annotazioni          string
 }
 
