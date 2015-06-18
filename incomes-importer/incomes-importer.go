@@ -51,7 +51,16 @@ func SanitizeFloat(line string) string {
 	line = reComma.ReplaceAllString(line, "$1.$2")
 	// "12000,00" --> 12000.00
 	return strings.Replace(line, `"`, ``, -1)
+}
 
+// SanitizeString removes any commas into double quotes
+// so no problem when splitting on comma.
+// "50% pari a € 50.100,00" --> "50% pari a € 50.100.00"
+func SanitizeString(line string) string {
+	// "12.000,00" --> "12000,00"
+	reComma := regexp.MustCompile("(\".+),(.+\")")
+	line = reComma.ReplaceAllString(line, "$1.$2")
+	return strings.Replace(line, `"`, ``, -1)
 }
 
 // ParseTitle extract Opid Surname and year of declaration
@@ -96,7 +105,7 @@ func ParseInfo(p *incomes.Politician, exportUrl string) error {
 		case 3:
 			date, err := incomes.ParseDate(values[1])
 			if err != nil {
-				log.Println("[ERROR] parsing date in line:", line, "for:", p, "today date will be set.")
+				log.Println("[ERROR] parsing date in line:", line, "for:", p, "today date it will be set.")
 				stracer.Tracef("invalid value \"%s\"\n", values[1])
 			}
 			p.DataNascita = date
@@ -215,7 +224,7 @@ func ParseBeniMobili(p *incomes.Politician, exportUrl string) error {
 		fields := strings.Split(line, ",")
 		year, err := incomes.Atoi(fields[3])
 		if err != nil {
-			log.Println("[ERROR] converting to int 'AnnoImmatricolazione' for", p, err, "will be zero.")
+			log.Println("[ERROR] converting to int 'AnnoImmatricolazione' for", p, err, "it will be zero.")
 		}
 		bene := incomes.BeneMobile{
 			Persona:              fields[0],
@@ -248,6 +257,7 @@ func ParsePartecipazioni(p *incomes.Politician, exportUrl string) error {
 			continue
 		}
 		line := scanner.Text()
+		line = SanitizeString(line)
 		fields := strings.Split(line, ",")
 		ruolo := incomes.Partecipazione{
 			Sede:          incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
@@ -295,6 +305,42 @@ func ParseAmmministrazioni(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
+func ParseContributiElettorali(p *incomes.Politician, exportUrl string) error {
+	voci := make([]incomes.Contributo, 0, 5)
+	url := exportUrl + "&gid=7"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		// Jump first lines.
+		if i <= 1 {
+			i++
+			continue
+		}
+		line := scanner.Text()
+		line = SanitizeFloat(line)
+		fields := strings.Split(line, ",")
+		year, err := incomes.Atoi(fields[2])
+		if err != nil {
+			log.Println("[ERROR] converting to int 'Anno' for", p, err, "it will be zero.")
+		}
+		voce := incomes.Contributo{
+			Fonte:        fields[0],
+			TipoElezione: fields[1],
+			Anno:         year,
+			Importo:      incomes.ParseFloat(fields[3]),
+		}
+		voci = append(voci, voce)
+		i++
+	}
+	p.ContributiElettorali = voci
+	return nil
+}
+
 func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
 	// XXX It seems that once read value are zeroed O.o
 	fileName := file.Title
@@ -326,6 +372,10 @@ func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
 		return politician, err
 	}
 	err = ParseAmmministrazioni(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	err = ParseContributiElettorali(&politician, exportUrl)
 	if err != nil {
 		return politician, err
 	}

@@ -54,16 +54,16 @@ type Ruolo struct {
 	Sede           `bson:",inline"`
 	Persona        string
 	Denominazione  string
-	NaturaIncarico string
+	NaturaIncarico string `natura_incarico`
 	Annotazioni    string
 }
 
 // Contributo modella il singolo contributo/spesa elettorale.
 type Contributo struct {
 	Fonte        string
-	TipoElezione string
+	TipoElezione string `tipo_elezione`
 	Anno         int
-	Importo      int
+	Importo      float32
 }
 
 // Politician models a parliamentary or senator
@@ -109,7 +109,7 @@ func (p Politician) String() string {
 }
 
 type PoliticianVersioned struct {
-	Politician
+	Politician `bson:",inline"`
 	// Different versions of this document as document ids in a different collection.
 	Versions []bson.ObjectId `versions`
 }
