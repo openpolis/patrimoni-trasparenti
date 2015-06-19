@@ -58,7 +58,7 @@ func SanitizeFloat(line string) string {
 
 // SanitizeString removes any commas into double quotes
 // so no problem when splitting on commas.
-// "50% pari a € 50.100,00" --> "50% pari a € 50.100.00"
+// "50% pari a € 50.100,00" --> 50% pari a € 50.100.00
 func SanitizeString(line string) string {
 	// "12.000,00" --> "12000,00"
 	reComma := regexp.MustCompile("(\".+),(.+\")")
@@ -141,8 +141,8 @@ func ParseVociReddito(p *incomes.Politician, exportUrl string) error {
 	scanner := bufio.NewScanner(resp.Body)
 	i := 0
 	for scanner.Scan() {
-		// Jump first line.
-		if i == 0 {
+		// Jump invalid lines.
+		if i == 0 || i == 6 {
 			i++
 			continue
 		}
@@ -191,6 +191,7 @@ func ParseBeniImmobili(p *incomes.Politician, exportUrl string) error {
 			continue
 		}
 		line := scanner.Text()
+		line = SanitizeString(line)
 		fields := strings.Split(line, ",")
 		bene := incomes.BeneImmobile{
 			Persona:     fields[0],
@@ -224,6 +225,7 @@ func ParseBeniMobili(p *incomes.Politician, exportUrl string) error {
 			continue
 		}
 		line := scanner.Text()
+		line = SanitizeString(line)
 		fields := strings.Split(line, ",")
 		year, err := incomes.Atoi(fields[3])
 		if err != nil {
@@ -360,20 +362,20 @@ func ParseSpeseElettorali(p *incomes.Politician, exportUrl string) error {
 	scanner := bufio.NewScanner(resp.Body)
 	i := 0
 	for scanner.Scan() {
-		// Jump first lines.
-		if i <= 1 || i == 7 || i == 11 {
+		// Jump invalid lines.
+		if i <= 1 || i == 9 || i == 10 || i == 11 || i == 13 {
 			i++
 			continue
 		}
 		line := scanner.Text()
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
-		if i == 10 {
+		if i == 12 {
 			i++
 			p.QuotaForfettariaSpese = incomes.ParseFloat(fields[3])
 			continue
 		}
-		if i == 12 {
+		if i == 14 {
 			i++
 			p.TotaleSpeseElettorali = incomes.ParseFloat(fields[3])
 			continue
@@ -391,7 +393,7 @@ func ParseSpeseElettorali(p *incomes.Politician, exportUrl string) error {
 		voci = append(voci, voce)
 		i++
 	}
-	p.ContributiElettorali = voci
+	p.SpeseElettorali = voci
 	return nil
 }
 
@@ -524,7 +526,7 @@ func main() {
 		log.Fatalf("An error occurred creating Drive client: %v\n", err)
 	}
 	files, _ := GetDeclarations(service)
-	for _, f := range files[:30] {
+	for _, f := range files[:20] {
 		if fileIsInvalid(f.Title) {
 			continue
 		}
