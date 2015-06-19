@@ -1,4 +1,7 @@
 // Import data from Google docs to MongoDB.
+// Usage example:
+//	incomes-importer -client-secret XXXX
+// where client-secret is taken following https://developers.google.com/drive/web/auth/web-client
 package main
 
 import (
@@ -317,13 +320,64 @@ func ParseContributiElettorali(p *incomes.Politician, exportUrl string) error {
 	i := 0
 	for scanner.Scan() {
 		// Jump first lines.
-		if i <= 1 {
+		if i <= 1 || i == 7 {
 			i++
 			continue
 		}
 		line := scanner.Text()
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
+		if i == 8 {
+			i++
+			p.TotaleContributiElettorali = incomes.ParseFloat(fields[3])
+			continue
+		}
+		year, err := incomes.Atoi(fields[2])
+		if err != nil {
+			log.Println("[ERROR] converting to int 'Anno' for", p, err, "it will be zero.")
+		}
+		voce := incomes.Contributo{
+			Fonte:        fields[0],
+			TipoElezione: fields[1],
+			Anno:         year,
+			Importo:      incomes.ParseFloat(fields[3]),
+		}
+		voci = append(voci, voce)
+		i++
+	}
+	p.ContributiElettorali = voci
+	return nil
+}
+
+func ParseSpeseElettorali(p *incomes.Politician, exportUrl string) error {
+	voci := make([]incomes.Contributo, 0, 5)
+	url := exportUrl + "&gid=8"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		// Jump first lines.
+		if i <= 1 || i == 7 || i == 11 {
+			i++
+			continue
+		}
+		line := scanner.Text()
+		line = SanitizeFloat(line)
+		fields := strings.Split(line, ",")
+		if i == 10 {
+			i++
+			p.QuotaForfettariaSpese = incomes.ParseFloat(fields[3])
+			continue
+		}
+		if i == 12 {
+			i++
+			p.TotaleSpeseElettorali = incomes.ParseFloat(fields[3])
+			continue
+		}
 		year, err := incomes.Atoi(fields[2])
 		if err != nil {
 			log.Println("[ERROR] converting to int 'Anno' for", p, err, "it will be zero.")
@@ -376,6 +430,10 @@ func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
 		return politician, err
 	}
 	err = ParseContributiElettorali(&politician, exportUrl)
+	if err != nil {
+		return politician, err
+	}
+	err = ParseSpeseElettorali(&politician, exportUrl)
 	if err != nil {
 		return politician, err
 	}
@@ -466,7 +524,7 @@ func main() {
 		log.Fatalf("An error occurred creating Drive client: %v\n", err)
 	}
 	files, _ := GetDeclarations(service)
-	for _, f := range files[:20] {
+	for _, f := range files[:30] {
 		if fileIsInvalid(f.Title) {
 			continue
 		}

@@ -91,11 +91,10 @@ type Politician struct {
 	Partecipazioni               []Partecipazione `partecipazioni_soc`
 	Amministrazioni              []Ruolo          `amministrazioni_soc`
 	ContributiElettorali         []Contributo     `contributi_elettorali`
-	TotaleContributiElettorali   int              `totale_contributi_elettorali`
+	TotaleContributiElettorali   float32          `totale_contributi_elettorali`
 	SpeseElettorali              []Contributo     `spese_elettorali`
-	// FIXME Remove this and calculate it with aggregation?
-	TotaleSpeseElettorali int `totale_spese_elettorali`
-	QuotaForfettariaSpese int `quota_forfettaria_spese`
+	TotaleSpeseElettorali        float32          `totale_spese_elettorali` // FIXME Remove this and calculate it with aggregation?
+	QuotaForfettariaSpese        float32          `quota_forfettaria_spese`
 
 	DichiarazioneElettorale bool   `dichiarazione_elettorale`
 	DichiarazioneConiuge    bool   `dichiarazione_coniuge`
