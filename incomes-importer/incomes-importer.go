@@ -54,7 +54,7 @@ func SanitizeFloat(line string) string {
 }
 
 // SanitizeString removes any commas into double quotes
-// so no problem when splitting on comma.
+// so no problem when splitting on commas.
 // "50% pari a € 50.100,00" --> "50% pari a € 50.100.00"
 func SanitizeString(line string) string {
 	// "12.000,00" --> "12000,00"
