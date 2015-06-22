@@ -5,6 +5,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -397,11 +398,16 @@ func ParseSpeseElettorali(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func DownloadAndParsePolitician(file *drive.File) (incomes.Politician, error) {
+func DownloadAndParsePolitician(file *drive.File) (poli incomes.Politician, er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("Fatal error", r)
+			er = errors.New("Error parsing")
+		}
+	}()
 	// XXX It seems that once read value are zeroed O.o
 	fileName := file.Title
 	exportUrl := file.ExportLinks["text/csv"]
-	stracer.Traceln("Parsing:", fileName, exportUrl)
 	politician := incomes.Politician{}
 	err := ParseTitle(&politician, fileName)
 	if err != nil {
@@ -447,8 +453,10 @@ func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
 	pageToken := ""
 	for {
 		q := d.Files.List()
+		q.Corpus("DOMAIN")
 		// If we have a pageToken set, apply it to the query
 		if pageToken != "" {
+			stracer.Traceln("pageToken:", pageToken)
 			q = q.PageToken(pageToken)
 		}
 		q.Q(queryString)
@@ -462,6 +470,7 @@ func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
 			break
 		}
 	}
+	stracer.Traceln("Number of files to retrieve:", len(fs))
 	return fs, nil
 }
 
@@ -489,6 +498,7 @@ func fileIsInvalid(title string) bool {
 }
 
 func main() {
+	stracer.Traceln("Tracing enabled...")
 	var pKeyFlag, mongoHost string
 	flag.StringVar(&pKeyFlag, "client-secret", "", "API Client secret")
 	flag.StringVar(&mongoHost, "mongo-host", "mongo30", "MongoDB address")
@@ -526,14 +536,16 @@ func main() {
 		log.Fatalf("An error occurred creating Drive client: %v\n", err)
 	}
 	files, _ := GetDeclarations(service)
-	for _, f := range files[:20] {
+	for _, f := range files {
+		log.Println("Parsing:", f.Title)
 		if fileIsInvalid(f.Title) {
 			continue
 		}
 		politician, err := DownloadAndParsePolitician(f)
 		if err != nil {
-			log.Println("Error parsing", politician)
+			log.Println("[ERROR] parsing", politician)
 			stracer.Traceln("Error parsing Politician{}:", politician, err)
+			continue
 		}
 		log.Println("Parsed:", politician)
 		wg.Add(1)
