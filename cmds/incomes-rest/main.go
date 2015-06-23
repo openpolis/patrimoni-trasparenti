@@ -1,4 +1,4 @@
-// Expose dossier 2015 data via rest API.
+// incomes-rest system daemon that exposes private and public REST APIs for incomes service.
 package main
 
 import (
