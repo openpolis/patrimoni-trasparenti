@@ -1,8 +1,8 @@
-=========
-Openpolis
-=========
+================================
+Openpolis dossier patrimoni 2015
+================================
 
-Private repo for Openpolis projects.
+Private repo for Openpolis dossier patrimoni 2015
 
 Note
 ----

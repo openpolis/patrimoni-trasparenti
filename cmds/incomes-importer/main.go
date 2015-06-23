@@ -17,7 +17,7 @@ import (
 
 	"bufio"
 
-	"bitbucket.org/eraclitux/openpolis/incomes"
+	incomes "bitbucket.org/eraclitux/op-incomes"
 	"code.google.com/p/goauth2/oauth"
 	"github.com/eraclitux/stracer"
 	drive "google.golang.org/api/drive/v2"

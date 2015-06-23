@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"bitbucket.org/eraclitux/openpolis/incomes"
+	incomes "bitbucket.org/eraclitux/op-incomes"
 
 	"github.com/eraclitux/httph"
 	"github.com/eraclitux/stracer"
