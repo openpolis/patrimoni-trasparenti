@@ -31,6 +31,11 @@ func GetSortKey(r *http.Request) string {
 	sort := "$natural"
 	if elem, ok := r.Form["_sort"]; ok {
 		sort = elem[0]
+		if elem, ok := r.Form["_sortDir"]; ok {
+			if elem[0] == "DESC" {
+				sort = "-" + sort
+			}
+		}
 	}
 	return sort
 }
@@ -81,6 +86,7 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	var searchKey interface{}
 	// Is it a full text search?
 	if textSearch != "" {
+		//searchKey = bson.M{"$text": bson.M{"$search": textSearch, "$language": "it"}}
 		searchKey = bson.M{"$text": bson.M{"$search": textSearch}}
 		stracer.Traceln("text search key", searchKey)
 	}
@@ -96,7 +102,12 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("[ERROR] retrieving parlamentari", err)
 		return
 	}
-	json.NewEncoder(w).Encode(results)
+	err = json.NewEncoder(w).Encode(results)
+	if err != nil {
+		// FIXME return error
+		log.Println("[ERROR] retrieving parlamentari", err)
+		return
+	}
 	return
 }
 
@@ -115,11 +126,17 @@ func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(result)
-	json.NewEncoder(w).Encode(result)
+	err = json.NewEncoder(w).Encode(result)
+	if err != nil {
+		// FIXME return error
+		log.Println("[ERROR] retrieving", vars["id"], "from MongoDB")
+		return
+	}
 	return
 }
 
 func main() {
+	stracer.Traceln("Tracing enabled...")
 	var mongoHost, httpPort string
 	flag.StringVar(&mongoHost, "mongo-host", "localhost", "MongoDB address")
 	flag.StringVar(&httpPort, "http-port", "8080", "http port to listen on")

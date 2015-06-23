@@ -45,7 +45,7 @@ type Partecipazione struct {
 	Sede          `bson:",inline"`
 	Persona       string
 	Denominazione string
-	NumeroQuote   string `numero_azioni_quote`
+	NumeroQuote   string `bson:"numero_azioni_quote" json:"numero_azioni_quote"`
 	Annotazioni   string
 }
 
@@ -54,14 +54,14 @@ type Ruolo struct {
 	Sede           `bson:",inline"`
 	Persona        string
 	Denominazione  string
-	NaturaIncarico string `natura_incarico`
+	NaturaIncarico string `bson:"natura_incarico" json:"natura_incarico"`
 	Annotazioni    string
 }
 
 // Contributo modella il singolo contributo/spesa elettorale.
 type Contributo struct {
 	Fonte        string
-	TipoElezione string `tipo_elezione`
+	TipoElezione string `bson:"tipo_elezione" json:"tipo_elezione"`
 	Anno         int
 	Importo      float32
 }
@@ -110,5 +110,5 @@ func (p Politician) String() string {
 type PoliticianVersioned struct {
 	Politician `bson:",inline"`
 	// Different versions of this document as document ids in a different collection.
-	Versions []bson.ObjectId `versions`
+	Versions []bson.ObjectId `bson:"versions" json:"versions"`
 }
