@@ -1,4 +1,16 @@
 // incomes-rest system daemon that exposes private and public REST APIs for incomes service.
+//
+// Example usage
+//
+// Attach output to stdout:
+//	incomes-rest -mongo-host mongohost.tld
+//
+// Private APIs
+//
+// Endpoints not intended for public use.
+//
+// 	/p/parlamentari
+//
 package main
 
 import (
@@ -55,6 +67,8 @@ func GetSkip(r *http.Request) int {
 	return skip
 }
 
+// GetFullTextSearchKey extracts full text serach key from
+// url parameters.
 func GetFullTextSearchKey(r *http.Request) string {
 	q := ""
 	if elem, ok := r.Form["q"]; ok {
@@ -63,8 +77,8 @@ func GetFullTextSearchKey(r *http.Request) string {
 	return q
 }
 
-// Risponde all'indirizzo:
-//	/p/parlamentari
+// ParlamentariHandler hanldes request for 'parlamentari' private
+// endpoint.
 func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -156,6 +170,6 @@ func main() {
 	privateRouter.HandleFunc("/parlamentari", httph.WithCORS(httph.WithSharedData(httph.WithMongo(mongoSession, ParlamentariHandler))))
 	privateRouter.HandleFunc("/parlamentari/{id}", httph.WithCORS(httph.WithSharedData(httph.WithMongo(mongoSession, ParlamentareHandler))))
 	http.Handle("/", router)
-	log.Println("Serving on:", httpPort)
+	log.Println("Listening on:", httpPort)
 	log.Fatal(http.ListenAndServe(":"+httpPort, nil))
 }

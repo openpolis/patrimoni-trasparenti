@@ -66,8 +66,7 @@ type Contributo struct {
 	Importo      float32
 }
 
-// Politician models a parliamentary or senator
-// public incomes declaration for a given year.
+// Politician models public incomes declaration for a politician (a parliamentary or senator) for a given year.
 type Politician struct {
 	// omitempty to not complain during insert with empty Id,
 	// MongoDB will create it anyway.
@@ -79,7 +78,7 @@ type Politician struct {
 	ProvinciaNascita             string           `bson:"provincia_nascita" json:"provincia_nascita"`
 	ComuneResidenza              string           `bson:"comune_residenza" json:"comune_residenza"`
 	ProvinciaResidenza           string           `bson:"provincia_residenza" json:"provincia_residenza"`
-	StatoCivile                  string           `bson:"stato_civile" json:"stato_civile"`             // FIXME does this work for bson and json?
+	StatoCivile                  string           `bson:"stato_civile" json:"stato_civile"`
 	AnnoDichiarazione            int              `bson:"anno_dichiarazione" json:"anno_dichiarazione"` // The year of declaration
 	OpId                         string           `bson:"op_id" json:"op_id"`                           // The id in http://api3.openpolis.it
 	VociReddito                  []VoceReddito    `bson:"reddito_730" json:"reddito_730"`

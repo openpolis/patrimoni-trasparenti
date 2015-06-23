@@ -2,6 +2,9 @@
 // Usage example:
 //	incomes-importer -client-secret XXXX
 // where client-secret is taken following https://developers.google.com/drive/web/auth/web-client
+//
+// NOTE Use "gid" parameter to get different tabs into same spreadsheet:
+// 	wget -O test.csv https://docs.google.com/spreadsheets/d/1FEZwQG92U89IMydBhP6aFzCadNk2GgGW_OIcD2PWIx4/export?format=csv&gid=11
 package main
 
 import (
@@ -23,9 +26,6 @@ import (
 	drive "google.golang.org/api/drive/v2"
 	"gopkg.in/mgo.v2"
 )
-
-// NOTE Use "gid" parameter to get different tabs into same spreadsheet:
-// wget -O test.csv https://docs.google.com/spreadsheets/d/1FEZwQG92U89IMydBhP6aFzCadNk2GgGW_OIcD2PWIx4/export?format=csv&gid=11
 
 // Get only files into 'Dichiarazioni' dir.
 const queryString = `'0ByZ65N5BuOCtflhXT1psaDFQTkdTSjVOV2pDb3pCbTM5dFd6SkxKSGUwZl8tYWM0bExJc3c' in parents`
