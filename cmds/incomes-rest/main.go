@@ -16,9 +16,10 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	incomes "bitbucket.org/eraclitux/op-incomes"
@@ -30,10 +31,16 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// ErrorLogger is used to log error messages.
+var ErrorLogger *log.Logger
+
+// InfoLogger is used to log general info events like access log.
+var InfoLogger *log.Logger
+
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		log.Println("[ERROR] parsing query", err)
+		ErrorLogger.Println("parsing query", err)
 	}
 	log.Println(r.Form)
 	log.Println(r)
@@ -83,13 +90,13 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		// FIXME return an error
-		log.Println("Error parsing parameters")
+		ErrorLogger.Println("decoding parameters in url", err)
 		return
 	}
 	stracer.Traceln("Parsed form from request:", r.Form)
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
-		log.Println("[ERROR] cannot find a Mongo session")
+		ErrorLogger.Println("cannot find a db session")
 		// FIXME Return error
 		return
 	}
@@ -109,52 +116,65 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	query = query.Skip(GetSkip(r)).Limit(GetLimit(r))
 	// Used by ng-admin to paginate.
 	w.Header().Set("X-Total-Count", strconv.Itoa(number))
+	// Add becouse some decorator could set this
 	w.Header().Add("Access-Control-Expose-Headers", "X-Total-Count")
 	err = query.All(&results)
 	if err != nil {
 		// FIXME return error
-		log.Println("[ERROR] retrieving parlamentari", err)
+		ErrorLogger.Println("retrieving parliamentarians from db", err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
 		// FIXME return error
-		log.Println("[ERROR] retrieving parlamentari", err)
+		ErrorLogger.Println("encoding parliamentarians in json", err)
 		return
 	}
 	return
 }
 
 func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
-	sessionInterface, _ := httph.SharedData.Get(r, httph.MongoSession)
+	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
+	if !ok {
+		ErrorLogger.Println("cannot find a db session")
+		// FIXME Return error
+		return
+	}
 	vars := mux.Vars(r)
-	stracer.Traceln("Parlamentare id:", vars["id"])
 	session := sessionInterface.(*mgo.Session)
+	// FIXME parametrize this
 	coll := session.DB("dossier_incomes").C("parlamentari")
 	result := incomes.Politician{}
 	objId := bson.ObjectIdHex(vars["id"])
 	err := coll.FindId(objId).One(&result)
 	if err != nil {
 		// FIXME return error
-		log.Println("[ERROR] retrieving", vars["id"], "from MongoDB")
+		ErrorLogger.Println("retrieving parliamentarian from db", err)
 		return
 	}
-	fmt.Println(result)
 	err = json.NewEncoder(w).Encode(result)
 	if err != nil {
 		// FIXME return error
-		log.Println("[ERROR] retrieving", vars["id"], "from MongoDB")
+		ErrorLogger.Println("encoding parliamentarian in json", err)
 		return
 	}
 	return
 }
 
+func SetupLoggers(o io.Writer) {
+	ErrorLogger = log.New(o, "[ERROR] ", log.Ldate+log.Ltime)
+	InfoLogger = log.New(o, "[INFO] ", log.Ldate+log.Ltime)
+}
+
 func main() {
-	stracer.Traceln("Tracing enabled...")
 	var mongoHost, httpPort string
 	flag.StringVar(&mongoHost, "mongo-host", "localhost", "MongoDB address")
 	flag.StringVar(&httpPort, "http-port", "8080", "http port to listen on")
 	flag.Parse()
+
+	SetupLoggers(os.Stderr)
+
 	mongoSession, err := mgo.Dial(mongoHost)
 	if err != nil {
 		log.Fatal(err)
@@ -167,8 +187,16 @@ func main() {
 	//  Pivate APIs
 	privateRouter := router.PathPrefix("/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
-	privateRouter.HandleFunc("/parlamentari", httph.WithCORS(httph.WithSharedData(httph.WithMongo(mongoSession, ParlamentariHandler))))
-	privateRouter.HandleFunc("/parlamentari/{id}", httph.WithCORS(httph.WithSharedData(httph.WithMongo(mongoSession, ParlamentareHandler))))
+	privateRouter.HandleFunc("/parlamentari",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, ParlamentariHandler)))))
+	privateRouter.HandleFunc("/parlamentari/{id}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, ParlamentareHandler)))))
 	http.Handle("/", router)
 	log.Println("Listening on:", httpPort)
 	log.Fatal(http.ListenAndServe(":"+httpPort, nil))
