@@ -7,6 +7,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+const (
+	DeclarationsDb             = "declarations"
+	ParliamentariansCollection = "parliamentarians"
+)
+
 // RecordReddito modella la singola voce del modello 730.
 type VoceReddito struct {
 	Voce        string `bson:"voce_730" json:"voce_730"`
@@ -66,8 +71,8 @@ type Contributo struct {
 	Importo      float32
 }
 
-// Politician models public incomes declaration for a politician (a parliamentary or senator) for a given year.
-type Politician struct {
+// Declaration models public incomes declaration for a politician (a parliamentary or senator) for a given year.
+type Declaration struct {
 	// omitempty to not complain during insert with empty Id,
 	// MongoDB will create it anyway.
 	Id                           bson.ObjectId    `bson:"_id,omitempty" json:"id"`
@@ -102,12 +107,12 @@ type Politician struct {
 	Note                    []string
 }
 
-func (p Politician) String() string {
-	return fmt.Sprintf("Politician(%s): %s %s", p.OpId, p.Nome, p.Cognome)
+func (p Declaration) String() string {
+	return fmt.Sprintf("Declaration(%d): %s %s %s", p.AnnoDichiarazione, p.OpId, p.Nome, p.Cognome)
 }
 
-type PoliticianVersioned struct {
-	Politician `bson:",inline"`
+type DeclarationVersioned struct {
+	Declaration `bson:",inline"`
 	// Different versions of this document as document ids in a different collection.
 	Versions []bson.ObjectId `bson:"versions" json:"versions"`
 }

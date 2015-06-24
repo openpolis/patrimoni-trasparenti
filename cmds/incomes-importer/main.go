@@ -69,7 +69,7 @@ func SanitizeString(line string) string {
 
 // ParseTitle extract Opid Surname and year of declaration
 // out of file name.
-func ParseTitle(p *incomes.Politician, title string) error {
+func ParseTitle(p *incomes.Declaration, title string) error {
 	values := strings.Split(title, "_")
 	p.OpId = values[0]
 	p.Cognome = values[2]
@@ -84,7 +84,7 @@ func ParseTitle(p *incomes.Politician, title string) error {
 // ParseInfo parses data from "Dichiarante" sheet.
 // Official API doesn't support multi sheet download so we
 // manually add "&gid=11"
-func ParseInfo(p *incomes.Politician, exportUrl string) error {
+func ParseInfo(p *incomes.Declaration, exportUrl string) error {
 	url := exportUrl + "&gid=11"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -131,7 +131,7 @@ func ParseInfo(p *incomes.Politician, exportUrl string) error {
 // ParseVociReddito create diffent entries for "VociReddito".
 // Official API doesn't support multi sheet download so we
 // manually add "&gid=11"
-func ParseVociReddito(p *incomes.Politician, exportUrl string) error {
+func ParseVociReddito(p *incomes.Declaration, exportUrl string) error {
 	redditi := make([]incomes.VoceReddito, 0, 5)
 	url := exportUrl + "&gid=0"
 	resp, err := http.Get(url)
@@ -175,7 +175,7 @@ func ParseVociReddito(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func ParseBeniImmobili(p *incomes.Politician, exportUrl string) error {
+func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) error {
 	beni := make([]incomes.BeneImmobile, 0, 5)
 	url := exportUrl + "&gid=1"
 	resp, err := http.Get(url)
@@ -209,7 +209,7 @@ func ParseBeniImmobili(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func ParseBeniMobili(p *incomes.Politician, exportUrl string) error {
+func ParseBeniMobili(p *incomes.Declaration, exportUrl string) error {
 	beni := make([]incomes.BeneMobile, 0, 5)
 	url := exportUrl + "&gid=2"
 	resp, err := http.Get(url)
@@ -246,7 +246,7 @@ func ParseBeniMobili(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func ParsePartecipazioni(p *incomes.Politician, exportUrl string) error {
+func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) error {
 	ruoli := make([]incomes.Partecipazione, 0, 5)
 	url := exportUrl + "&gid=3"
 	resp, err := http.Get(url)
@@ -279,7 +279,7 @@ func ParsePartecipazioni(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func ParseAmmministrazioni(p *incomes.Politician, exportUrl string) error {
+func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) error {
 	ruoli := make([]incomes.Ruolo, 0, 5)
 	url := exportUrl + "&gid=4"
 	resp, err := http.Get(url)
@@ -311,7 +311,7 @@ func ParseAmmministrazioni(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func ParseContributiElettorali(p *incomes.Politician, exportUrl string) error {
+func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) error {
 	voci := make([]incomes.Contributo, 0, 5)
 	url := exportUrl + "&gid=7"
 	resp, err := http.Get(url)
@@ -352,7 +352,7 @@ func ParseContributiElettorali(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func ParseSpeseElettorali(p *incomes.Politician, exportUrl string) error {
+func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) error {
 	voci := make([]incomes.Contributo, 0, 5)
 	url := exportUrl + "&gid=8"
 	resp, err := http.Get(url)
@@ -398,7 +398,7 @@ func ParseSpeseElettorali(p *incomes.Politician, exportUrl string) error {
 	return nil
 }
 
-func DownloadAndParsePolitician(file *drive.File) (poli incomes.Politician, er error) {
+func DownloadAndParseDeclaration(file *drive.File) (poli incomes.Declaration, er error) {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Println("Fatal error", r)
@@ -408,7 +408,7 @@ func DownloadAndParsePolitician(file *drive.File) (poli incomes.Politician, er e
 	// XXX It seems that once read value are zeroed O.o
 	fileName := file.Title
 	exportUrl := file.ExportLinks["text/csv"]
-	politician := incomes.Politician{}
+	politician := incomes.Declaration{}
 	err := ParseTitle(&politician, fileName)
 	if err != nil {
 		return politician, err
@@ -474,11 +474,11 @@ func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
 	return fs, nil
 }
 
-// SendToMongo insert a single Politician{} into db.
-func SendToMongo(mSession *mgo.Session, p incomes.Politician) {
+// SendToMongo insert a single Declaration{} into db.
+func SendToMongo(mSession *mgo.Session, p incomes.Declaration) {
 	session := mSession.Copy()
 	defer session.Close()
-	coll := session.DB("dossier_incomes").C("parlamentari")
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
 	err := coll.Insert(p)
 	if err != nil {
 		log.Println("Error inserting", p, "into MongoDB:", err)
@@ -541,10 +541,10 @@ func main() {
 		if fileIsInvalid(f.Title) {
 			continue
 		}
-		politician, err := DownloadAndParsePolitician(f)
+		politician, err := DownloadAndParseDeclaration(f)
 		if err != nil {
 			log.Println("[ERROR] parsing", politician)
-			stracer.Traceln("Error parsing Politician{}:", politician, err)
+			stracer.Traceln("Error parsing Declaration{}:", politician, err)
 			continue
 		}
 		log.Println("Parsed:", politician)

@@ -89,20 +89,20 @@ func GetFullTextSearchKey(r *http.Request) string {
 func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		// FIXME return an error
 		ErrorLogger.Println("decoding parameters in url", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 	stracer.Traceln("Parsed form from request:", r.Form)
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
 		ErrorLogger.Println("cannot find a db session")
-		// FIXME Return error
+		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
 		return
 	}
 	session := sessionInterface.(*mgo.Session)
-	coll := session.DB("dossier_incomes").C("parlamentari")
-	results := []incomes.Politician{}
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	results := []incomes.Declaration{}
 	textSearch := GetFullTextSearchKey(r)
 	var searchKey interface{}
 	// Is it a full text search?
@@ -120,15 +120,15 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Access-Control-Expose-Headers", "X-Total-Count")
 	err = query.All(&results)
 	if err != nil {
-		// FIXME return error
 		ErrorLogger.Println("retrieving parliamentarians from db", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
-		// FIXME return error
 		ErrorLogger.Println("encoding parliamentarians in json", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	return
@@ -143,19 +143,18 @@ func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	vars := mux.Vars(r)
 	session := sessionInterface.(*mgo.Session)
-	// FIXME parametrize this
-	coll := session.DB("dossier_incomes").C("parlamentari")
-	result := incomes.Politician{}
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	result := incomes.Declaration{}
 	objId := bson.ObjectIdHex(vars["id"])
 	err := coll.FindId(objId).One(&result)
 	if err != nil {
-		// FIXME return error
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("retrieving parliamentarian from db", err)
 		return
 	}
 	err = json.NewEncoder(w).Encode(result)
 	if err != nil {
-		// FIXME return error
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("encoding parliamentarian in json", err)
 		return
 	}
@@ -163,8 +162,8 @@ func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetupLoggers(o io.Writer) {
-	ErrorLogger = log.New(o, "[ERROR] ", log.Ldate+log.Ltime)
-	InfoLogger = log.New(o, "[INFO] ", log.Ldate+log.Ltime)
+	ErrorLogger = log.New(o, "[ERROR] ", log.Ldate|log.Ltime)
+	InfoLogger = log.New(o, "[INFO] ", log.Ldate|log.Ltime)
 }
 
 func main() {
@@ -177,7 +176,7 @@ func main() {
 
 	mongoSession, err := mgo.Dial(mongoHost)
 	if err != nil {
-		log.Fatal(err)
+		ErrorLogger.Fatal(err)
 	}
 	defer mongoSession.Close()
 
