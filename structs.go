@@ -104,7 +104,7 @@ type Declaration struct {
 	DichiarazioneConiuge    bool   `bson:"dichiarazione_coniuge" json:"dichiarazione_coniuge"`
 	ModelloRedditi          string `bson:"modello_redditi" json:"modello_redditi"`
 	QuadriPresentati        string `bson:"quadri_presentati" json:"quadri_presentati"`
-	Note                    string
+	Note                    string `bson:"note" json:"note"`
 }
 
 func (p Declaration) String() string {

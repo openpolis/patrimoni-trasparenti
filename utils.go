@@ -9,6 +9,20 @@ import (
 )
 
 // ParseDate converts a string date in the format
+// dd-MM-yyyy in a time.Time.
+func ParseDateFromBackend(d string) (time.Time, error) {
+	// How reference date "Mon Jan 2 15:04:05 MST 2006 (MST is GMT-0700)" will be
+	// formatted our way?
+	// http://stackoverflow.com/a/6590606
+	format := "02-01-2006"
+	date, err := time.Parse(format, d)
+	if err != nil {
+		return time.Now(), err
+	}
+	return date, nil
+}
+
+// ParseDate converts a string date in the format
 // dd/mm/yyyy in a time.Time.
 func ParseDate(d string) (time.Time, error) {
 	// How reference date "Mon Jan 2 15:04:05 MST 2006 (MST is GMT-0700)" will be
