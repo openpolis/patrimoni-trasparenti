@@ -15,6 +15,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"io"
 	"log"
@@ -31,6 +32,9 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// InvalidIDError is returned if declaration id is invalid.
+var ErrInvalidID = errors.New("invalid declaration id")
+
 // ErrorLogger is used to log error messages.
 var ErrorLogger *log.Logger
 
@@ -44,6 +48,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(r.Form)
 	log.Println(r)
+}
+
+func GetObjectIdHex(s string) (bson.ObjectId, error) {
+	if !bson.IsObjectIdHex(s) {
+		return "", ErrInvalidID
+	}
+	return bson.ObjectIdHex(s), nil
 }
 
 func GetSortKey(r *http.Request) string {
@@ -83,10 +94,7 @@ func GetFullTextSearchKey(r *http.Request) string {
 	}
 	return q
 }
-
-// ParlamentariHandler hanldes request for 'parlamentari' private
-// endpoint.
-func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
+func ParlamentariHandlerGet(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		ErrorLogger.Println("decoding parameters in url", err)
@@ -107,6 +115,7 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	var searchKey interface{}
 	// Is it a full text search?
 	if textSearch != "" {
+		// NOTE defining language seems to degradate results quality.
 		//searchKey = bson.M{"$text": bson.M{"$search": textSearch, "$language": "it"}}
 		searchKey = bson.M{"$text": bson.M{"$search": textSearch}}
 		stracer.Traceln("text search key", searchKey)
@@ -127,31 +136,49 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
-		ErrorLogger.Println("encoding parliamentarians in json", err)
+		ErrorLogger.Println("encoding declaration in json", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	return
 }
 
-func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
+// ParlamentariHandler hanldes request for 'parlamentari' private
+// endpoint.
+func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		ParlamentariHandlerGet(w, r)
+		return
+	}
+	http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+
+}
+
+func ParlamentareHandlerGet(w http.ResponseWriter, r *http.Request) {
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
 		ErrorLogger.Println("cannot find a db session")
-		// FIXME Return error
+		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
 		return
 	}
 	vars := mux.Vars(r)
 	session := sessionInterface.(*mgo.Session)
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
 	result := incomes.Declaration{}
-	objId := bson.ObjectIdHex(vars["id"])
-	err := coll.FindId(objId).One(&result)
+	objId, err := GetObjectIdHex(vars["id"])
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		ErrorLogger.Println("invalid id", err)
+		return
+	}
+	err = coll.FindId(objId).One(&result)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("retrieving parliamentarian from db", err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(result)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -159,6 +186,57 @@ func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	return
+}
+
+func ParlamentareHandlerPut(w http.ResponseWriter, r *http.Request) {
+	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
+	if !ok {
+		ErrorLogger.Println("cannot find a db session")
+		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+		return
+	}
+	vars := mux.Vars(r)
+	session := sessionInterface.(*mgo.Session)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	p := incomes.Declaration{}
+	err := json.NewDecoder(r.Body).Decode(&p)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		ErrorLogger.Println("decoding parliamentarian in json", err)
+		return
+	}
+	stracer.Traceln("declar encoded:", p)
+	objId, err := GetObjectIdHex(vars["id"])
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		ErrorLogger.Println("invalid id", err)
+		return
+	}
+	err = coll.UpdateId(objId, p)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		ErrorLogger.Println("saving declaration", err)
+		return
+	}
+	w.WriteHeader(http.StatusAccepted)
+}
+
+func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		ParlamentareHandlerGet(w, r)
+		return
+	case "PUT":
+		ParlamentareHandlerPut(w, r)
+		return
+	case "OPTIONS":
+		w.Header().Add("Access-Control-Allow-Methods", "DELETE")
+		w.Header().Add("Access-Control-Allow-Methods", "PUT")
+		w.Header().Add("Access-Control-Allow-Headers", "content-type")
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 }
 
 func SetupLoggers(o io.Writer) {
@@ -176,7 +254,7 @@ func main() {
 
 	mongoSession, err := mgo.Dial(mongoHost)
 	if err != nil {
-		ErrorLogger.Fatal(err)
+		ErrorLogger.Fatalln("connecting to MongoDB", err)
 	}
 	defer mongoSession.Close()
 
@@ -198,5 +276,5 @@ func main() {
 					httph.WithMongo(mongoSession, ParlamentareHandler)))))
 	http.Handle("/", router)
 	log.Println("Listening on:", httpPort)
-	log.Fatal(http.ListenAndServe(":"+httpPort, nil))
+	log.Fatalln(http.ListenAndServe(":"+httpPort, nil))
 }

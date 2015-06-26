@@ -48,8 +48,8 @@ type Sede struct {
 // Partecipazione modella la singola participazioe societaria.
 type Partecipazione struct {
 	Sede          `bson:",inline"`
-	Persona       string
-	Denominazione string
+	Persona       string `bson:"persona" json:"persona"`
+	Denominazione string `bson:"denominazione" json:"denominazione"`
 	NumeroQuote   string `bson:"numero_azioni_quote" json:"numero_azioni_quote"`
 	Annotazioni   string
 }
@@ -104,11 +104,11 @@ type Declaration struct {
 	DichiarazioneConiuge    bool   `bson:"dichiarazione_coniuge" json:"dichiarazione_coniuge"`
 	ModelloRedditi          string `bson:"modello_redditi" json:"modello_redditi"`
 	QuadriPresentati        string `bson:"quadri_presentati" json:"quadri_presentati"`
-	Note                    []string
+	Note                    string
 }
 
 func (p Declaration) String() string {
-	return fmt.Sprintf("Declaration(%d): %s %s %s", p.AnnoDichiarazione, p.OpId, p.Nome, p.Cognome)
+	return fmt.Sprintf("Declaration: %s %s %s %d", p.OpId, p.Nome, p.Cognome, p.AnnoDichiarazione)
 }
 
 type DeclarationVersioned struct {

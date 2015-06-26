@@ -1,8 +1,8 @@
-================================
-Openpolis dossier patrimoni 2015
-================================
+===================
+Openpolis patrimoni
+===================
 
-Private repo for Openpolis dossier patrimoni 2015
+Private repo for Openpolis patrimoni APIs Rest & utils.
 
 ``cmds`` stores commands built using main ``incomes`` package.
 
