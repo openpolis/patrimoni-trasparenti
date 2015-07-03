@@ -365,22 +365,31 @@ func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) error {
 	i := 0
 	for scanner.Scan() {
 		// Jump invalid lines.
-		if i <= 1 || i == 9 || i == 10 || i == 11 || i == 13 {
+		if i <= 1 {
 			i++
 			continue
 		}
 		line := scanner.Text()
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
-		if i == 12 {
+		// Skip empty lines
+		if fields[0] == "" {
+			i++
+			continue
+		}
+		if fields[0] == "TOTALE PARZIALE" {
+			i++
+			continue
+		}
+		if fields[0] == "Quota forfettaria spese" {
 			i++
 			p.QuotaForfettariaSpese = incomes.ParseFloat(fields[3])
 			continue
 		}
-		if i == 14 {
+		if fields[0] == "TOTALE GENERALE" {
 			i++
 			p.TotaleSpeseElettorali = incomes.ParseFloat(fields[3])
-			continue
+			break
 		}
 		year, err := incomes.Atoi(fields[2])
 		if err != nil {
@@ -402,8 +411,8 @@ func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) error {
 func DownloadAndParseDeclaration(file *drive.File) (poli incomes.Declaration, er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("Fatal error", r)
-			er = errors.New("Error parsing")
+			log.Println("[ERROR] Fatal error", r)
+			er = errors.New("Fatal error parsing")
 		}
 	}()
 	// XXX It seems that once read value are zeroed O.o
@@ -499,7 +508,6 @@ func fileIsInvalid(title string) bool {
 }
 
 func main() {
-	stracer.Traceln("Tracing enabled...")
 	var pKeyFlag, mongoHost string
 	flag.StringVar(&pKeyFlag, "client-secret", "", "API Client secret")
 	flag.StringVar(&mongoHost, "mongo-host", "localhost", "MongoDB address")
