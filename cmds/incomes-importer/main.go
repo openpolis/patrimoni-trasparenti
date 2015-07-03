@@ -85,7 +85,13 @@ func ParseTitle(p *incomes.Declaration, title string) error {
 // ParseInfo parses data from "Dichiarante" sheet.
 // Official API doesn't support multi sheet download so we
 // manually add "&gid=11"
-func ParseInfo(p *incomes.Declaration, exportUrl string) error {
+func ParseInfo(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseInfo", r)
+			er = r.(error)
+		}
+	}()
 	url := exportUrl + "&gid=11"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -132,7 +138,13 @@ func ParseInfo(p *incomes.Declaration, exportUrl string) error {
 // ParseVociReddito create diffent entries for "VociReddito".
 // Official API doesn't support multi sheet download so we
 // manually add "&gid=11"
-func ParseVociReddito(p *incomes.Declaration, exportUrl string) error {
+func ParseVociReddito(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseVociReddito", r)
+			er = r.(error)
+		}
+	}()
 	redditi := make([]incomes.VoceReddito, 0, 5)
 	url := exportUrl + "&gid=0"
 	resp, err := http.Get(url)
@@ -176,7 +188,13 @@ func ParseVociReddito(p *incomes.Declaration, exportUrl string) error {
 	return nil
 }
 
-func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) error {
+func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseBeniImmobili", r)
+			er = r.(error)
+		}
+	}()
 	beni := make([]incomes.BeneImmobile, 0, 5)
 	url := exportUrl + "&gid=1"
 	resp, err := http.Get(url)
@@ -210,7 +228,13 @@ func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) error {
 	return nil
 }
 
-func ParseBeniMobili(p *incomes.Declaration, exportUrl string) error {
+func ParseBeniMobili(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseBeniMobili", r)
+			er = r.(error)
+		}
+	}()
 	beni := make([]incomes.BeneMobile, 0, 5)
 	url := exportUrl + "&gid=2"
 	resp, err := http.Get(url)
@@ -247,7 +271,13 @@ func ParseBeniMobili(p *incomes.Declaration, exportUrl string) error {
 	return nil
 }
 
-func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) error {
+func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParsePartecipazioni", r)
+			er = r.(error)
+		}
+	}()
 	ruoli := make([]incomes.Partecipazione, 0, 5)
 	url := exportUrl + "&gid=3"
 	resp, err := http.Get(url)
@@ -280,7 +310,13 @@ func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) error {
 	return nil
 }
 
-func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) error {
+func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseAmmministrazioni", r)
+			er = r.(error)
+		}
+	}()
 	ruoli := make([]incomes.Ruolo, 0, 5)
 	url := exportUrl + "&gid=4"
 	resp, err := http.Get(url)
@@ -312,7 +348,13 @@ func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) error {
 	return nil
 }
 
-func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) error {
+func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseContributiElettorali", r)
+			er = r.(error)
+		}
+	}()
 	voci := make([]incomes.Contributo, 0, 5)
 	url := exportUrl + "&gid=7"
 	resp, err := http.Get(url)
@@ -353,7 +395,13 @@ func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) error {
 	return nil
 }
 
-func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) error {
+func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseSpeseElettorali", r)
+			er = r.(error)
+		}
+	}()
 	voci := make([]incomes.Contributo, 0, 5)
 	url := exportUrl + "&gid=8"
 	resp, err := http.Get(url)

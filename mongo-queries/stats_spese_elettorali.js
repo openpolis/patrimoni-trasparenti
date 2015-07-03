@@ -23,7 +23,13 @@ results.forEach( function(i) {
 print("Aggregated by parliamentarians and sum recalculated")
 results = db['parliamentarians'].aggregate(
 		{$unwind: "$spese_elettorali"},
-		{$group: { _id : "$op_id", 'total': { $sum: "$spese_elettorali.importo"}}},
+		{$group: {
+			_id : "$op_id",
+			'sub-total': {$sum: "$spese_elettorali.importo"},
+			'quota_forfait': {$last: "$quota_forfettaria_spese"}
+			}
+		},
+		{$project: { _id : 1, 'total': {$add: ["$sub-total", "$quota_forfait"]}}},
 		{$sort: {"total":-1}},
 		{$limit: 20}
 );
