@@ -3,7 +3,8 @@
 //	incomes-importer -client-secret XXXX
 // where client-secret is taken following https://developers.google.com/drive/web/auth/web-client
 //
-// NOTE Use "gid" parameter to get different tabs into same spreadsheet:
+// NOTE Official APIs don't support spreadsheets with multiple sheets.
+// Use "gid" parameter to get different tabs into same spreadsheet:
 // 	wget -O test.csv https://docs.google.com/spreadsheets/d/1FEZwQG92U89IMydBhP6aFzCadNk2GgGW_OIcD2PWIx4/export?format=csv&gid=11
 package main
 
@@ -501,7 +502,7 @@ func main() {
 	stracer.Traceln("Tracing enabled...")
 	var pKeyFlag, mongoHost string
 	flag.StringVar(&pKeyFlag, "client-secret", "", "API Client secret")
-	flag.StringVar(&mongoHost, "mongo-host", "mongo30", "MongoDB address")
+	flag.StringVar(&mongoHost, "mongo-host", "localhost", "MongoDB address")
 	flag.Parse()
 	if flag.NFlag() == 0 {
 		log.Fatal("client-secret is mandatory")
@@ -543,8 +544,7 @@ func main() {
 		}
 		politician, err := DownloadAndParseDeclaration(f)
 		if err != nil {
-			log.Println("[ERROR] parsing", politician)
-			stracer.Traceln("Error parsing Declaration{}:", politician, err)
+			log.Println("[ERROR] parsing", politician, err)
 			continue
 		}
 		log.Println("Parsed:", politician)

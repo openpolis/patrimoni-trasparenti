@@ -32,11 +32,11 @@ type BeneImmobile struct {
 
 // BeneMobile modella la singola voce della sezione beni mobili.
 type BeneMobile struct {
-	Persona              string
-	Tipologia            string
+	Persona              string `bson:"persona" json:"persona"`
+	Tipologia            string `bson:"tipologia" json:"tipologia"`
 	CavalliFiscali       string `bson:"cavalli_fiscali" json:"cavalli_fiscali"`
 	AnnoImmatricolazione int    `bson:"anno_immatricolazione" json:"anno_immatricolazione"`
-	Annotazioni          string
+	Annotazioni          string `bson:"annotazioni" json:"annotazioni"`
 }
 
 // Sede è una struct utilizzata da altri oggetti.
@@ -51,7 +51,7 @@ type Partecipazione struct {
 	Persona       string `bson:"persona" json:"persona"`
 	Denominazione string `bson:"denominazione" json:"denominazione"`
 	NumeroQuote   string `bson:"numero_azioni_quote" json:"numero_azioni_quote"`
-	Annotazioni   string
+	Annotazioni   string `bson:"annotazioni" json:"annotazioni"`
 }
 
 // Ruolo modella il sigolo ruolo di amministrazione di società.
@@ -65,16 +65,20 @@ type Ruolo struct {
 
 // Contributo modella il singolo contributo/spesa elettorale.
 type Contributo struct {
-	Fonte        string
-	TipoElezione string `bson:"tipo_elezione" json:"tipo_elezione"`
-	Anno         int
-	Importo      float32
+	Fonte        string  `bson:"fonte" json:"fonte"`
+	TipoElezione string  `bson:"tipo_elezione" json:"tipo_elezione"`
+	Anno         int     `bson:"anno" json:"anno"`
+	Importo      float32 `bson:"importo" json:"importo"`
 }
 
 // Declaration models public incomes declaration for a politician (a parliamentary or senator) for a given year.
 type Declaration struct {
 	// omitempty to not complain during insert with empty Id,
 	// MongoDB will create it anyway.
+	//
+	// NOTE Mongo' unwind is cool but total fields are NOT consistent!
+	// We have inserted totals !=0 even if single voices are zero.
+	// We cannot remove totals fields and calculate them with aggregation.
 	Id                           bson.ObjectId    `bson:"_id,omitempty" json:"id"`
 	Nome                         string           `bson:"nome" json:"nome"`
 	Cognome                      string           `bson:"cognome" json:"cognome"`
@@ -97,7 +101,7 @@ type Declaration struct {
 	ContributiElettorali         []Contributo     `bson:"contributi_elettorali" json:"contributi_elettorali"`
 	TotaleContributiElettorali   float32          `bson:"totale_contributi_elettorali" json:"totale_contributi_elettorali"`
 	SpeseElettorali              []Contributo     `bson:"spese_elettorali" json:"spese_elettorali"`
-	TotaleSpeseElettorali        float32          `bson:"totale_spese_elettorali" json:"totale_spese_elettorali"` // FIXME Remove this and calculate it with aggregation?
+	TotaleSpeseElettorali        float32          `bson:"totale_spese_elettorali" json:"totale_spese_elettorali"`
 	QuotaForfettariaSpese        float32          `bson:"quota_forfettaria_spese" json:"quota_forfettaria_spese"`
 
 	DichiarazioneElettorale bool   `bson:"dichiarazione_elettorale" json:"dichiarazione_elettorale"`

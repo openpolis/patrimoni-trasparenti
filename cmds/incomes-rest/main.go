@@ -17,6 +17,7 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -42,12 +43,7 @@ var ErrorLogger *log.Logger
 var InfoLogger *log.Logger
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		ErrorLogger.Println("parsing query", err)
-	}
-	log.Println(r.Form)
-	log.Println(r)
+	fmt.Fprintf(w, "Please, welcome.")
 }
 
 func GetObjectIdHex(s string) (bson.ObjectId, error) {
@@ -272,6 +268,22 @@ func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 
+func AnalisiHandler(w http.ResponseWriter, r *http.Request) {
+	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
+	if !ok {
+		ErrorLogger.Println("cannot find a db session")
+		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+		return
+	}
+	session := sessionInterface.(*mgo.Session)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	fmt.Println(coll)
+	vars := mux.Vars(r)
+	switch vars["kind"] {
+	case "beni-immobili":
+	}
+}
+
 func SetupLoggers(o io.Writer) {
 	ErrorLogger = log.New(o, "[ERROR] ", log.Ldate|log.Ltime)
 	InfoLogger = log.New(o, "[INFO] ", log.Ldate|log.Ltime)
@@ -294,6 +306,11 @@ func main() {
 	router := mux.NewRouter()
 	// Public APIs
 	router.HandleFunc("/", HomeHandler)
+	router.HandleFunc("/parlamentari/analisi/{kind}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, AnalisiHandler)))))
 	//  Pivate APIs
 	privateRouter := router.PathPrefix("/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
