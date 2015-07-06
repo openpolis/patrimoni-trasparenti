@@ -69,6 +69,9 @@ func Atoi(s string) (int, error) {
 // ExtractDistrict takes a string in the format "City (dst)"
 // and returns city and district as two strings.
 func ExtractDistrict(s string) (city, district string) {
+	if !strings.Contains(s, "(") {
+		return
+	}
 	a := strings.Split(s, " (")
 	city = a[0]
 	district = strings.TrimRight(a[1], ")")
