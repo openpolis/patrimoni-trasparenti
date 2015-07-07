@@ -12,7 +12,13 @@ print("######################################")
 
 print("Aggregated by parliamentarians")
 results = db['parliamentarians'].aggregate(
-		{$group: { _id : "$op_id", 'total': { $sum: "$totale_spese_elettorali"}}},
+		{$group: { 
+							 _id : "$op_id", 
+							nome: {$last: "$nome"},
+							cognome: {$last: "$cognome"},
+							 'total': { $sum: "$totale_spese_elettorali"}
+						 }
+		},
 		{$sort: {"total":-1}},
 		{$limit: 20}
 );

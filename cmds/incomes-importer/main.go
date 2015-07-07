@@ -48,11 +48,17 @@ var config = &oauth.Config{
 // when spitting on commas.
 // "12.000,00" --> 12000.00
 func SanitizeFloat(line string) string {
-	// "12.000,00" --> "12000,00"
-	reDot := regexp.MustCompile("([0-9]+)\\.([0-9]+)")
-	line = reDot.ReplaceAllString(line, "$1$2")
-	// "12000,00" --> "12000.00"
+	reDot := regexp.MustCompile("([0-9]+)\\.([0-9]{3})")
+	reDotMilion := regexp.MustCompile("([0-9]+)\\.([0-9]{3})\\.([0-9]{3})")
+	if reDotMilion.MatchString(line) {
+		// "12.000.000,00" --> "12000000,00"
+		line = reDot.ReplaceAllString(line, "$1$2$3")
+	} else if reDot.MatchString(line) {
+		// "12.000,00" --> "12000,00"
+		line = reDot.ReplaceAllString(line, "$1$2")
+	}
 	reComma := regexp.MustCompile("(\"[0-9]+),([0-9]+\")")
+	// "12000,00" --> "12000.00"
 	line = reComma.ReplaceAllString(line, "$1.$2")
 	// "12000,00" --> 12000.00
 	return strings.Replace(line, `"`, ``, -1)

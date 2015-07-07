@@ -46,7 +46,7 @@ func ParseFloat(s string) float32 {
 		if e, ok := err.(*strconv.NumError); ok && e.Num == "" {
 			return 0
 		}
-		stracer.Traceln("Error converting to float", s, err)
+		stracer.Traceln("error converting to float", s, err)
 		return 0
 	}
 	return float32(value)
