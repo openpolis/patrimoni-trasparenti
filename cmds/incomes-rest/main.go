@@ -1,15 +1,22 @@
 // incomes-rest system daemon that exposes private and public REST APIs for incomes service.
 //
-// Example usage
+// Esempio di utilizzo
 //
 // Attach output to stdout:
 //	incomes-rest -mongo-host mongohost.tld
 //
-// Private APIs
+// APIs pubbliche
 //
-// Endpoints not intended for public use.
+//	/parlamentari/classifiche/{kind}
+//
+// kind = totale-beni-immobili
+// Classifica dei parlamentari che hanno dichiarato più imobili in assoluto per tutti gli anni coniuge compreso.
+//
+// Endpoints intesi per uso interno
 //
 // 	/p/parlamentari
+//
+// Leggi/inserisci/ modifica le dichiarazioni dei prlamentari.
 //
 package main
 
@@ -268,22 +275,6 @@ func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
 
-func AnalisiHandler(w http.ResponseWriter, r *http.Request) {
-	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
-	if !ok {
-		ErrorLogger.Println("cannot find a db session")
-		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
-		return
-	}
-	session := sessionInterface.(*mgo.Session)
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
-	fmt.Println(coll)
-	vars := mux.Vars(r)
-	switch vars["kind"] {
-	case "beni-immobili":
-	}
-}
-
 func SetupLoggers(o io.Writer) {
 	ErrorLogger = log.New(o, "[ERROR] ", log.Ldate|log.Ltime)
 	InfoLogger = log.New(o, "[INFO] ", log.Ldate|log.Ltime)
@@ -306,11 +297,11 @@ func main() {
 	router := mux.NewRouter()
 	// Public APIs
 	router.HandleFunc("/", HomeHandler)
-	router.HandleFunc("/parlamentari/analisi/{kind}",
+	router.HandleFunc("/parlamentari/classifiche/{kind}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
-					httph.WithMongo(mongoSession, AnalisiHandler)))))
+					httph.WithMongo(mongoSession, ClassificheHandler)))))
 	//  Pivate APIs
 	privateRouter := router.PathPrefix("/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
