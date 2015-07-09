@@ -7,16 +7,16 @@
 //
 // APIs pubbliche
 //
-//	/parlamentari/classifiche/{kind}
+//	/parlamentari/classifiche/{tipo}
 //
-// kind = totale-beni-immobili
+// tipo = totale-beni-immobili
 // Classifica dei parlamentari che hanno dichiarato più imobili in assoluto per tutti gli anni coniuge compreso.
 //
 // Endpoints intesi per uso interno
 //
 // 	/p/parlamentari
 //
-// Leggi/inserisci/ modifica le dichiarazioni dei prlamentari.
+// recupera/inserisci/modifica le dichiarazioni dei prlamentari.
 //
 package main
 
