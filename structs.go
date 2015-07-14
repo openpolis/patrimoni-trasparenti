@@ -14,20 +14,20 @@ const (
 
 // RecordReddito modella la singola voce del modello 730.
 type VoceReddito struct {
-	Voce        string `bson:"voce_730" json:"voce_730"`
-	Dichiarante float32
-	Coniuge     float32
-	Totale      float32
+	Voce        string  `bson:"voce_730" json:"voce_730"`
+	Dichiarante float32 `bson:"dichiarante" json:"dichiarante"`
+	Coniuge     float32 `bson:"coniuge" json:"coniuge"`
+	Totale      float32 `bson:"totale" json:"totale"`
 }
 
 // BeneImmobile modella la singola voce della sezione beni immobili.
 type BeneImmobile struct {
-	Persona     string
+	Persona     string `bson:"persona" json:"persona"`
 	Diritto     string `bson:"natura_diritto" json:"natura_diritto"`
-	Descrizione string
-	Provincia   string
-	Comune      string
-	Annotazioni string
+	Descrizione string `bson:"descrizione" json:"descrizione"`
+	Provincia   string `bson:"provincia" json:"provincia"`
+	Comune      string `bson:"comune" json:"comune"`
+	Annotazioni string `bson:"annotazioni" json:"annotazioni"`
 }
 
 // BeneMobile modella la singola voce della sezione beni mobili.
@@ -57,10 +57,10 @@ type Partecipazione struct {
 // Ruolo modella il sigolo ruolo di amministrazione di società.
 type Ruolo struct {
 	Sede           `bson:",inline"`
-	Persona        string
-	Denominazione  string
+	Persona        string `bson:"persona" json:"persona"`
+	Denominazione  string `bson:"denominazione" json:"denominazione"`
 	NaturaIncarico string `bson:"natura_incarico" json:"natura_incarico"`
-	Annotazioni    string
+	Annotazioni    string `bson:"annotazioni" json:"annotazioni"`
 }
 
 // Contributo modella il singolo contributo/spesa elettorale.
