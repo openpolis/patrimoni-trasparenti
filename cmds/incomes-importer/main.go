@@ -328,17 +328,22 @@ func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) (er err
 	i := 0
 	for scanner.Scan() {
 		// Jump first lines.
-		if i <= 1 || i == 7 {
+		if i <= 1 {
 			i++
 			continue
 		}
 		line := scanner.Text()
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
-		if i == 8 {
+		// Skip empty lines
+		if fields[0] == "" {
+			i++
+			continue
+		}
+		if fields[0] == "TOTALE" {
 			i++
 			p.TotaleContributiElettorali = incomes.ParseFloat(fields[3])
-			continue
+			break
 		}
 		year, err := incomes.Atoi(fields[2])
 		if err != nil {
