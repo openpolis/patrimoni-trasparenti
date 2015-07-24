@@ -174,14 +174,31 @@ func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) (er error) {
 		}
 		line := scanner.Text()
 		line = SanitizeString(line)
+		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
-		bene := incomes.BeneImmobile{
-			Persona:     fields[0],
-			Diritto:     fields[1],
-			Descrizione: fields[2],
-			Provincia:   fields[3],
-			Comune:      fields[4],
-			Annotazioni: fields[5],
+		var bene incomes.BeneImmobile
+		// Data format has changed, fields were added.
+		if len(fields) == 6 {
+			bene = incomes.BeneImmobile{
+				Persona:     fields[0],
+				Diritto:     fields[1],
+				Descrizione: fields[2],
+				Provincia:   fields[3],
+				Comune:      fields[4],
+				Annotazioni: fields[5],
+			}
+		} else {
+			// New format has 8 fields
+			bene = incomes.BeneImmobile{
+				Persona:            fields[0],
+				Diritto:            fields[1],
+				Descrizione:        fields[2],
+				Provincia:          fields[3],
+				Comune:             fields[4],
+				RenditaCatastale:   incomes.ParseFloat(fields[5]),
+				CategoriaCatastale: fields[6],
+				Annotazioni:        fields[7],
+			}
 		}
 		beni = append(beni, bene)
 		i++
@@ -257,13 +274,28 @@ func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) (er error) {
 		}
 		line := scanner.Text()
 		line = SanitizeString(line)
+		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
-		ruolo := incomes.Partecipazione{
-			Sede:          incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
-			Persona:       fields[0],
-			Denominazione: fields[1],
-			NumeroQuote:   fields[4],
-			Annotazioni:   fields[5],
+		var ruolo incomes.Partecipazione
+		// Data format has changed, fields were added.
+		if len(fields) < 7 {
+			ruolo = incomes.Partecipazione{
+				Sede:          incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
+				Persona:       fields[0],
+				Denominazione: fields[1],
+				NumeroQuote:   fields[4],
+				Annotazioni:   fields[5],
+			}
+		} else {
+			// New format has 8 fields
+			ruolo = incomes.Partecipazione{
+				Sede:            incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
+				Persona:         fields[0],
+				Denominazione:   fields[1],
+				NumeroQuote:     fields[4],
+				ValoreEconomico: incomes.ParseFloat(fields[5]),
+				Annotazioni:     fields[6],
+			}
 		}
 		ruoli = append(ruoli, ruolo)
 		i++

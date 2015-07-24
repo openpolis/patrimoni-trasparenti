@@ -22,12 +22,14 @@ type VoceReddito struct {
 
 // BeneImmobile modella la singola voce della sezione beni immobili.
 type BeneImmobile struct {
-	Persona     string `bson:"persona" json:"persona"`
-	Diritto     string `bson:"natura_diritto" json:"natura_diritto"`
-	Descrizione string `bson:"descrizione" json:"descrizione"`
-	Provincia   string `bson:"provincia" json:"provincia"`
-	Comune      string `bson:"comune" json:"comune"`
-	Annotazioni string `bson:"annotazioni" json:"annotazioni"`
+	Persona            string  `bson:"persona" json:"persona"`
+	Diritto            string  `bson:"natura_diritto" json:"natura_diritto"`
+	Descrizione        string  `bson:"descrizione" json:"descrizione"`
+	Provincia          string  `bson:"provincia" json:"provincia"`
+	Comune             string  `bson:"comune" json:"comune"`
+	RenditaCatastale   float32 `bson:"rendita_catastale" json:"rendita_catastale"`
+	CategoriaCatastale string  `bson:"categoria_catastale" json:"categoria_catastale"`
+	Annotazioni        string  `bson:"annotazioni" json:"annotazioni"`
 }
 
 // BeneMobile modella la singola voce della sezione beni mobili.
@@ -47,11 +49,12 @@ type Sede struct {
 
 // Partecipazione modella la singola participazioe societaria.
 type Partecipazione struct {
-	Sede          `bson:",inline"`
-	Persona       string `bson:"persona" json:"persona"`
-	Denominazione string `bson:"denominazione" json:"denominazione"`
-	NumeroQuote   string `bson:"numero_azioni_quote" json:"numero_azioni_quote"`
-	Annotazioni   string `bson:"annotazioni" json:"annotazioni"`
+	Sede            `bson:",inline"`
+	Persona         string  `bson:"persona" json:"persona"`
+	Denominazione   string  `bson:"denominazione" json:"denominazione"`
+	NumeroQuote     string  `bson:"numero_azioni_quote" json:"numero_azioni_quote"`
+	ValoreEconomico float32 `bson:"valore_economico" json:"valore_economico"`
+	Annotazioni     string  `bson:"annotazioni" json:"annotazioni"`
 }
 
 // Ruolo modella il sigolo ruolo di amministrazione di società.
