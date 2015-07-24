@@ -1,5 +1,7 @@
-conn = new Mongo("mongo30")
-var db = conn.getDB("dossier-incomes");
+// use mongo host.tlb/database script.js
+// and db will be populated
+//conn = new Mongo("mongo30")
+//var db = conn.getDB("dossier-incomes");
 var data = db['parlamentari'].find();
 
 print("######################################")
