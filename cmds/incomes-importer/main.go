@@ -18,6 +18,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -28,6 +30,7 @@ import (
 	"github.com/eraclitux/stracer"
 	drive "google.golang.org/api/drive/v2"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // Get only files into 'Dichiarazioni' dir.
@@ -42,6 +45,74 @@ var config = &oauth.Config{
 	RedirectURL:  "urn:ietf:wg:oauth:2.0:oob",
 	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
 	TokenURL:     "https://accounts.google.com/o/oauth2/token",
+}
+
+func getNamesFromNote(field string) (name, surname string) {
+	v := strings.Split(field, " ")
+	name = v[1]
+	surname = v[0]
+	return
+}
+
+func getDichiarazioneFromNote(field string) bool {
+	y := regexp.MustCompile("SI")
+	return y.MatchString(field)
+}
+
+func getDichiarazioneConiuge(field string) bool {
+	y := regexp.MustCompile("SI")
+	return y.MatchString(field)
+}
+
+func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error in ParseNotes", r)
+			er = r.(error)
+		}
+	}()
+	session := mSession.Copy()
+	defer session.Close()
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+
+	url := exportUrl + "&gid=0"
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	scanner := bufio.NewScanner(resp.Body)
+	i := 0
+	for scanner.Scan() {
+		// Jump first line.
+		if i == 0 {
+			i++
+			continue
+		}
+		line := scanner.Text()
+		values := strings.Split(line, ",")
+		stracer.Traceln("splitted line", values)
+		n, s := getNamesFromNote(values[0])
+		sQuery := bson.M{"nome": n, "cognome": s, "anno_dichiarazione": year}
+		uQuery := bson.M{"$set": bson.M{
+			"dichiarazione_elettorale": getDichiarazioneFromNote(values[1]),
+			"documenti_appello":        values[2],
+			"dichiarazione_coniuge":    getDichiarazioneConiuge(values[3]),
+			"modello_redditi":          values[4],
+			"quadri_presentati":        values[5],
+			"dichiarazioni_incomplete": values[6],
+			"note": values[7],
+		},
+		}
+		err = coll.Update(sQuery, uQuery)
+		if err != nil {
+			log.Println("[ERROR] updating notes in declaration:", n, s, year, err)
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+	return nil
 }
 
 // ParseInfo parses data from "Dichiarante" sheet.
@@ -505,7 +576,37 @@ func DownloadAndParseDeclaration(file *drive.File) (poli incomes.Declaration, er
 	return politician, nil
 }
 
-func GetDeclarations(d *drive.Service) ([]*drive.File, error) {
+func getNotesYear(fName string) (int, error) {
+	s := strings.Split(fName, "_")[1]
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return 0, err
+	}
+	return i, nil
+}
+
+func DownloadAndParseNote(file *drive.File, session *mgo.Session) (er error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("[ERROR] Fatal error", r)
+			er = errors.New("error parsing notes")
+		}
+	}()
+	// XXX It seems that once read value are zeroed O.o
+	fileName := file.Title
+	year, err := getNotesYear(fileName)
+	if err != nil {
+		return err
+	}
+	exportUrl := file.ExportLinks["text/csv"]
+	err = ParseNoteFile(exportUrl, year, session)
+	if err != nil {
+		return err
+	}
+	return
+}
+
+func GetFilesFromDrive(d *drive.Service) ([]*drive.File, error) {
 	var fs []*drive.File
 	pageToken := ""
 	for {
@@ -544,7 +645,7 @@ func SendToMongo(mSession *mgo.Session, p incomes.Declaration) {
 	log.Println(p, "sended to Mongo.")
 }
 
-func fileIsInvalid(title string) bool {
+func dNameIsValid(title string) bool {
 	if strings.HasPrefix(title, "Note") {
 		return true
 	}
@@ -554,10 +655,54 @@ func fileIsInvalid(title string) bool {
 	return false
 }
 
+func NoteNameIsValid(title string) bool {
+	if !strings.HasPrefix(title, "Note") {
+		return false
+	}
+	return true
+}
+
+func ParseDeclarations(files []*drive.File, session *mgo.Session) {
+	for _, f := range files {
+		log.Println("Parsing:", f.Title)
+		if dNameIsValid(f.Title) {
+			continue
+		}
+		politician, err := DownloadAndParseDeclaration(f)
+		if err != nil {
+			log.Println("[ERROR] parsing", politician, err)
+			continue
+		}
+		log.Println("Parsed:", politician)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			SendToMongo(session, politician)
+		}()
+	}
+	wg.Wait()
+}
+
+func ParseNotes(files []*drive.File, session *mgo.Session) {
+	for _, f := range files {
+		log.Println("Parsing:", f.Title)
+		if !NoteNameIsValid(f.Title) {
+			continue
+		}
+		err := DownloadAndParseNote(f, session)
+		if err != nil {
+			log.Println("[ERROR] parsing notes", err)
+			continue
+		}
+	}
+}
+
 func main() {
 	var pKeyFlag, mongoHost string
+	var parseNotes bool
 	flag.StringVar(&pKeyFlag, "client-secret", "", "API Client secret")
 	flag.StringVar(&mongoHost, "mongo-host", "localhost", "MongoDB address")
+	flag.BoolVar(&parseNotes, "parse-notes", false, "Parse notes file (instead of declarations)")
 	flag.Parse()
 	if flag.NFlag() == 0 {
 		log.Fatal("client-secret is mandatory")
@@ -591,23 +736,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("An error occurred creating Drive client: %v\n", err)
 	}
-	files, _ := GetDeclarations(service)
-	for _, f := range files {
-		log.Println("Parsing:", f.Title)
-		if fileIsInvalid(f.Title) {
-			continue
-		}
-		politician, err := DownloadAndParseDeclaration(f)
-		if err != nil {
-			log.Println("[ERROR] parsing", politician, err)
-			continue
-		}
-		log.Println("Parsed:", politician)
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			SendToMongo(session, politician)
-		}()
+	files, _ := GetFilesFromDrive(service)
+	if parseNotes {
+		log.Println("Preparing for note parsing")
+		ParseNotes(files, session)
+	} else {
+		ParseDeclarations(files, session)
 	}
-	wg.Wait()
 }

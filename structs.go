@@ -108,9 +108,12 @@ type Declaration struct {
 	QuotaForfettariaSpese        float32          `bson:"quota_forfettaria_spese" json:"quota_forfettaria_spese"`
 
 	DichiarazioneElettorale bool   `bson:"dichiarazione_elettorale" json:"dichiarazione_elettorale"`
+	DocumentiAppello        bool   `bson:"documenti_appello" json:"documenti_appello"`
 	DichiarazioneConiuge    bool   `bson:"dichiarazione_coniuge" json:"dichiarazione_coniuge"`
+	DichiaraziniIncomplete  string `bson:"dichiarazioni_incomplete" json:"dichiarazioni_incomplete"`
 	ModelloRedditi          string `bson:"modello_redditi" json:"modello_redditi"`
 	QuadriPresentati        string `bson:"quadri_presentati" json:"quadri_presentati"`
+	Variazioni              bool   `bson:"variazioni" json:"variazioni"`
 	Note                    string `bson:"note" json:"note"`
 }
 
