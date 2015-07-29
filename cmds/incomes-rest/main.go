@@ -171,6 +171,7 @@ func ParlamentariHandlerPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(p)
 }
 
 // ParlamentariHandler hanldes request for 'parlamentari' private
