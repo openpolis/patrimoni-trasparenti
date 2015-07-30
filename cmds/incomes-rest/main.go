@@ -12,7 +12,7 @@
 // tipo = totale-beni-immobili
 // Classifica dei parlamentari che hanno dichiarato più imobili in assoluto per tutti gli anni coniuge compreso.
 //
-// Endpoints intesi per uso interno
+// Endpoints privati
 //
 // 	/p/parlamentari
 //
@@ -23,7 +23,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -33,6 +32,7 @@ import (
 
 	incomes "bitbucket.org/eraclitux/op-incomes"
 
+	"github.com/eraclitux/cfgp"
 	"github.com/eraclitux/httph"
 	"github.com/eraclitux/stracer"
 	"github.com/gorilla/mux"
@@ -48,6 +48,12 @@ var ErrorLogger *log.Logger
 
 // InfoLogger is used to log general info events like access log.
 var InfoLogger *log.Logger
+
+type daemonConf struct {
+	Httpport    string
+	Httpaddress string
+	Mongohost   string
+}
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Please, welcome.")
@@ -282,18 +288,23 @@ func SetupLoggers(o io.Writer) {
 }
 
 func main() {
-	var mongoHost, httpPort string
-	flag.StringVar(&mongoHost, "mongo-host", "localhost", "MongoDB address")
-	flag.StringVar(&httpPort, "http-port", "8080", "http port to listen on")
-	flag.Parse()
+	conf := daemonConf{
+		Httpport:  "8080",
+		Mongohost: "localhost",
+	}
+	err := cfgp.Parse(&conf)
+	if err != nil {
+		ErrorLogger.Fatalln("parsing conf", err)
+	}
 
 	SetupLoggers(os.Stderr)
 
-	mongoSession, err := mgo.Dial(mongoHost)
+	mongoSession, err := mgo.Dial(conf.Mongohost)
 	if err != nil {
 		ErrorLogger.Fatalln("connecting to MongoDB", err)
 	}
 	defer mongoSession.Close()
+	InfoLogger.Println("connected to mongo:", conf.Mongohost)
 
 	router := mux.NewRouter()
 	// Public APIs
@@ -317,6 +328,6 @@ func main() {
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, ParlamentareHandler)))))
 	http.Handle("/", router)
-	log.Println("Listening on:", httpPort)
-	log.Fatalln(http.ListenAndServe(":"+httpPort, nil))
+	InfoLogger.Println("listening on:", conf.Httpport)
+	log.Fatalln(http.ListenAndServe(":"+conf.Httpport, nil))
 }
