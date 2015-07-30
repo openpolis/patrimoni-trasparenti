@@ -48,19 +48,22 @@ var config = &oauth.Config{
 }
 
 func getNamesFromNote(field string) (name, surname string) {
+	if len(field) == 0 {
+		return
+	}
 	v := strings.Split(field, " ")
+	if len(v) == 1 {
+		name = v[0]
+		return
+	}
 	name = v[1]
 	surname = v[0]
 	return
 }
 
-func getDichiarazioneFromNote(field string) bool {
-	y := regexp.MustCompile("SI")
-	return y.MatchString(field)
-}
-
-func getDichiarazioneConiuge(field string) bool {
-	y := regexp.MustCompile("SI")
+func getBoolFromNote(field string) bool {
+	y := regexp.MustCompile(`.*s[iiì].*`)
+	stracer.Traceln("string to cast to bool:", field, "result:", y.MatchString(field))
 	return y.MatchString(field)
 }
 
@@ -90,23 +93,45 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
+		line = SanitizeString(line)
 		values := strings.Split(line, ",")
-		stracer.Traceln("splitted line", values)
+		stracer.Traceln("splitted line", values, "length:", len(values))
 		n, s := getNamesFromNote(values[0])
 		sQuery := bson.M{"nome": n, "cognome": s, "anno_dichiarazione": year}
-		uQuery := bson.M{"$set": bson.M{
-			"dichiarazione_elettorale": getDichiarazioneFromNote(values[1]),
-			"documenti_appello":        values[2],
-			"dichiarazione_coniuge":    getDichiarazioneConiuge(values[3]),
-			"modello_redditi":          values[4],
-			"quadri_presentati":        values[5],
-			"dichiarazioni_incomplete": values[6],
-			"note": values[7],
-		},
+		uQuery := bson.M{}
+		if len(values) == 9 {
+			uQuery = bson.M{"$set": bson.M{
+				"dichiarazione_elettorale": getBoolFromNote(values[1]),
+				"documenti_appello":        values[2],
+				"dichiarazione_coniuge":    getBoolFromNote(values[3]),
+				"modello_redditi":          values[4],
+				"quadri_presentati":        values[5],
+				"dichiarazioni_incomplete": values[6],
+				"note":       values[7],
+				"variazioni": getBoolFromNote(values[8]),
+			},
+			}
+		} else {
+			uQuery = bson.M{"$set": bson.M{
+				"dichiarazione_elettorale": getBoolFromNote(values[1]),
+				"documenti_appello":        values[2],
+				"dichiarazione_coniuge":    getBoolFromNote(values[3]),
+				"modello_redditi":          values[4],
+				"quadri_presentati":        values[5],
+				"dichiarazioni_incomplete": values[6],
+				"note": values[7],
+			},
+			}
 		}
 		err = coll.Update(sQuery, uQuery)
 		if err != nil {
-			log.Println("[ERROR] updating notes in declaration:", n, s, year, err)
+			// Maye Name and surname are swapped...
+			sQuery = bson.M{"nome": s, "cognome": n, "anno_dichiarazione": year}
+			err = coll.Update(sQuery, uQuery)
+			if err != nil {
+				log.Println("[ERROR] updating notes in declaration:", n, s, year, err)
+			}
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -140,6 +165,7 @@ func ParseInfo(p *incomes.Declaration, exportUrl string) (er error) {
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		values := strings.Split(line, ",")
 		switch i {
 		case 1:
@@ -194,6 +220,7 @@ func ParseVociReddito(p *incomes.Declaration, exportUrl string) (er error) {
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
 		if i == 7 {
@@ -244,6 +271,7 @@ func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) (er error) {
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		line = SanitizeString(line)
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
@@ -301,6 +329,7 @@ func ParseBeniMobili(p *incomes.Declaration, exportUrl string) (er error) {
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		line = SanitizeString(line)
 		fields := strings.Split(line, ",")
 		year, err := incomes.Atoi(fields[3])
@@ -344,6 +373,7 @@ func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) (er error) {
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		line = SanitizeString(line)
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
@@ -398,6 +428,7 @@ func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) (er error) 
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		fields := strings.Split(line, ",")
 		ruolo := incomes.Ruolo{
 			Sede:           incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
@@ -436,6 +467,7 @@ func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) (er err
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
 		// Skip empty lines
@@ -488,6 +520,7 @@ func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) (er error) {
 			continue
 		}
 		line := scanner.Text()
+		line = strings.ToLower(line)
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
 		// Skip empty lines

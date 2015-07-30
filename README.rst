@@ -9,9 +9,16 @@ Private repo for Openpolis patrimoni APIs Rest & utils.
 Commands
 --------
 
-``incomes-importer`` command line tool that imports data from Google Drive. Example usage::
+``incomes-importer`` command line tool that imports data from Google Drive.
+
+Import all declarations::
 
         incomes-importer -client-secret <google-privete-id>
+
+Import notes files::
+
+        incomes-importer -client-secret <google-privete-id> -parse-notes
+
 
 ``incomes-rest`` system daemon that exposes private and public REST APIs for *incomes service*.
 
