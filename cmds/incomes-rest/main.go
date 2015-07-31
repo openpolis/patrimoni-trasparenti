@@ -311,14 +311,14 @@ func main() {
 
 	router := mux.NewRouter()
 	// Public APIs
-	router.HandleFunc("/", HomeHandler)
-	router.HandleFunc("/parlamentari/classifiche/{kind}",
+	router.HandleFunc("/", httph.WithLog(InfoLogger, HomeHandler))
+	router.HandleFunc("/api/parlamentari/classifiche/{kind}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, ClassificheHandler)))))
 	//  Pivate APIs
-	privateRouter := router.PathPrefix("/p").Subrouter()
+	privateRouter := router.PathPrefix("/api/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
 	privateRouter.HandleFunc("/parlamentari",
 		httph.WithLog(InfoLogger,
@@ -331,6 +331,6 @@ func main() {
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, ParlamentareHandler)))))
 	http.Handle("/", router)
-	InfoLogger.Println("listening on:", conf.Httpport)
-	log.Fatalln(http.ListenAndServe(":"+conf.Httpport, nil))
+	InfoLogger.Println("listening on:", conf.Httpaddress, ":", conf.Httpport)
+	log.Fatalln(http.ListenAndServe(conf.Httpaddress+":"+conf.Httpport, nil))
 }
