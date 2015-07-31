@@ -475,7 +475,7 @@ func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) (er err
 			i++
 			continue
 		}
-		if fields[0] == "TOTALE" {
+		if fields[0] == "totale" {
 			i++
 			p.TotaleContributiElettorali = incomes.ParseFloat(fields[3])
 			break
@@ -528,16 +528,16 @@ func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) (er error) {
 			i++
 			continue
 		}
-		if fields[0] == "TOTALE PARZIALE" {
+		if fields[0] == "totale parziale" {
 			i++
 			continue
 		}
-		if fields[0] == "Quota forfettaria spese" {
+		if fields[0] == "quota forfettaria spese" {
 			i++
 			p.QuotaForfettariaSpese = incomes.ParseFloat(fields[3])
 			continue
 		}
-		if fields[0] == "TOTALE GENERALE" {
+		if fields[0] == "totale generale" {
 			i++
 			p.TotaleSpeseElettorali = incomes.ParseFloat(fields[3])
 			break

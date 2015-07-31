@@ -162,6 +162,9 @@ func ParlamentariHandlerPost(w http.ResponseWriter, r *http.Request) {
 	session := sessionInterface.(*mgo.Session)
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
 	p := incomes.Declaration{}
+	// Using Unmarshall and lowering all received bytes
+	// will make date parsing fails:
+	// decoding declaration in json parsing time ""2015-07-31t00:00:00z"" as ""2006-01-02T15:04:05Z07:00""
 	err := json.NewDecoder(r.Body).Decode(&p)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
