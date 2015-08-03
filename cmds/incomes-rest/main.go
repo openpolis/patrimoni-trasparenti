@@ -53,7 +53,13 @@ type daemonConf struct {
 	Httpport    string
 	Httpaddress string
 	Mongohost   string
+	S3bucket    string
+	S3key       string
+	S3secret    string
+	S3path      string
 }
+
+var conf daemonConf
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Please, welcome.")
@@ -227,7 +233,12 @@ func ParlamentareHandlerGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	err = json.NewEncoder(w).Encode(result)
+	enhancedResult := incomes.DeclarationEnhanced{
+		Declaration: result,
+		UrlFileOrig: createS3link(result.File),
+		UrlFileRect: createS3link(result.FileRectification),
+	}
+	err = json.NewEncoder(w).Encode(enhancedResult)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("encoding parliamentarian in json", err)
@@ -291,7 +302,7 @@ func SetupLoggers(o io.Writer) {
 }
 
 func main() {
-	conf := daemonConf{
+	conf = daemonConf{
 		Httpport:  "8080",
 		Mongohost: "localhost",
 	}
@@ -320,6 +331,9 @@ func main() {
 	//  Pivate APIs
 	privateRouter := router.PathPrefix("/api/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
+	privateRouter.HandleFunc("/parlamentari/file/upload",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(ParlamentariUploadHandler)))
 	privateRouter.HandleFunc("/parlamentari",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(

@@ -115,6 +115,13 @@ type Declaration struct {
 	QuadriPresentati        string `bson:"quadri_presentati" json:"quadri_presentati"`
 	Variazioni              bool   `bson:"variazioni" json:"variazioni"`
 	Note                    string `bson:"note" json:"note"`
+
+	// This is the original file name for delcaration.
+	// Not intended to be modified.
+	File string `bson:"filename" json:"filename"`
+	// This is the rectification file name for declaration.
+	// Intended to be modified.
+	FileRectification string `bson:"filename_rectification" json:"filename_rectification"`
 }
 
 func (p Declaration) String() string {
@@ -125,4 +132,13 @@ type DeclarationVersioned struct {
 	Declaration `bson:",inline"`
 	// Different versions of this document as document ids in a different collection.
 	Versions []bson.ObjectId `bson:"versions" json:"versions"`
+}
+
+// DeclarationEnhanced extends Declaration
+// to include download link for declarations.
+// Not intended to be stored in db.
+type DeclarationEnhanced struct {
+	Declaration
+	UrlFileOrig string `json:"filename_url"`
+	UrlFileRect string `json:"filename_rectification_url"`
 }
