@@ -44,7 +44,8 @@ func ParlamentariUploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-	obj := s3c.Object(header.Filename)
+	name := time.Now().UTC().Format("20060102150405") + "_" + header.Filename
+	obj := s3c.Object(name)
 	out := obj.Writer()
 	defer out.Close()
 	_, err = io.Copy(out, file)
@@ -54,6 +55,6 @@ func ParlamentariUploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	result := map[string]string{"filename": header.Filename}
+	result := map[string]string{"filename": name}
 	json.NewEncoder(w).Encode(result)
 }
