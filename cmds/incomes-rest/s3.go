@@ -57,4 +57,5 @@ func ParlamentariUploadHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	result := map[string]string{"filename": name}
 	json.NewEncoder(w).Encode(result)
+	InfoLogger.Println("file sended to s3:", name)
 }

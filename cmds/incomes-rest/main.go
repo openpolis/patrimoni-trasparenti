@@ -57,6 +57,7 @@ type daemonConf struct {
 	S3key       string
 	S3secret    string
 	S3path      string
+	LogFile     string
 }
 
 var conf daemonConf
@@ -310,8 +311,16 @@ func main() {
 	if err != nil {
 		ErrorLogger.Fatalln("parsing conf", err)
 	}
-
-	SetupLoggers(os.Stderr)
+	if conf.LogFile != "" {
+		f, err := os.OpenFile(conf.LogFile, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+		if err != nil {
+			log.Fatalln("opening log file:", err)
+		}
+		defer f.Close()
+		SetupLoggers(f)
+	} else {
+		SetupLoggers(os.Stdout)
+	}
 
 	mongoSession, err := mgo.Dial(conf.Mongohost)
 	if err != nil {
