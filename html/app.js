@@ -599,7 +599,7 @@
                 '<td><input ng-model="obj.dichiarante" size=5 type="number" step="any" value="{{obj.dichiarante}}" /></td>' +
                 '<td><input ng-model="obj.coniuge" size=5 type="number" step="any" value="{{obj.coniuge}}" /></td>' +
                 '<td>	Calcolato: <span id="my-bind">{{obj.coniuge + obj.dichiarante|currency:"&euro;"}}</span><br>'+
-									'<input ng-model="obj.totale" size=5 type="number" value="{{obj.totale}}" />'+
+									'<input ng-model="obj.totale" size=5 type="number" step="any" value="{{obj.totale}}" />'+
 								'</td>' +
               '</tr>' +
               '<tr>' +
@@ -634,7 +634,7 @@
                 '<td><input ng-model="obj.dichiarante" size=5 type="number" step="any" value="{{obj.dichiarante}}" /></td>' +
                 '<td><input ng-model="obj.coniuge" size=5 type="number" step="any" value="{{obj.coniuge}}" /></td>' +
                 '<td>	Calcolato: <span id="my-bind">{{obj.coniuge + obj.dichiarante|currency:"&euro;"}}</span><br>'+
-									'<input ng-model="obj.totale" size=5 type="number" value="{{obj.totale}}" />'+
+									'<input ng-model="obj.totale" size=5 type="number" step="any" value="{{obj.totale}}" />'+
 								'</td>' +
               '</tr>' +
               '<tr>' +
