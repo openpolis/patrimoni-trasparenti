@@ -107,7 +107,7 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.partecipazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
                 '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
@@ -133,7 +133,7 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.partecipazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
                 '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
@@ -181,7 +181,7 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.amministrazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
                 '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
@@ -205,7 +205,7 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.amministrazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
                 '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
@@ -254,7 +254,7 @@
         '</tr></thead>' +
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_immobili">' +
-            '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
             '<td><input ng-model="obj.natura_diritto" size=8 placeholder="Tipologia" type="text" value="{{obj.natura_diritto}}" /></td>' +
             '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione" type="text" value="{{obj.descrizione}}" required/></td>' +
             '<td><input ng-model="obj.provincia" ng-minlength="2" ng-maxlength="2" size=2 placeholder="XX" value="{{obj.provincia}}" required/></td>' +
@@ -280,7 +280,7 @@
         '</tr></thead>' +
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_immobili">' +
-            '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
             '<td><input ng-model="obj.natura_diritto" size=8 placeholder="tipologia" type="text" value="{{obj.natura_diritto}}" required/></td>' +
             '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione"/ type="text" value="{{obj.descrizione}}" required/></td>' +
             '<td><input ng-model="obj.provincia" ng-minlength="2" ng-maxlength="2" size=2 placeholder="XX"/ value="{{obj.provincia}}"/></td>' +
@@ -525,7 +525,7 @@
         '</tr></thead>' +
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_mobili">' +
-            '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
             '<td><input ng-model="obj.tipologia" size=8 placeholder="tipologia" type="text" value="{{obj.tipologia}}" required/></td>' +
             '<td><input ng-model="obj.cavalli_fiscali" size=5 placeholder="CV" type="text" value="{{obj.cavalli_fiscali}}" required/></td>' +
             '<td><input ng-model="obj.anno_immatricolazione" ng-minlength="4" ng-maxlength="4" size=4 placeholder="Anno"/ type="number" value="{{obj.anno_immatricolazione}}" required/></td>' +
