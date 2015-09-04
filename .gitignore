@@ -1,5 +1,2 @@
 *.swp
 incomes-mockup.nogo
-cmds/incomes-rest/incomes-rest
-cmds/incomes-importer/incomes-importer
-conf.cfg

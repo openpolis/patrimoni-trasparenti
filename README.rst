@@ -4,7 +4,7 @@ Openpolis patrimoni
 
 Private repo for Openpolis patrimoni APIs Rest & utils.
 
-``cmds`` stores commands built using main ``incomes`` package.
+``cmd`` stores commands built using main ``incomes`` package.
 
 Commands
 --------
@@ -49,7 +49,7 @@ Generate RESTapi swagger docs
 With github.com/yvasiyarov/swagger installed::
         
         $ cd cmd/rest-docs
-        $ swagger -apiPackage="bitbucket.org/eraclitux/op-incomes" -mainApiFile="bitbucket.org/eraclitux/op-incomes/cmds/incomes-rest/main.go"
+        $ swagger -apiPackage="bitbucket.org/eraclitux/op-incomes" -mainApiFile="bitbucket.org/eraclitux/op-incomes/cmd/incomes-rest/main.go"
 
 Test it with::
 
