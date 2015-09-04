@@ -255,7 +255,7 @@
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_immobili">' +
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-            '<td><input ng-model="obj.natura_diritto" size=8 placeholder="Tipologia" type="text" value="{{obj.natura_diritto}}" /></td>' +
+                '<td><select name="select_diritto" ng-model="obj.natura_diritto" required><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
             '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione" type="text" value="{{obj.descrizione}}" required/></td>' +
             '<td><input ng-model="obj.provincia" ng-minlength="2" ng-maxlength="2" size=2 placeholder="XX" value="{{obj.provincia}}" required/></td>' +
             '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" required/></td>' +
@@ -281,7 +281,7 @@
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_immobili">' +
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-            '<td><input ng-model="obj.natura_diritto" size=8 placeholder="tipologia" type="text" value="{{obj.natura_diritto}}" required/></td>' +
+                '<td><select name="select_diritto" ng-model="obj.natura_diritto" required><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
             '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione"/ type="text" value="{{obj.descrizione}}" required/></td>' +
             '<td><input ng-model="obj.provincia" ng-minlength="2" ng-maxlength="2" size=2 placeholder="XX"/ value="{{obj.provincia}}"/></td>' +
             '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" required/></td>' +
