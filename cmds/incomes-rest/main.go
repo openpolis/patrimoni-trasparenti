@@ -5,19 +5,9 @@
 // Attach output to stdout:
 //	incomes-rest -mongo-host mongohost.tld
 //
-// APIs pubbliche
-//
-//	/parlamentari/classifiche/{tipo}
-//
-// tipo = totale-beni-immobili
-// Classifica dei parlamentari che hanno dichiarato più imobili in assoluto per tutti gli anni coniuge compreso.
-//
-// Endpoints privati
-//
-// 	/p/parlamentari
-//
-// recupera/inserisci/modifica le dichiarazioni dei prlamentari.
-//
+// @APIVersion 1.0.0
+// @APITitle Patrimoni Trasparenti RESTapi
+// @APIDescription Openpolis Patrimoni trasparenti api. http://openpolis.it/
 package main
 
 import (

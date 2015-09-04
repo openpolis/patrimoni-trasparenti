@@ -39,10 +39,21 @@ Full documentation
 
 To navigate and read full documentation use Go builtin doc system. Once cloned this repo in a proper installed go environment just run::
 
-        godoc -http=:8001
+        $ godoc -http=:8001
 
 and point your browser to ``http://localhost:8001/pkg/`` and choose desider package/command.
 
+Generate RESTapi swagger docs
+-----------------------------
+
+With github.com/yvasiyarov/swagger installed::
+        
+        $ cd cmd/rest-docs
+        $ swagger -apiPackage="bitbucket.org/eraclitux/op-incomes" -mainApiFile="bitbucket.org/eraclitux/op-incomes/cmds/incomes-rest/main.go"
+
+Test it with::
+
+        $ go run web.go docs.go
 Note
 ----
 

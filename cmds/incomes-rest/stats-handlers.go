@@ -90,6 +90,16 @@ func ClassificheHandlerImmobiliConiuge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// @Title Classifiche
+// @Description Varie classifiche sui patrimoni dei parlamentari
+// @Accept json
+// @Param kind path int true "User ID"
+// @Success 200 {object} string "Success"
+// @Failure 401 {object} string "Access denied"
+// @Failure 404 {object} string "Not Found"
+// @Resource /users
+// @Router /api/parlamentari/classifiche/:kind [get]
 func ClassificheHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	switch vars["kind"] {
