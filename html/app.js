@@ -358,6 +358,8 @@
               '<th>Descrizione</th>' +
               '<th>Provincia</th>' +
               '<th>Comune</th>' +
+              '<th>Rendita catastale</th>' +
+              '<th>Categoria catastale</th>' +
               '<th>Annotazioni</th>' +
             '</tr></thead>' +
             '<tbody>' +
@@ -367,6 +369,8 @@
                 '<td>{{obj.descrizione}}</td>' +
                 '<td>{{obj.provincia}}</td>' +
                 '<td>{{obj.comune}}</td>' +
+                '<td>{{obj.rendita_catastale}}</td>' +
+                '<td>{{obj.categoria_catastale}}</td>' +
                 '<td>{{obj.annotazioni}}</td>' +
               '</tr>' +
             '</tbody>' +
