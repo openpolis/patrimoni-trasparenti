@@ -21,12 +21,128 @@
 
   app.controller('main', function ($scope, $rootScope, $location) {
 
+    $scope.dataProvince = {
+        availableOptions: [
+          {id:'ag', name:'agrigento'},
+          {id:'al', name:'alessandria'},
+          {id:'an', name:'ancona'},
+          {id:'ao', name:'aosta'},
+          {id:'ar', name:'arezzo'},
+          {id:'ap', name:'ascoli piceno'},
+          {id:'at', name:'asti'},
+          {id:'av', name:'avellino'},
+          {id:'ba', name:'bari'},
+          {id:'bt', name:'barletta-andria-trani'},
+          {id:'bl', name:'belluno'},
+          {id:'bn', name:'benevento'},
+          {id:'bg', name:'bergamo'},
+          {id:'bi', name:'biella'},
+          {id:'bo', name:'bologna'},
+          {id:'bz', name:'bolzano'},
+          {id:'bs', name:'brescia'},
+          {id:'br', name:'brindisi'},
+          {id:'ca', name:'cagliari'},
+          {id:'cl', name:'caltanissetta'},
+          {id:'cb', name:'campobasso'},
+          {id:'ci', name:'carbonia-iglesias'},
+          {id:'ce', name:'caserta'},
+          {id:'ct', name:'catania'},
+          {id:'cz', name:'catanzaro'},
+          {id:'ch', name:'chieti'},
+          {id:'co', name:'como'},
+          {id:'cs', name:'cosenza'},
+          {id:'cr', name:'cremona'},
+          {id:'kr', name:'crotone'},
+          {id:'cn', name:'cuneo'},
+          {id:'en', name:'enna'},
+          {id:'fm', name:'fermo'},
+          {id:'fe', name:'ferrara'},
+          {id:'fi', name:'firenze'},
+          {id:'fg', name:'foggia'},
+          {id:'fc', name:'forli’-cesena'},
+          {id:'fr', name:'frosinone'},
+          {id:'ge', name:'genova'},
+          {id:'go', name:'gorizia'},
+          {id:'gr', name:'grosseto'},
+          {id:'im', name:'imperia'},
+          {id:'is', name:'isernia'},
+          {id:'sp', name:'la spezia'},
+          {id:'aq', name:'l’aquila'},
+          {id:'lt', name:'latina'},
+          {id:'le', name:'lecce'},
+          {id:'lc', name:'lecco'},
+          {id:'li', name:'livorno'},
+          {id:'lo', name:'lodi'},
+          {id:'lu', name:'lucca'},
+          {id:'mc', name:'macerata'},
+          {id:'mn', name:'mantova'},
+          {id:'ms', name:'massa-carrara'},
+          {id:'mt', name:'matera'},
+          {id:'vs', name:' medio campidano'},
+          {id:'me', name:'messina'},
+          {id:'mi', name:'milano'},
+          {id:'mo', name:'modena'},
+          {id:'mb', name:'monza e della brianza'},
+          {id:'na', name:'napoli'},
+          {id:'no', name:'novara'},
+          {id:'nu', name:'nuoro'},
+          {id:'og', name:'ogliastra'},
+          {id:'ot', name:'olbia-tempio'},
+          {id:'or', name:'oristano'},
+          {id:'pd', name:'padova'},
+          {id:'pa', name:'palermo'},
+          {id:'pr', name:'parma'},
+          {id:'pv', name:'pavia'},
+          {id:'pg', name:'perugia'},
+          {id:'pu', name:'pesaro e urbino'},
+          {id:'pe', name:'pescara'},
+          {id:'pc', name:'piacenza'},
+          {id:'pi', name:'pisa'},
+          {id:'pt', name:'pistoia'},
+          {id:'pn', name:'pordenone'},
+          {id:'pz', name:'potenza'},
+          {id:'po', name:'prato'},
+          {id:'rg', name:'ragusa'},
+          {id:'ra', name:'ravenna'},
+          {id:'rc', name:'reggio di calabria'},
+          {id:'re', name:'reggio nell’emilia'},
+          {id:'ri', name:'rieti'},
+          {id:'rn', name:'rimini'},
+          {id:'rm', name:'roma'},
+          {id:'ro', name:'rovigo'},
+          {id:'sa', name:'salerno'},
+          {id:'ss', name:'sassari'},
+          {id:'sv', name:'savona'},
+          {id:'si', name:'siena'},
+          {id:'sr', name:'siracusa'},
+          {id:'so', name:'sondrio'},
+          {id:'ta', name:'taranto'},
+          {id:'te', name:'teramo'},
+          {id:'tr', name:'terni'},
+          {id:'to', name:'torino'},
+          {id:'tp', name:'trapani'},
+          {id:'tn', name:'trento'},
+          {id:'tv', name:'treviso'},
+          {id:'ts', name:'trieste'},
+          {id:'ud', name:'udine'},
+          {id:'va', name:'varese'},
+          {id:'ve', name:'venezia'},
+          {id:'vb', name:'verbano-cusio-ossola'},
+          {id:'vc', name:'vercelli'},
+          {id:'vr', name:'verona'},
+          {id:'vv', name:'vibo valentia'},
+          {id:'vi', name:'vicenza'},
+          {id:'vt', name:'viterbo'}
+        ],
+    };
+
     $rootScope.$on('$stateChangeSuccess', function () {
       $scope.displayBanner = $location.$$path === '/dashboard';
     });
   });
 
   app.config(function (NgAdminConfigurationProvider, RestangularProvider) {
+    console.log("config");
     var nga = NgAdminConfigurationProvider;
 
     function truncate(value) {
@@ -42,7 +158,7 @@
         console.log('empty date');
         return '';
       }
-      console.log(value);
+      console.log("utcify:", value);
       return value.length > 10 ? value : value+'T00:00:00Z';
     }
 
@@ -72,6 +188,14 @@
       return { params: params };
     });
 
+    var provResEditTemplate =
+            '<select ng-controller="main" name="prov-res" ng-model="entry.values.provincia_residenza">' +
+              '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="entry.values.provincia_residenza === option.id">{{option.name}}</option>'+
+            '</select>';
+    var provNascEditTemplate =
+            '<select ng-controller="main" name="prov-nasc" ng-model="entry.values.provincia_nascita">' +
+              '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="entry.values.provincia_nascita === option.id">{{option.name}}</option>'+
+            '</select>';
     var partecipazioniView =
             '<table class="table">' +
             '<thead><tr>' +
@@ -95,7 +219,7 @@
             '</table>';
 
     var partecipazioniEdit =
-            '<table class="table">' +
+            '<table ng-controller="main" class="table">' +
             '<thead><tr>' +
               '<th>Persona</th>' +
               '<th>Denominazione</th>' +
@@ -110,7 +234,9 @@
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
-                '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
+                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
+                  '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia_sede === option.id">{{option.name}}</option>'+
+                '</select></td>'+
                 '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" required/></td>' +
                 '<td><input ng-model="obj.valore_economico" size=4 placeholder="Valore" type="number" step="any" value="{{obj.valore_economico}}" required/></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
@@ -121,7 +247,7 @@
             '<button type="button" class="btn btn-default btn-sm" ng-click="entry.values.partecipazioni_soc.push({})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Aggiungi</button>';
 
     var partecipazioniInsert =
-            '<table class="table">' +
+            '<table ng-controller="main" class="table">' +
             '<thead><tr>' +
               '<th>Persona</th>' +
               '<th>Denominazione</th>' +
@@ -136,7 +262,9 @@
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
-                '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
+                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
+                  '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia_sede === option.id">{{option.name}}</option>'+
+                '</select></td>'+
                 '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" required/></td>' +
                 '<td><input ng-model="obj.valore_economico" size=4 placeholder="Valore" type="number" step="any" value="{{obj.valore_economico}}" required/></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
@@ -170,7 +298,7 @@
             '</table>';
 
     var amministrazioneEdit =
-            '<table class="table">' +
+            '<table ng-controller="main" class="table">' +
             '<thead><tr>' +
               '<th>Persona</th>' +
               '<th>Denominazione</th>' +
@@ -184,7 +312,9 @@
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
-                '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
+                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
+                  '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
+                '</select></td>'+
                 '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" required/></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
                 '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.partecipazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
@@ -194,7 +324,7 @@
             '<button type="button" class="btn btn-default btn-sm" ng-click="entry.values.amministrazioni_soc.push({})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Aggiungi</button>';
 
     var amministrazioneInsert =
-            '<table class="table">' +
+            '<table ng-controller="main" class="table">' +
             '<thead><tr>' +
               '<th>Persona</th>' +
               '<th>Denominazione</th>' +
@@ -208,7 +338,9 @@
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
-                '<td><input ng-model="obj.provincia_sede" size=2 placeholder="Provincia sede" type="text" value="{{obj.provincia_sede}}" required/></td>' +
+                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
+                  '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}">{{option.name}}</option>'+
+                '</select></td>'+
                 '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" required/></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
                 '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.amministrazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
@@ -241,7 +373,7 @@
             '</table>';
 
     var templateBeniImmobiliEdit =
-        '<table class="table">' +
+        '<table ng-controller="main" class="table">' +
         '<thead><tr>' +
           '<th>Persona</th>' +
           '<th>Natura diritto</th>' +
@@ -257,7 +389,9 @@
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><select name="select_diritto" ng-model="obj.natura_diritto" required><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
             '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione" type="text" value="{{obj.descrizione}}" required/></td>' +
-            '<td><input ng-model="obj.provincia" ng-minlength="2" ng-maxlength="2" size=2 placeholder="XX" value="{{obj.provincia}}" required/></td>' +
+            '<td><select name="prov-name" ng-model="obj.provincia">' +
+              '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
+            '</select></td>'+
             '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" required/></td>' +
             '<td><input ng-model="obj.rendita_catastale" size=8 type="number" value="{{obj.rendita_catastale}}"/></td>' +
             '<td><input ng-model="obj.categoria_catastale" size=8 placeholder="Categoria" type="text" value="{{obj.categoria_catastale}}"/></td>' +
@@ -269,7 +403,7 @@
         '<button type="button" class="btn btn-default btn-sm" ng-click="entry.values.beni_immobili.push({})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Aggiungi bene</button>';
 
     var templateBeniImmobiliInsert =
-        '<table class="table">' +
+        '<table ng-controller="main" class="table">' +
         '<thead><tr>' +
           '<th>Persona</th>' +
           '<th>Natura diritto</th>' +
@@ -283,7 +417,9 @@
                 '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
                 '<td><select name="select_diritto" ng-model="obj.natura_diritto" required><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
             '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione"/ type="text" value="{{obj.descrizione}}" required/></td>' +
-            '<td><input ng-model="obj.provincia" ng-minlength="2" ng-maxlength="2" size=2 placeholder="XX"/ value="{{obj.provincia}}"/></td>' +
+            '<td><select name="prov-name" ng-model="obj.provincia">' +
+              '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
+            '</select></td>'+
             '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" required/></td>' +
             '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note"/ type="text" value="{{obj.annotazioni}}" required/></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_immobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
@@ -586,6 +722,7 @@
 
     var template730Edit =
             //'{{entry.values.reddito_730}}' +
+            '{{entry.values}}' +
             '<table class="table">' +
             '<thead><tr>' +
               '<th>Voce</th>' +
@@ -654,7 +791,7 @@
 		var templateDownloadRect = '<a ng-show=entry.values.filename_rectification href="{{entry.values.filename_rectification_url}}">Scarica {{entry.values.filename_rectification}}</a>';
 
     var admin = nga.application('Openpolis dossier redditi - backend') // application main title
-      .baseApiUrl('http://patrimoni.openpolis.it/api/p/'); // main API endpoint
+      .baseApiUrl('http://openpatrimoni.deppsviluppo.org/api/p/'); // main API endpoint
 
     // define all entities at the top to allow references between them
     var parlamentari = nga.entity('parlamentari'); // the API endpoint for posts will be http://localhost:3000/posts/:id
@@ -716,12 +853,12 @@
           .validation({ required: true }),
         nga.field('comune_nascita')
           .validation({ required: true }),
-        nga.field('provincia_nascita')
-          .validation({ required: true, minlength: 2, maxlength: 2 }),
+        nga.field('provincia_nascita', 'template')
+          .template(provNascEditTemplate),
         nga.field('comune_residenza')
           .validation({ required: true }),
-        nga.field('provincia_residenza')
-          .validation({ required: true, minlength: 2, maxlength: 2 }),
+        nga.field('provincia_residenza', 'template')
+          .template(provResEditTemplate),
         nga.field('reddito_730', 'template')
             .label('Reddito')
             .template(template730Insert),
@@ -807,12 +944,12 @@
           .validation({ required: true }),
         nga.field('comune_nascita')
           .validation({ required: true }),
-        nga.field('provincia_nascita')
-          .validation({ required: true, minlength: 2, maxlength: 2 }),
+        nga.field('provincia_nascita', 'template')
+          .template(provNascEditTemplate),
         nga.field('comune_residenza')
           .validation({ required: true }),
-        nga.field('provincia_residenza')
-          .validation({ required: true, minlength: 2, maxlength: 2 }),
+        nga.field('provincia_residenza', 'template')
+          .template(provResEditTemplate),
         nga.field('reddito_730', 'template')
             .label('Reddito')
             .template(template730Edit),
@@ -1019,6 +1156,7 @@
         '<p class="lead">You can add custom pages, too</p>' +
       '</div>' +
     '</div></div>';
+
   app.config(function ($stateProvider) {
     $stateProvider.state('stats', {
       parent: 'main',
