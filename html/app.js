@@ -231,14 +231,14 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.partecipazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
-                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
+                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
+                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
                 '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
                   '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia_sede === option.id">{{option.name}}</option>'+
                 '</select></td>'+
-                '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" required/></td>' +
-                '<td><input ng-model="obj.valore_economico" size=4 placeholder="Valore" type="number" step="any" value="{{obj.valore_economico}}" required/></td>' +
+                '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" /></td>' +
+                '<td><input ng-model="obj.valore_economico" size=4 placeholder="Valore" type="number" step="any" value="{{obj.valore_economico}}" /></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
                 '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.partecipazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
               '</tr>' +
@@ -259,14 +259,14 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.partecipazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
-                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
+                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
+                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
                 '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
                   '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia_sede === option.id">{{option.name}}</option>'+
                 '</select></td>'+
-                '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" required/></td>' +
-                '<td><input ng-model="obj.valore_economico" size=4 placeholder="Valore" type="number" step="any" value="{{obj.valore_economico}}" required/></td>' +
+                '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" /></td>' +
+                '<td><input ng-model="obj.valore_economico" size=4 placeholder="Valore" type="number" step="any" value="{{obj.valore_economico}}" /></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
                 '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.partecipazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
               '</tr>' +
@@ -309,13 +309,13 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.amministrazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
-                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
+                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
+                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
                 '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
                   '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
                 '</select></td>'+
-                '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" required/></td>' +
+                '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" /></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
                 '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.partecipazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
               '</tr>' +
@@ -335,13 +335,13 @@
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.amministrazioni_soc">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" required/></td>' +
-                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" required/></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
+                '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
+                '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
                 '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
                   '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}">{{option.name}}</option>'+
                 '</select></td>'+
-                '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" required/></td>' +
+                '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" /></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
                 '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.amministrazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
               '</tr>' +
@@ -380,20 +380,20 @@
           '<th>Descrizione</th>' +
           '<th>Provincia</th>' +
           '<th>Comune</th>' +
-          '<th>Rendita</th>' +
+          '<th>Rendita catastale</th>' +
           '<th>Categoria catastale</th>' +
           '<th>Annotazioni</th>' +
         '</tr></thead>' +
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_immobili">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-                '<td><select name="select_diritto" ng-model="obj.natura_diritto" required><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
-            '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione" type="text" value="{{obj.descrizione}}" required/></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
+                '<td><select name="select_diritto" ng-model="obj.natura_diritto" ><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
+            '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione" type="text" value="{{obj.descrizione}}" /></td>' +
             '<td><select name="prov-name" ng-model="obj.provincia">' +
               '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
             '</select></td>'+
-            '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" required/></td>' +
-            '<td><input ng-model="obj.rendita_catastale" size=8 type="number" value="{{obj.rendita_catastale}}"/></td>' +
+            '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" /></td>' +
+            '<td><input ng-model="obj.rendita_catastale" size=6 type="number" value="{{obj.rendita_catastale}}"/></td>' +
             '<td><input ng-model="obj.categoria_catastale" size=8 placeholder="Categoria" type="text" value="{{obj.categoria_catastale}}"/></td>' +
             '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note" type="text" value="{{obj.annotazioni}}"/></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_immobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
@@ -414,14 +414,14 @@
         '</tr></thead>' +
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_immobili">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-                '<td><select name="select_diritto" ng-model="obj.natura_diritto" required><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
-            '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione"/ type="text" value="{{obj.descrizione}}" required/></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
+                '<td><select name="select_diritto" ng-model="obj.natura_diritto" ><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
+            '<td><input ng-model="obj.descrizione" size=12 placeholder="Descrione"/ type="text" value="{{obj.descrizione}}" /></td>' +
             '<td><select name="prov-name" ng-model="obj.provincia">' +
               '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
             '</select></td>'+
-            '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" required/></td>' +
-            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note"/ type="text" value="{{obj.annotazioni}}" required/></td>' +
+            '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" /></td>' +
+            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note"/ type="text" value="{{obj.annotazioni}}" /></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_immobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
           '</tr>' +
         '</tbody>' +
@@ -499,7 +499,7 @@
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.spese_elettorali">' +
 								'<td>'+
-									'<select ng-model="obj.fonte" type="text" required>'+
+									'<select ng-model="obj.fonte" type="text">'+
 									'<option value="produzione materiale e mezzi di propaganda">produzione materiale e mezzi di propaganda</option>'+
 									'<option value="distribuzione e diffusione del materiale">distribuzione e diffusione del materiale</option>'+
 									'<option value="organizzazione di manifestazioni">organizzazione di manifestazioni</option>'+
@@ -596,7 +596,7 @@
             '<tbody>' +
               '<tr ng-repeat="obj in entry.values.contributi_elettorali">' +
 								'<td>'+
-									'<select ng-model="obj.fonte" type="text" required>'+
+									'<select ng-model="obj.fonte" type="text">'+
 									'<option value="contributo ex legge n. 195/74">contributo ex legge n. 195/74</option>'+
 									'<option value="erogazioni del candidato">erogazioni del candidato</option>'+
 									'<option value="contributi o servizi ricevuti dal partito">contributi o servizi ricevuti dal partito</option>'+
@@ -661,11 +661,11 @@
         '</tr></thead>' +
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_mobili">' +
-                '<td><select name="select_persona" ng-model="obj.persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
-            '<td><input ng-model="obj.tipologia" size=8 placeholder="tipologia" type="text" value="{{obj.tipologia}}" required/></td>' +
-            '<td><input ng-model="obj.cavalli_fiscali" size=5 placeholder="CV" type="text" value="{{obj.cavalli_fiscali}}" required/></td>' +
-            '<td><input ng-model="obj.anno_immatricolazione" ng-minlength="4" ng-maxlength="4" size=4 placeholder="Anno"/ type="number" value="{{obj.anno_immatricolazione}}" required/></td>' +
-            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note"/ type="text" value="{{obj.annotazioni}}" required/></td>' +
+                '<td><select name="select_persona" ng-model="obj.persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option><option value="figli">Figli</option><option value="parente">Parente</option></select></td>' +
+            '<td><input ng-model="obj.tipologia" size=8 placeholder="tipologia" type="text" value="{{obj.tipologia}}" /></td>' +
+            '<td><input ng-model="obj.cavalli_fiscali" size=5 placeholder="CV" type="text" value="{{obj.cavalli_fiscali}}" /></td>' +
+            '<td><input ng-model="obj.anno_immatricolazione" ng-minlength="4" ng-maxlength="4" size=4 placeholder="Anno"/ type="number" value="{{obj.anno_immatricolazione}}" /></td>' +
+            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note"/ type="text" value="{{obj.annotazioni}}" /></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_mobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
           '</tr>' +
         '</tbody>' +
@@ -684,11 +684,11 @@
         '</tr></thead>' +
         '<tbody>' +
           '<tr ng-repeat="obj in entry.values.beni_mobili">' +
-            '<td><select name="select_persona" ng-model="obj.Persona" required><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
-            '<td><input ng-model="obj.tipologia" size=8 placeholder="tipologia" type="text" value="{{obj.tipologia}}" required/></td>' +
-            '<td><input ng-model="obj.cavalli_fiscali" size=5 placeholder="CV" type="text" value="{{obj.cavalli_fiscali}}" required/></td>' +
-            '<td><input ng-model="obj.anno_immatricolazione" ng-minlength="4" ng-maxlength="4" size=4 placeholder="Anno" type="number" value="{{obj.anno_immatricolazione}}" required/></td>' +
-            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note" type="text" value="{{obj.annotazioni}}" required/></td>' +
+            '<td><select name="select_persona" ng-model="obj.Persona" ><option value="coniuge">Coniuge</option><option value="dichiarante">Dichiarante</option></select></td>' +
+            '<td><input ng-model="obj.tipologia" size=8 placeholder="tipologia" type="text" value="{{obj.tipologia}}" /></td>' +
+            '<td><input ng-model="obj.cavalli_fiscali" size=5 placeholder="CV" type="text" value="{{obj.cavalli_fiscali}}" /></td>' +
+            '<td><input ng-model="obj.anno_immatricolazione" ng-minlength="4" ng-maxlength="4" size=4 placeholder="Anno" type="number" value="{{obj.anno_immatricolazione}}" /></td>' +
+            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note" type="text" value="{{obj.annotazioni}}" /></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_mobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
           '</tr>' +
         '</tbody>' +
@@ -721,8 +721,7 @@
             '</table>';
 
     var template730Edit =
-            //'{{entry.values.reddito_730}}' +
-            '{{entry.values}}' +
+            //'{{entry.values}}' +
             '<table class="table">' +
             '<thead><tr>' +
               '<th>Voce</th>' +
@@ -849,14 +848,11 @@
             { value: 'celibe', label: 'Celibe' },
             { value: 'nubile', label: 'Nubile' },
             { value: 'coniugato', label: 'Coniugato' },
-          ])
-          .validation({ required: true }),
-        nga.field('comune_nascita')
-          .validation({ required: true }),
+          ]),
+        nga.field('comune_nascita'),
         nga.field('provincia_nascita', 'template')
           .template(provNascEditTemplate),
-        nga.field('comune_residenza')
-          .validation({ required: true }),
+        nga.field('comune_residenza'),
         nga.field('provincia_residenza', 'template')
           .template(provResEditTemplate),
         nga.field('reddito_730', 'template')
@@ -926,10 +922,10 @@
           .validation({ required: true, minlength: 2 }),
         nga.field('nome') // the default edit field type is "string", and displays as a text input
           .attributes({ placeholder: 'Nome' }) // you can add custom attributes, too
-          .validation({ required: true, minlength: 3, maxlength: 100 }), // add validation rules for fields
+          .validation({ required: true, minlength: 2, maxlength: 100 }), // add validation rules for fields
         nga.field('cognome') // the default edit field type is "string", and displays as a text input
           .attributes({ placeholder: 'Cognome' }) // you can add custom attributes, too
-          .validation({ required: true, minlength: 3, maxlength: 100 }), // add validation rules for fields
+          .validation({ required: true, minlength: 2, maxlength: 100 }), // add validation rules for fields
         nga.field('data_nascita', 'date')
           //.format('dd-MM-yyyy') // 2006-01-02T15:04:05Z07:00 Date field type allows date formatting
           //.transform(utcfy) // FIXME update ng-admin version
@@ -940,14 +936,11 @@
             { value: 'celibe', label: 'Celibe' },
             { value: 'nubile', label: 'Nubile' },
             { value: 'coniugato', label: 'Coniugato' },
-          ])
-          .validation({ required: true }),
-        nga.field('comune_nascita')
-          .validation({ required: true }),
+          ]),
+        nga.field('comune_nascita'),
         nga.field('provincia_nascita', 'template')
           .template(provNascEditTemplate),
-        nga.field('comune_residenza')
-          .validation({ required: true }),
+        nga.field('comune_residenza'),
         nga.field('provincia_residenza', 'template')
           .template(provResEditTemplate),
         nga.field('reddito_730', 'template')
