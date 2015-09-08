@@ -53,7 +53,7 @@ With github.com/yvasiyarov/swagger installed::
 
 Test it with::
 
-        $ go run web.go docs.go
+        $ bin/rest-docs -api "http://openpatrimoni.deppsviluppo.org"
 Note
 ----
 

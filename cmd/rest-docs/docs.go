@@ -3,27 +3,27 @@ package main
 //This file is generated automatically. Do not try to edit it manually.
 
 var resourceListingJson = `{
-    "apiVersion": "1.0.0",
+    "apiVersion": "0.1.0",
     "swaggerVersion": "1.2",
     "apis": [
         {
-            "path": "/users",
+            "path": "/api",
             "description": "Varie classifiche sui patrimoni dei parlamentari"
         }
     ],
     "info": {
         "title": "Patrimoni Trasparenti RESTapi",
-        "description": "Openpolis Patrimoni trasparenti api. http://openpolis.it/"
+        "description": "Openpolis Patrimoni trasparenti RESTapi. http://openpolis.it/"
     }
 }`
-var apiDescriptionsJson = map[string]string{"users":`{
-    "apiVersion": "1.0.0",
+var apiDescriptionsJson = map[string]string{"api":`{
+    "apiVersion": "0.1.0",
     "swaggerVersion": "1.2",
     "basePath": "{{.}}",
-    "resourcePath": "/users",
+    "resourcePath": "/api",
     "apis": [
         {
-            "path": "/api/parlamentari/classifiche/",
+            "path": "/api/parlamentari/classifiche/{kind}",
             "description": "Varie classifiche sui patrimoni dei parlamentari",
             "operations": [
                 {
@@ -36,9 +36,9 @@ var apiDescriptionsJson = map[string]string{"users":`{
                         {
                             "paramType": "path",
                             "name": "kind",
-                            "description": "User ID",
-                            "dataType": "int",
-                            "type": "int",
+                            "description": "Tipo della classifica desiderata {beni-immobili-totali|beni-immobili-coniuge}",
+                            "dataType": "string",
+                            "type": "string",
                             "format": "",
                             "allowMultiple": false,
                             "required": true,

@@ -5,9 +5,9 @@
 // Attach output to stdout:
 //	incomes-rest -mongo-host mongohost.tld
 //
-// @APIVersion 1.0.0
+// @APIVersion 0.1.0
 // @APITitle Patrimoni Trasparenti RESTapi
-// @APIDescription Openpolis Patrimoni trasparenti api. http://openpolis.it/
+// @APIDescription Openpolis Patrimoni trasparenti RESTapi. http://openpolis.it/
 package main
 
 import (
@@ -320,14 +320,15 @@ func main() {
 	InfoLogger.Println("connected to mongo:", conf.Mongohost)
 
 	router := mux.NewRouter()
-	// Public APIs
+	// ===== Public APIs
 	router.HandleFunc("/", httph.WithLog(InfoLogger, HomeHandler))
+
 	router.HandleFunc("/api/parlamentari/classifiche/{kind}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, ClassificheHandler)))))
-	//  Pivate APIs
+	// ===== Pivate APIs
 	privateRouter := router.PathPrefix("/api/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
 	privateRouter.HandleFunc("/parlamentari/file/upload",
