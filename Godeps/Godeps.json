@@ -1,0 +1,76 @@
+{
+	"ImportPath": "bitbucket.org/eraclitux/op-incomes",
+	"GoVersion": "go1.5",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/goauth2/oauth",
+			"Comment": "weekly-56",
+			"Rev": "afe77d958c701557ec5dc56f6936fcc194d15520"
+		},
+		{
+			"ImportPath": "github.com/eaigner/s3",
+			"Rev": "8f20ed1460fb8f8dc8cb810e421ca598ba23449c"
+		},
+		{
+			"ImportPath": "github.com/eraclitux/cfgp",
+			"Comment": "new-api-10-g5cfaaed",
+			"Rev": "5cfaaede88c867c713ff401fc644ef6900118ee6"
+		},
+		{
+			"ImportPath": "github.com/eraclitux/httph",
+			"Comment": "v0.1.0-alpha",
+			"Rev": "570b5c209704eea6fbb17b2829c69ffeb227b683"
+		},
+		{
+			"ImportPath": "github.com/eraclitux/stracer",
+			"Rev": "eb32003f6c55049ac3dc2718bffb0d47cfa5939d"
+		},
+		{
+			"ImportPath": "github.com/fvbock/endless",
+			"Rev": "877f13564d9fa4eaccefa9becfb01da91e9dc94a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "47e8f450ef38c857cdd922ec08862ca9d65a1c6d"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-colorable",
+			"Rev": "40e4aedc8fabf8c23e040057540867186712faa5"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Rev": "7fcbc72f853b92b5720db4a6b8482be612daef24"
+		},
+		{
+			"ImportPath": "github.com/mgutz/ansi",
+			"Rev": "452f5f5396543168418a299cd963697ac742b56e"
+		},
+		{
+			"ImportPath": "github.com/mgutz/logxi/v1",
+			"Rev": "3b9b8954fb030d7130a00f228ad2b8167b76a2c7"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "933937213561306ee71d265fb8a2913f20a55123"
+		},
+		{
+			"ImportPath": "google.golang.org/api/drive/v2",
+			"Rev": "cf0f7d2e30720b820fc9ec9f768ad765a27d641b"
+		},
+		{
+			"ImportPath": "google.golang.org/api/googleapi",
+			"Rev": "cf0f7d2e30720b820fc9ec9f768ad765a27d641b"
+		},
+		{
+			"ImportPath": "gopkg.in/mgo.v2",
+			"Rev": "c9fd3712fbf3e92924c974dce16da2d322508fe2"
+		}
+	]
+}
