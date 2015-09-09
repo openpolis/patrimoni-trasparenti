@@ -142,3 +142,78 @@ type DeclarationEnhanced struct {
 	UrlFileOrig string `json:"filename_url"`
 	UrlFileRect string `json:"filename_rectification_url"`
 }
+
+// TBDashTest models JSON response for TadaBoard test dashboard.
+// required tag is used by swagger for documentation.
+type TBDashTest struct {
+	Status    bool              `json:"status,required"`
+	Error     error             `json:"error"`
+	Timestamp int64             `json:"timestamp"`
+	Query     map[string]string `json:"query"`
+}
+
+//{
+//  "status": true,
+//  "error": null,
+//  "timestamp": 1441789290944,
+//  "query": {
+//    "provincia_residenza": null,
+//    "comune_residenza": null
+//  },
+//  "item": [
+//    {
+//      "id": "1",
+//      "tip": "a test widget",
+//      "data": [
+//        {
+//          "value": 1821,
+//          "radius": 293,
+//          "category": "A",
+//          "id": 0
+//        },
+//        {
+//          "value": 1590,
+//          "radius": 253,
+//          "category": "B",
+//          "id": 1
+//        }
+//      ]
+//    },
+//    {
+//      "id": "2",
+//      "tip": "another widget",
+//      "data": [
+//        {
+//          "x": "A",
+//          "y": 4426,
+//          "category": "groupA",
+//          "id": 0
+//        },
+//        {
+//          "x": "B",
+//          "y": 5026,
+//          "category": "groupA",
+//          "id": 1
+//        },
+//        {
+//          "x": "C",
+//          "y": 4475,
+//          "category": "groupA",
+//          "id": 2
+//        },
+//        {
+//          "x": "D",
+//          "y": 6471,
+//          "category": "groupA",
+//          "id": 3
+//        },
+//        {
+//          "x": "E",
+//          "y": 6146,
+//          "category": "groupA",
+//          "id": 4
+//        }
+//      ]
+//    }
+//  ]
+//}

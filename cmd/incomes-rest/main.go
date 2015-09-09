@@ -8,6 +8,8 @@
 // @APIVersion 0.1.0
 // @APITitle Patrimoni Trasparenti RESTapi
 // @APIDescription Openpolis Patrimoni trasparenti RESTapi. http://openpolis.it/
+// @SubApi TadaBoard API [/tdb]
+// @SubApi API politici [/api]
 package main
 
 import (
@@ -328,6 +330,11 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, ClassificheHandler)))))
+	router.HandleFunc("/api/tdb/test",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, TadaBoardHandlerTest)))))
 	// ===== Pivate APIs
 	privateRouter := router.PathPrefix("/api/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))

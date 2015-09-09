@@ -55,3 +55,8 @@ func WithLog(logger *log.Logger, fn http.HandlerFunc) http.HandlerFunc {
 		fn(w, r)
 	}
 }
+
+// HeaderJSON sets http header for json.
+func HeaderJSON(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+}

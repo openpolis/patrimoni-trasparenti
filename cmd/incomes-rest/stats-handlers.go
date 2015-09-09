@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"bitbucket.org/eraclitux/op-incomes"
 	"github.com/eraclitux/httph"
+	"github.com/eraclitux/stracer"
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -41,7 +43,8 @@ func ClassificheHandlerImmobiliTot(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(status), status)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	//w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	httph.HeaderJSON(w)
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
 		ErrorLogger.Println("encoding data", err)
@@ -98,6 +101,7 @@ func ClassificheHandlerImmobiliConiuge(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} string "Success"
 // @Failure 401 {object} string "Access denied"
 // @Failure 404 {object} string "Not Found"
+// @Failure 500 {object} string "Mhm, something went wrong"
 // @Router /api/parlamentari/classifiche/{kind} [get]
 func ClassificheHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -109,6 +113,34 @@ func ClassificheHandler(w http.ResponseWriter, r *http.Request) {
 	default:
 		ErrorLogger.Println("bad charts request", vars)
 		status := http.StatusBadRequest
+		http.Error(w, http.StatusText(status), status)
+		return
+	}
+}
+
+// @Title Test dashboard
+// @Description Un endpoint per testare il funzionamento di TB
+// @Accept json
+// @Param kind query string true "Un parametro"
+// @Param kind2 query string true "Un altro parametro"
+// @Success 200 {object} incomes.TBDashTest
+// @Failure 401 {object} string "Access denied"
+// @Failure 404 {object} string "Not Found"
+// @Failure 500 {object} string "Mhm, something went wrong"
+// @Resource /tdb
+// @Router /api/tdb/test [get]
+func TadaBoardHandlerTest(w http.ResponseWriter, r *http.Request) {
+	stracer.Traceln("query elems:", r.Form)
+	result := &incomes.TBDashTest{
+		Timestamp: time.Now().Unix(),
+		Query:     map[string]string{"key": "value"},
+	}
+
+	httph.HeaderJSON(w)
+	err := json.NewEncoder(w).Encode(result)
+	if err != nil {
+		ErrorLogger.Println("encoding data", err)
+		status := http.StatusInternalServerError
 		http.Error(w, http.StatusText(status), status)
 		return
 	}

@@ -16,13 +16,13 @@
 		},
 		{
 			"ImportPath": "github.com/eraclitux/cfgp",
-			"Comment": "new-api-10-g5cfaaed",
-			"Rev": "5cfaaede88c867c713ff401fc644ef6900118ee6"
+			"Comment": "v1.0.0-alpha-2-g3d4bec5",
+			"Rev": "3d4bec502cbba30395d1ebfd3eb75902552bbede"
 		},
 		{
 			"ImportPath": "github.com/eraclitux/httph",
-			"Comment": "v0.1.0-alpha",
-			"Rev": "570b5c209704eea6fbb17b2829c69ffeb227b683"
+			"Comment": "v0.1.0-alpha-1-g8ad5c8b",
+			"Rev": "8ad5c8bd05db13d3fffbd2581ada1c750dabc484"
 		},
 		{
 			"ImportPath": "github.com/eraclitux/stracer",

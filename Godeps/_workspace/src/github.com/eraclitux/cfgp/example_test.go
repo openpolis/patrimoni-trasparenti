@@ -15,11 +15,13 @@ type myConf struct {
 	// Same key name will be searched in configuration file.
 	NumberOfUsers int `cfgp:"users,number of users,"`
 	Daemon        bool
+	Message       string
 }
 
 func Example() {
-	c := myConf{}
-	//
+	// To create a dafault value for a flag
+	// assign it when instantiate the conf struct.
+	c := myConf{Message: "A default value"}
 	cfgp.Path = "test_data/one.ini"
 	err := cfgp.Parse(&c)
 	if err != nil {
