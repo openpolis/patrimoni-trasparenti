@@ -48,10 +48,18 @@ func WithMongo(session *mgo.Session, fn http.HandlerFunc) http.HandlerFunc {
 // of provided logger to log received requests.
 // Format is:
 // <http method> <remote addr> <requested url>
+// If X-Real-IP is found in headers it is used as <remote addr>
+// with (X-Real-IP) added.
 func WithLog(logger *log.Logger, fn http.HandlerFunc) http.HandlerFunc {
 	//TODO use constants to define format like in log package.
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Println(r.Method, r.RemoteAddr, r.URL)
+		remoteAddr := r.Header.Get("X-Real-IP")
+		if remoteAddr == "" {
+			remoteAddr = r.RemoteAddr
+		} else {
+			remoteAddr += " (X-Real-IP)"
+		}
+		logger.Println(r.Method, remoteAddr, r.URL)
 		fn(w, r)
 	}
 }
