@@ -32,6 +32,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// Version is populated at compile time
+// with git describe output.
+var Version = "unknown-rev"
+var BuildTime = "unknown-time"
+
 // InvalidIDError is returned if declaration id is invalid.
 var ErrInvalidID = errors.New("invalid declaration id")
 
@@ -50,6 +55,7 @@ type daemonConf struct {
 	S3secret    string
 	S3path      string
 	LogFile     string
+	Version     bool `cfgp:"v,show version and exit,"`
 }
 
 var conf daemonConf
@@ -302,6 +308,9 @@ func main() {
 	err := cfgp.Parse(&conf)
 	if err != nil {
 		ErrorLogger.Fatalln("parsing conf", err)
+	}
+	if conf.Version {
+		log.Fatalf("%s %s", Version, BuildTime)
 	}
 	if conf.LogFile != "" {
 		f, err := os.OpenFile(conf.LogFile, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)

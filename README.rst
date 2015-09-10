@@ -57,4 +57,4 @@ Test it with::
 Note
 ----
 
-This code is *alfa* quality.
+This code is *alpha* quality.

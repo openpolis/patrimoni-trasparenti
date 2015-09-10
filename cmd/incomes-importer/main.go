@@ -33,6 +33,9 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+var Version = "unknown-rev"
+var BuildTime = "unknown-time"
+
 // Get only files into 'Dichiarazioni' dir.
 const queryString = `'0ByZ65N5BuOCtflhXT1psaDFQTkdTSjVOV2pDb3pCbTM5dFd6SkxKSGUwZl8tYWM0bExJc3c' in parents`
 
@@ -733,12 +736,17 @@ func ParseNotes(files []*drive.File, session *mgo.Session) {
 func main() {
 	var pKeyFlag, mongoHost string
 	var parseNotes bool
+	var versionFlag bool
 	flag.StringVar(&pKeyFlag, "client-secret", "", "API Client secret")
 	flag.StringVar(&mongoHost, "mongo-host", "localhost", "MongoDB address")
 	flag.BoolVar(&parseNotes, "parse-notes", false, "Parse notes file (instead of declarations)")
+	flag.BoolVar(&versionFlag, "v", false, "Print version and exit")
 	flag.Parse()
 	if flag.NFlag() == 0 {
 		log.Fatal("client-secret is mandatory")
+	}
+	if versionFlag {
+		log.Fatalf("%s %s", Version, BuildTime)
 	}
 	config.ClientSecret = pKeyFlag
 	session, err := mgo.Dial(mongoHost)
