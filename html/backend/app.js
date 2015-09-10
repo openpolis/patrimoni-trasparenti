@@ -2,6 +2,8 @@
 (function () {
   "use strict";
 
+  var apiTarget = 'http://patrimoni.staging.openpolis.it/api/p/' // main API endpoint
+
   var app = angular.module('dossierApp', ['ng-admin']);
 
   // Define custom filter to calculate totals.
@@ -794,7 +796,7 @@
 		var templateDownloadRect = '<a ng-show=entry.values.filename_rectification href="{{entry.values.filename_rectification_url}}">Scarica {{entry.values.filename_rectification}}</a>';
 
     var admin = nga.application('Openpolis dossier redditi - backend') // application main title
-      .baseApiUrl('http://openpatrimoni.deppsviluppo.org/api/p/'); // main API endpoint
+      .baseApiUrl(apiTarget); // main API endpoint
 
     // define all entities at the top to allow references between them
     var parlamentari = nga.entity('parlamentari'); // the API endpoint for posts will be http://localhost:3000/posts/:id

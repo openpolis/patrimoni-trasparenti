@@ -143,6 +143,23 @@ type DeclarationEnhanced struct {
 	UrlFileRect string `json:"filename_rectification_url"`
 }
 
+// TBRPolarPoint models a single point in a polar pie widget.
+// It can be passed also for other pies (radius is ignored).
+// Different categories have different color but different IDs in same category haven't.
+type TBPolarPoint struct {
+	Value    int    `json:"value"`
+	Radius   int    `json:"radius"`
+	Category string `json:"category"`
+	ID       string `json:"id"`
+}
+
+// TBItem models a single TB item aka a widget.
+type TBItem struct {
+	ID   string         `json:"id"`
+	Tip  string         `json:"tip"`
+	Data []TBPolarPoint `json:"data"`
+}
+
 // TBDashTest models JSON response for TadaBoard test dashboard.
 // required tag is used by swagger for documentation.
 type TBDashTest struct {
@@ -150,6 +167,18 @@ type TBDashTest struct {
 	Error     error             `json:"error"`
 	Timestamp int64             `json:"timestamp"`
 	Query     map[string]string `json:"query"`
+	Item      []TBItem          `json:"item"`
+}
+
+// TBReq models single request made by TB.
+//[STRACER] 09:59:29.513576 {"method":"GET","customQuery":"","url":"http://patrimoni.staging.openpolis.it/api/tdb/test","query":{"provincia_residenza":"0"},"token":""}
+type TBReq struct {
+	ID          string            `json:"id"`
+	Method      string            `json:"method"`
+	CustomQuery string            `json:"customQuery"`
+	URL         string            `json:"url"`
+	Query       map[string]string `json:"query"`
+	Token       string            `json:"token"`
 }
 
 //{

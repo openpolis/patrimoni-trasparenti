@@ -1,3 +1,10 @@
+MongoDB commands
+================
+
+Create text index::
+
+        db.parliamentarians.createIndex({ "$**": "text" }, { name: "TextIndex" })
+         
 ES commands
 ===========
 
