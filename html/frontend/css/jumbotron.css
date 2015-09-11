@@ -17,3 +17,47 @@ body {
     from { -webkit-transform: rotate(0deg); }
     to { -webkit-transform: rotate(360deg); }
 }
+
+.ui-autocomplete {
+    /* will be fixed by options.outHeight */
+    max-height: 300px;
+    min-height: 50px;
+    max-width: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    padding-right: 0;
+    z-index: 9999;
+    background-color: white;
+}
+.ui-helper-hidden-accessible {
+  display: none;
+}
+.ui-menu-add {
+  text-align: center;
+}
+.ui-menu-group {
+  margin-right: 10px;
+  text-align: right;
+  color: red;
+}
+.ui-state-hover,
+.ui-state-focus,
+.ui-state-active {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 15px;
+}
+::-webkit-scrollbar-thumb {
+    background: #aaa;
+    min-height: 20px;
+}
+::-webkit-scrollbar-track {
+    background: #ddd;
+}

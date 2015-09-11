@@ -5,6 +5,7 @@ angular.module('PatrimoniTrasparenti')
     // FIXME create an open version of this
     $http.get('//patrimoni.staging.openpolis.it/api/p/parlamentari/' + $routeParams.id)
       .success(function(scheda){
+        controller.spinner = false;
         $scope.scheda = scheda;
       })
       .catch(function(resp) {

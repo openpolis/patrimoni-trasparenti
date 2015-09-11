@@ -10,10 +10,12 @@
     </p>
   </div>
 
-  <div ng-show="cardCtrl.scheda" class="alert alert-danger" role="alert">
-    <h1>Scheda {{scheda.nome}} {{scheda.cognome}}</h1>
-      <p>{{cardCtrl.id}}</p>
-      <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+  <div ng-show="scheda">
+    <h1>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h1>
+      <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}"/>
+      <a href="{{scheda.filename_url}}"><p>Scarica documento originale<p></a>
+      <p>Identificativo dichiarazione {{scheda.id}}</p>
+      <p></p>
   </div>
 
 </div>
