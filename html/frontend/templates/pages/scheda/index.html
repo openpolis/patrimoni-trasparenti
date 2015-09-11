@@ -1,0 +1,19 @@
+<div class ="scheda-wrapper">
+
+  <p ng-show="cardCtrl.spinner" ><span class="glyphicon glyphicon-refresh spinning"></span> Recupero la scheda...</p>
+
+  <div ng-show="cardCtrl.errors" class="alert alert-danger" role="alert">
+    <p>
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      Errore durante il recupero della scheda, riprova più tardi.
+    </p>
+  </div>
+
+  <div ng-show="cardCtrl.scheda" class="alert alert-danger" role="alert">
+    <h1>Scheda {{scheda.nome}} {{scheda.cognome}}</h1>
+      <p>{{cardCtrl.id}}</p>
+      <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+  </div>
+
+</div>
