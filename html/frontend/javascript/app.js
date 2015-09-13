@@ -1,4 +1,7 @@
 angular.module('PatrimoniTrasparenti', ['ngRoute', 'ui.autocomplete'])
+  .config(function(DeclarationsProvider){
+    DeclarationsProvider.setEndPoint('//patrimoni.staging.openpolis.it/api/p/parlamentari/');
+  })
   .filter('capitalize', function() {
     return function (input, format) {
       if (!input) {
@@ -23,4 +26,3 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ui.autocomplete'])
       }
     };
   });
-

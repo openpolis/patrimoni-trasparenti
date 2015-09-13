@@ -1,6 +1,7 @@
 angular.module('PatrimoniTrasparenti')
-  .controller('SearchController', function($scope, $compile, $location) {
-    searchTarget = {};
+  .controller('SearchController', ['$scope', '$compile', '$location', function($scope, $compile, $location) {
+    this.searchObj = {id:'', value:''};
+    controller = this;
     /* config object */
     $scope.myOption = {
         options: {
@@ -8,38 +9,16 @@ angular.module('PatrimoniTrasparenti')
             focusOpen: true,
             onlySelectValid: true,
             source: function (request, response) {
-                var data2 = [
-                        "Asp",
-                        "BASIC",
-                        "C",
-                        "C++",
-                        "Clojure",
-                        "COBOL",
-                        "ColdFusion",
-                        "Erlang",
-                        "Fortran",
-                        "Groovy",
-                        "Haskell",
-                        "Java",
-                        "JavaScript",
-                        "Lisp",
-                        "Perl",
-                        "PHP",
-                        "Python",
-                        "Ruby",
-                        "Scala",
-                        "Scheme"
-                ];
                 var data = [
-                  {label:"Etichetta", value:"55f1550800241310b2543687"},
-                  {label:"Formaggio", value:"55f1550200241310b2543685"}
+                  {value:"Mario Rossi 2014", id:"55f1550800241310b2543687"},
+                  {value:"Giorgia Meloni 2014", id:"55f1550200241310b2543685"}
                 ];
                 data = $scope.myOption.methods.filter(data, request.term);
 
                 if (!data.length) {
                     data.push({
-                        label: 'Non trovato',
-                        value: ''
+                        value: 'Non trovato',
+                        id: ''
                     });
                 }
                 // add "Add Language" button to autocomplete menu bottom
@@ -53,12 +32,17 @@ angular.module('PatrimoniTrasparenti')
         events : {
             select: function( event, ui ) {
                 console.log("selected!");
-                console.log(searchTarget);
-                console.log(ui.item.value);
-                searchTarget = {};
-                $location.path('/scheda/'+ui.item.value);
+                console.log(controller.searchObj);
+                console.log('ui:', ui);
+                console.log(ui.item);
+                $location.path('/scheda/'+ui.item.id);
+            },
+            close: function( event, ui ) {
+                console.log("closed!");
+                console.log('searchObj:', controller.searchObj);
+                console.log(ui.item);
             }
         },
         methods: {}
     };
-  });
+  }]);

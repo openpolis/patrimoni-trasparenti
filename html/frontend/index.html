@@ -45,7 +45,7 @@
           </ul>
           <form class="navbar-form navbar-right">
             <div class="form-group">
-              <input ng-controller="SearchController as searchCtl" ng-model="searchCtl.searchTarget" ui-autocomplete="myOption" type="text" placeholder="Cerca un politico..." class="form-control">
+              <input ng-controller="SearchController as searchCtl" ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text" placeholder="Cerca un politico..." class="form-control" >
             </div>
             <button type="submit" class="btn btn-success">cerca</button>
           </form>
@@ -104,6 +104,7 @@
     <script src="javascript/routes.js"></script>
     <script src="javascript/controllers/card-controllers.js"></script>
     <script src="javascript/controllers/search-controllers.js"></script>
+    <script src="javascript/services/declarations.js"></script>
     <script src="assets/bower_components/ui-autocomplete/autocomplete.js"></script>
   </body>
 </html>
