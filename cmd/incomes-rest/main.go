@@ -269,7 +269,11 @@ func DichiarazioneHandlerPut(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("invalid id", err)
 		return
 	}
-	err = coll.UpdateId(objId, p)
+	uQuery := bson.M{
+		"$set":         p,
+		"$currentDate": bson.M{"ultima_modifica": true},
+	}
+	err = coll.UpdateId(objId, uQuery)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("saving declaration", err)
