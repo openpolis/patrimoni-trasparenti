@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	DeclarationsDb             = "declarations"
-	ParliamentariansCollection = "parliamentarians"
+	DeclarationsDb   = "declarations"
+	DeclarationsColl = "all"
 )
 
 // RecordReddito modella la singola voce del modello 730.

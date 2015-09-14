@@ -27,9 +27,9 @@ func createS3link(fileName string) string {
 	return url.String()
 }
 
-// ParlamentariUploadHandler get a declaration file via POST and
+// DeclarationUploader get a declaration file via POST and
 // store it to s3.
-func ParlamentariUploadHandler(w http.ResponseWriter, r *http.Request) {
+func DeclarationUploader(w http.ResponseWriter, r *http.Request) {
 	s3c := &s3.S3{
 		Bucket:    conf.S3bucket,
 		AccessKey: conf.S3key,

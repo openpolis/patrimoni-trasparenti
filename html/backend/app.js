@@ -799,7 +799,7 @@
       .baseApiUrl(apiTarget); // main API endpoint
 
     // define all entities at the top to allow references between them
-    var parlamentari = nga.entity('parlamentari'); // the API endpoint for posts will be http://localhost:3000/posts/:id
+    var parlamentari = nga.entity('dichiarazioni'); // the API endpoint for posts will be http://localhost:3000/posts/:id
 
     // set the application entities
     admin
@@ -914,7 +914,7 @@
         nga.field('quadri_presentati')
             .label('Quadri presentati'),
         nga.field('note', 'wysiwyg'),
-				nga.field('filename', 'file').uploadInformation({ 'url': 'http://patrimoni.openpolis.it/api/p/parlamentari/file/upload', 'apifilename': 'filename' })
+				nga.field('filename', 'file').uploadInformation({ 'url': apiTarget + 'file/upload', 'apifilename': 'filename' })
 						.label("File originale")
       ]);
 
@@ -1006,7 +1006,7 @@
         nga.field('filename')
 					.editable(false),
 						// FIXME neighter map() works to add op_ip (it is triggered when whole form is submitted)
-				nga.field('filename_rectification', 'file').uploadInformation({ 'url': 'http://patrimoni.openpolis.it/api/p/parlamentari/file/upload', 'apifilename': 'filename' })
+				nga.field('filename_rectification', 'file').uploadInformation({ 'url': apiTarget + 'file/upload', 'apifilename': 'filename' })
 						.label("File rettifica")
       ]);
 

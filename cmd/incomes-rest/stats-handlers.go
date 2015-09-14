@@ -19,7 +19,7 @@ func ClassificheHandlerImmobiliTot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	session := sessionInterface.(*mgo.Session)
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	results := []bson.M{}
 	pipe := coll.Pipe([]bson.M{
 		{"$unwind": "$beni_immobili"},
@@ -59,7 +59,7 @@ func ClassificheHandlerImmobiliConiuge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	session := sessionInterface.(*mgo.Session)
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	results := []bson.M{}
 	pipe := coll.Pipe([]bson.M{
 		{"$unwind": "$beni_immobili"},
@@ -100,7 +100,7 @@ func ClassificheHandlerImmobiliConiuge(w http.ResponseWriter, r *http.Request) {
 // @Failure 401 {object} string "Access denied"
 // @Failure 404 {object} string "Not Found"
 // @Failure 500 {object} string "Mhm, something went wrong"
-// @Router /api/parlamentari/classifiche/{kind} [get]
+// @Router /api/dichiarazioni/classifiche/{kind} [get]
 func ClassificheHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	switch vars["kind"] {

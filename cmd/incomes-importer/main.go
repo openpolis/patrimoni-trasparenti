@@ -79,7 +79,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 	}()
 	session := mSession.Copy()
 	defer session.Close()
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 
 	url := exportUrl + "&gid=0"
 	resp, err := http.Get(url)
@@ -672,7 +672,7 @@ func GetFilesFromDrive(d *drive.Service) ([]*drive.File, error) {
 func SendToMongo(mSession *mgo.Session, p incomes.Declaration) {
 	session := mSession.Copy()
 	defer session.Close()
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	err := coll.Insert(p)
 	if err != nil {
 		log.Println("Error inserting", p, "into MongoDB:", err)

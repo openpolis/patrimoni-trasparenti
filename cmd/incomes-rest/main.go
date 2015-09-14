@@ -108,7 +108,7 @@ func GetFullTextSearchKey(r *http.Request) string {
 	}
 	return q
 }
-func ParlamentariHandlerGet(w http.ResponseWriter, r *http.Request) {
+func DichiarazioniHandlerGet(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		ErrorLogger.Println("decoding parameters in url", err)
@@ -123,7 +123,7 @@ func ParlamentariHandlerGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	session := sessionInterface.(*mgo.Session)
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	results := []incomes.Declaration{}
 	textSearch := GetFullTextSearchKey(r)
 	var searchKey interface{}
@@ -157,7 +157,7 @@ func ParlamentariHandlerGet(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func ParlamentariHandlerPost(w http.ResponseWriter, r *http.Request) {
+func DichiarazioniHandlerPost(w http.ResponseWriter, r *http.Request) {
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
 		ErrorLogger.Println("cannot find a db session")
@@ -165,7 +165,7 @@ func ParlamentariHandlerPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	session := sessionInterface.(*mgo.Session)
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	p := incomes.Declaration{}
 	// Using Unmarshall and lowering all received bytes
 	// will make date parsing fails:
@@ -188,15 +188,15 @@ func ParlamentariHandlerPost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(p)
 }
 
-// ParlamentariHandler hanldes request for 'parlamentari' private
+// DichiarazioniHandler hanldes requests for all politicians private
 // endpoint.
-func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
+func DichiarazioniHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		ParlamentariHandlerGet(w, r)
+		DichiarazioniHandlerGet(w, r)
 		return
 	case "POST":
-		ParlamentariHandlerPost(w, r)
+		DichiarazioniHandlerPost(w, r)
 		return
 	case "OPTIONS":
 		w.Header().Add("Access-Control-Allow-Methods", "POST,PUT,DELETE")
@@ -208,7 +208,7 @@ func ParlamentariHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func ParlamentareHandlerGet(w http.ResponseWriter, r *http.Request) {
+func DichiarazioneHandlerGet(w http.ResponseWriter, r *http.Request) {
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
 		ErrorLogger.Println("cannot find a db session")
@@ -217,7 +217,7 @@ func ParlamentareHandlerGet(w http.ResponseWriter, r *http.Request) {
 	}
 	vars := mux.Vars(r)
 	session := sessionInterface.(*mgo.Session)
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	result := incomes.Declaration{}
 	objId, err := GetObjectIdHex(vars["id"])
 	if err != nil {
@@ -246,7 +246,7 @@ func ParlamentareHandlerGet(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func ParlamentareHandlerPut(w http.ResponseWriter, r *http.Request) {
+func DichiarazioneHandlerPut(w http.ResponseWriter, r *http.Request) {
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
 		ErrorLogger.Println("cannot find a db session")
@@ -255,7 +255,7 @@ func ParlamentareHandlerPut(w http.ResponseWriter, r *http.Request) {
 	}
 	vars := mux.Vars(r)
 	session := sessionInterface.(*mgo.Session)
-	coll := session.DB(incomes.DeclarationsDb).C(incomes.ParliamentariansCollection)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	p := incomes.Declaration{}
 	err := json.NewDecoder(r.Body).Decode(&p)
 	if err != nil {
@@ -278,13 +278,13 @@ func ParlamentareHandlerPut(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 }
 
-func ParlamentareHandler(w http.ResponseWriter, r *http.Request) {
+func DichiarazioneHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		ParlamentareHandlerGet(w, r)
+		DichiarazioneHandlerGet(w, r)
 		return
 	case "PUT":
-		ParlamentareHandlerPut(w, r)
+		DichiarazioneHandlerPut(w, r)
 		return
 	case "OPTIONS":
 		w.Header().Add("Access-Control-Allow-Methods", "POST,PUT,DELETE")
@@ -334,7 +334,7 @@ func main() {
 	// ===== Public APIs
 	router.HandleFunc("/", httph.WithLog(InfoLogger, HomeHandler))
 
-	router.HandleFunc("/api/parlamentari/classifiche/{kind}",
+	router.HandleFunc("/api/dichiarazioni/classifiche/{kind}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
@@ -347,19 +347,19 @@ func main() {
 	// ===== Pivate APIs
 	privateRouter := router.PathPrefix("/api/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
-	privateRouter.HandleFunc("/parlamentari/file/upload",
+	privateRouter.HandleFunc("/file/upload",
 		httph.WithLog(InfoLogger,
-			httph.WithCORS(ParlamentariUploadHandler)))
-	privateRouter.HandleFunc("/parlamentari",
-		httph.WithLog(InfoLogger,
-			httph.WithCORS(
-				httph.WithSharedData(
-					httph.WithMongo(mongoSession, ParlamentariHandler)))))
-	privateRouter.HandleFunc("/parlamentari/{id}",
+			httph.WithCORS(DeclarationUploader)))
+	privateRouter.HandleFunc("/dichiarazioni",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
-					httph.WithMongo(mongoSession, ParlamentareHandler)))))
+					httph.WithMongo(mongoSession, DichiarazioniHandler)))))
+	privateRouter.HandleFunc("/dichiarazioni/{id}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, DichiarazioneHandler)))))
 	http.Handle("/", router)
 	InfoLogger.Println("listening on:", conf.Httpaddress, ":", conf.Httpport)
 	log.Fatalln(http.ListenAndServe(conf.Httpaddress+":"+conf.Httpport, nil))
