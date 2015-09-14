@@ -269,6 +269,9 @@ func DichiarazioneHandlerPut(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("invalid id", err)
 		return
 	}
+	// Avoid "saving declaration Mod on _id not allowed"
+	// thanks to "omitempty" in tag.
+	p.Id = bson.ObjectId("")
 	uQuery := bson.M{
 		"$set":         p,
 		"$currentDate": bson.M{"ultima_modifica": true},

@@ -122,6 +122,8 @@ type Declaration struct {
 	// This is the rectification file name for declaration.
 	// Intended to be modified.
 	FileRectification string `bson:"filename_rectification" json:"filename_rectification"`
+
+	LastModified time.Time `bson:"ultima_modifica,omitempty" json:"ultima_modifica,omitempty"`
 }
 
 func (p Declaration) String() string {
@@ -140,9 +142,8 @@ type DeclarationVersioned struct {
 // Not intended to be stored in db but to return in REST calls.
 type DeclarationEnhanced struct {
 	Declaration
-	LastModified time.Time `json:"ultima_modifica,omitempty"`
-	UrlFileOrig  string    `json:"filename_url"`
-	UrlFileRect  string    `json:"filename_rectification_url"`
+	UrlFileOrig string `json:"filename_url"`
+	UrlFileRect string `json:"filename_rectification_url"`
 }
 
 // TBRPolarPoint models a single point in a polar pie widget.
