@@ -314,7 +314,7 @@ func main() {
 	}
 	err := cfgp.Parse(&conf)
 	if err != nil {
-		ErrorLogger.Fatalln("parsing conf", err)
+		log.Fatalln("parsing conf", err)
 	}
 	if conf.Version {
 		log.Fatalf("%s %s", Version, BuildTime)

@@ -9,3 +9,6 @@ godep go build -ldflags "-w -X main.Version=${GIT_TAG} -X main.BuildTime=${BTIME
 cd -
 cd ./cmd/incomes-importer
 godep go build -ldflags "-w -X main.Version=${GIT_TAG} -X main.BuildTime=${BTIME}" -o ../../bin/incomes-importer
+cd -
+cd ./cmd/incomes-updater
+godep go build -ldflags "-w -X main.Version=${GIT_TAG} -X main.BuildTime=${BTIME}" -o ../../bin/incomes-updater

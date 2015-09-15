@@ -10,6 +10,7 @@ import (
 const (
 	DeclarationsDb   = "declarations"
 	DeclarationsColl = "all"
+	OpApi            = "http://api3.openpolis.it"
 )
 
 // RecordReddito modella la singola voce del modello 730.
@@ -123,6 +124,9 @@ type Declaration struct {
 	// Intended to be modified.
 	FileRectification string `bson:"filename_rectification" json:"filename_rectification"`
 
+	// FIXME field is present in json even if empty.
+	// Embed struct rule/bug?
+	// Try to put in DeclarationEnhanced
 	LastModified time.Time `bson:"ultima_modifica,omitempty" json:"ultima_modifica,omitempty"`
 }
 
@@ -144,6 +148,35 @@ type DeclarationEnhanced struct {
 	Declaration
 	UrlFileOrig string `json:"filename_url"`
 	UrlFileRect string `json:"filename_rectification_url"`
+}
+
+type Group struct {
+	Name    string `bson:"name" json:"name"`
+	Acronym string `bson:"acronym" json:"acronym"`
+	//Onane   string `bson:"oname" json:"oname"`
+}
+type PoliticalData struct {
+	Role string `bson:"incarico" json:"incarico"`
+	// Only for parliamentary and senate.
+	Group            Group  `bson:"gruppo" json:"gruppo"`
+	ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
+	Occupation       string `bson:"professione" json:"professione"`
+}
+
+//============== Openpolis API
+
+type Content struct {
+	Content map[string]string `json:"content"`
+}
+
+type OpPolitician struct {
+	Content Content `json:"content"`
+}
+
+// OpResponse models response from Op api.
+type OpResponse struct {
+	Next    string                   `json:"next"`
+	Results []map[string]interface{} `json:"results"`
 }
 
 // TBRPolarPoint models a single point in a polar pie widget.
