@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
+	"strings"
 
 	"bitbucket.org/eraclitux/op-incomes"
 
@@ -84,9 +84,11 @@ func UpdateMongo(opId string, d incomes.PoliticalData) error {
 func UpdateData(r incomes.OpResponse, role string) error {
 	// FIXME better way?
 	for _, r := range r.Results {
-		data := r["content"].(map[string]interface{})
-		sdata := data["content"].(map[string]interface{})
-		op_id := strconv.Itoa(int(sdata["id"].(float64)))
+		sdata := r["politician"].(map[string]interface{})
+		// OpId is not present :(
+		// We'll take it from image_uri
+		image_uri := sdata["image_uri"].(string)
+		op_id := strings.Split(image_uri, "=")[1]
 		sdata = r["group"].(map[string]interface{})
 		var name, acronym string
 		if sdata["name"] != nil {
@@ -95,6 +97,8 @@ func UpdateData(r incomes.OpResponse, role string) error {
 		if sdata["acronym"] != nil {
 			acronym = sdata["acronym"].(string)
 		}
+		name = strings.ToLower(name)
+		acronym = strings.ToLower(acronym)
 		group := incomes.Group{
 			Name:    name,
 			Acronym: acronym,
@@ -103,6 +107,8 @@ func UpdateData(r incomes.OpResponse, role string) error {
 		// FIXME I don't like this.
 		occupation := sdata["profession"].(map[string]interface{})["description"].(string)
 		stracer.Traceln("op api results, op_id:", op_id, "group:", group, "occupation:", occupation)
+		role = strings.ToLower(role)
+		occupation = strings.ToLower(occupation)
 		d := incomes.PoliticalData{
 			Role:       role,
 			Group:      group,
@@ -156,11 +162,11 @@ func updateSingle(ep string) {
 	InfoLogger.Println("retrieve data for", ep)
 	switch ep {
 	case "parlamentare":
-		target = incomes.OpApi + "/politici/instcharges?institution_id=4&started_after=2013-01-16&status=a"
+		target = incomes.OpApi + "/politici/instcharges?institution_id=4&started_after=2010-01-16"
 	case "senatore":
-		target = incomes.OpApi + "/politici/instcharges?institution_id=5&started_after=2013-01-16&status=a"
+		target = incomes.OpApi + "/politici/instcharges?institution_id=5&started_after=2010-01-16"
 	case "membro":
-		target = incomes.OpApi + "/politici/instcharges?institution_id=3&started_after=2013-01-16&status=a"
+		target = incomes.OpApi + "/politici/instcharges?institution_id=3&started_after=2010-01-16"
 	default:
 		ErrorLogger.Println("unknown politician type", ep)
 		return

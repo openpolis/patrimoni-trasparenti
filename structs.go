@@ -158,20 +158,12 @@ type Group struct {
 type PoliticalData struct {
 	Role string `bson:"incarico" json:"incarico"`
 	// Only for parliamentary and senate.
-	Group            Group  `bson:"gruppo" json:"gruppo"`
-	ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
-	Occupation       string `bson:"professione" json:"professione"`
+	Group Group `bson:"gruppo" json:"gruppo"`
+	//ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
+	Occupation string `bson:"professione" json:"professione"`
 }
 
 //============== Openpolis API
-
-type Content struct {
-	Content map[string]string `json:"content"`
-}
-
-type OpPolitician struct {
-	Content Content `json:"content"`
-}
 
 // OpResponse models response from Op api.
 type OpResponse struct {
