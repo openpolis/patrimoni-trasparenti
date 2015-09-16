@@ -12,10 +12,8 @@ angular.module('PatrimoniTrasparenti')
                 var data = [];
                 Declarations.getAutocompleteAll(request.term)
                   .success(function(rData){
-                    console.log("autoc retrieved:", rData);
                     response(rData);
                   });
-                console.log("search term and data:", request.term, data);
                 data = $scope.myOption.methods.filter(data, request.term);
 
                 if (!data.length) {

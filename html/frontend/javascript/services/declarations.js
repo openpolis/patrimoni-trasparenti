@@ -7,7 +7,7 @@ angular.module('PatrimoniTrasparenti')
     this.$get = function($http) {
       return {
         get: function(id) {
-          return $http.get(apiEndPoint + '/p/dichiarazioni/' + id)
+          return $http.get(apiEndPoint + '/dichiarazioni/' + id)
         },
         getAutocompleteAll: function(query) {
           return $http.get(apiEndPoint + '/autocompleter', {params:{q:query}})

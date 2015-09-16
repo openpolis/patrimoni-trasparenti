@@ -10,11 +10,85 @@
     </p>
   </div>
 
-  <div ng-show="scheda">
-    <h1>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h1>
-      <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}"/>
+  <div ng-show="scheda" class="panel panel-default">
+    <div class="panel-heading"><h2>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}} {{scheda.anno_dichiarazione}}</h2></div>
+    <div class="panel-body">
+        <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}" alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
+        <p><b>Data di nascita:</b> {{scheda.data_nascita | date:'dd-MM-yyyy'}}</p>
+        <p><b>Residenza:</b> {{scheda.comune_residenza|capitalize:all}} ({{scheda.provincia_residenza|capitalize:team}})</p>
+        <p><b>Incarico:</b> {{scheda.incarico}}</p>
+        <p><b>Professione:</b> {{scheda.professione}}</p>
+        <p><b>Gruppo:</b> {{scheda.gruppo.acronym}} - {{scheda.gruppo.name}}</p>
+    </div> <!-- panel-body -->
+    <div class="panel-heading">Voci reddito</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Voce</th>
+          <th>Dichiarante</th>
+          <th>Coniuge</th>
+          <th>Totali</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="voce in scheda.reddito_730">
+          <td ng-repeat="(k, v) in voce">
+            {{v|currency:"€"}}
+          </td>
+        </tr>
+        <tr>
+          <td>Totale dichiarato</td>
+          <td></td>
+          <td></td>
+          <td>{{scheda.totale_730|currency:"€"}}</td>
+        </tr>
+      </tbody>
+    <table> <!-- reddito -->
+    <div class="panel-heading">Beni immobili {{scheda.beni_immobili.length}}</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Persona</th>
+          <th>Diritto</th>
+          <th>Descrizione</th>
+          <th>Provincia</th>
+          <th>Comune</th>
+          <th>Rendita</th>
+          <th>Categoria</th>
+          <th>Annotazioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="voce in scheda.beni_immobili">
+          <td ng-repeat="(k, v) in voce">
+            {{v}}
+          </td>
+        </tr>
+      </tbody>
+    <table> <!-- immobili -->
+    <div class="panel-heading">Beni mobili {{scheda.beni_mobili.length}}</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Persona</th>
+          <th>Tipologia</th>
+          <th>Cavalli fiscali</th>
+          <th>Anno immatr.</th>
+          <th>Annotazioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="voce in scheda.beni_mobili">
+          <td ng-repeat="(k, v) in voce">
+            {{v}}
+          </td>
+        </tr>
+      </tbody>
+    <table> <!-- immobili -->
+    <div class="panel-footer">
       <a href="{{scheda.filename_url}}"><p>Scarica documento originale<p></a>
       <p>Identificativo dichiarazione {{scheda.id}}</p>
-      <p></p>
-  </div>
+      <li ng-repeat="(key, value) in scheda">{{key}}: {{value}}</li>
+    </div> <!-- panel-footer -->
+  </div> <!-- panel-default -->
 </div>

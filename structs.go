@@ -139,13 +139,17 @@ type DeclarationVersioned struct {
 	// Different versions of this document as document ids in a different collection.
 	Versions []bson.ObjectId `bson:"versions" json:"versions"`
 }
+type DeclarationPolitical struct {
+	Declaration   `bson:",inline"`
+	PoliticalData `bson:",inline"`
+}
 
 // DeclarationEnhanced extends Declaration
 // to include download link for declarations and other
 // stuff.
 // Not intended to be stored in db but to return in REST calls.
 type DeclarationEnhanced struct {
-	Declaration
+	DeclarationPolitical
 	UrlFileOrig string `json:"filename_url"`
 	UrlFileRect string `json:"filename_rectification_url"`
 }

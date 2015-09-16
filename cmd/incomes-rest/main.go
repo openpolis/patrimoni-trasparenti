@@ -218,7 +218,7 @@ func DichiarazioneHandlerGet(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	session := sessionInterface.(*mgo.Session)
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
-	result := incomes.Declaration{}
+	result := incomes.DeclarationPolitical{}
 	objId, err := GetObjectIdHex(vars["id"])
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -228,14 +228,14 @@ func DichiarazioneHandlerGet(w http.ResponseWriter, r *http.Request) {
 	err = coll.FindId(objId).One(&result)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		ErrorLogger.Println("retrieving parliamentarian from db", err)
+		ErrorLogger.Println("retrieving declaration from db", err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	enhancedResult := incomes.DeclarationEnhanced{
-		Declaration: result,
-		UrlFileOrig: createS3link(result.File),
-		UrlFileRect: createS3link(result.FileRectification),
+		DeclarationPolitical: result,
+		UrlFileOrig:          createS3link(result.File),
+		UrlFileRect:          createS3link(result.FileRectification),
 	}
 	err = json.NewEncoder(w).Encode(enhancedResult)
 	if err != nil {
@@ -340,6 +340,11 @@ func main() {
 	router := mux.NewRouter()
 	// ===== Public APIs
 	router.HandleFunc("/", httph.WithLog(InfoLogger, HomeHandler))
+	router.HandleFunc("/api/dichiarazioni/{id}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, DichiarazioneHandlerGet))))).Methods("GET")
 	router.HandleFunc("/api/autocompleter",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
