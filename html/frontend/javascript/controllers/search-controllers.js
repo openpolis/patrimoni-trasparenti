@@ -9,11 +9,13 @@ angular.module('PatrimoniTrasparenti')
             focusOpen: true,
             onlySelectValid: true,
             source: function (request, response) {
-                Declarations.getAutocompleteAll();
-                var data = [
-                  {value:"Mario Rossi 2014", id:"55f1550800241310b2543687"},
-                  {value:"Giorgia Meloni 2014", id:"55f1550200241310b2543685"}
-                ];
+                var data = [];
+                Declarations.getAutocompleteAll(request.term)
+                  .success(function(rData){
+                    console.log("autoc retrieved:", rData);
+                    response(rData);
+                  });
+                console.log("search term and data:", request.term, data);
                 data = $scope.myOption.methods.filter(data, request.term);
 
                 if (!data.length) {
