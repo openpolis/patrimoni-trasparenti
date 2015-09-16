@@ -8,8 +8,10 @@ angular.module('PatrimoniTrasparenti')
   })
     .when('/scheda/:id', {
     templateUrl: '/templates/pages/scheda/index.html',
-    controller: 'CardController',
-    controllerAs: 'cardCtrl'
+    controller: function($routeParams) {
+      this.declarationId = $routeParams.id;
+    },
+    controllerAs: 'cardPageController'
   })
     .otherwise({ redirectTo: '/' });
 

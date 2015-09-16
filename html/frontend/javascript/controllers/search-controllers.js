@@ -1,5 +1,5 @@
 angular.module('PatrimoniTrasparenti')
-  .controller('SearchController', ['$scope', '$compile', '$location', function($scope, $compile, $location) {
+  .controller('SearchController', ['$scope', '$compile', '$location', 'Declarations', function($scope, $compile, $location, Declarations) {
     this.searchObj = {id:'', value:''};
     controller = this;
     /* config object */
@@ -9,6 +9,7 @@ angular.module('PatrimoniTrasparenti')
             focusOpen: true,
             onlySelectValid: true,
             source: function (request, response) {
+                Declarations.getAutocompleteAll();
                 var data = [
                   {value:"Mario Rossi 2014", id:"55f1550800241310b2543687"},
                   {value:"Giorgia Meloni 2014", id:"55f1550200241310b2543685"}

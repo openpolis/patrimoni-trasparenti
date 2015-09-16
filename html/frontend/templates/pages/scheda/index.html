@@ -1,21 +1,3 @@
 <div class ="scheda-wrapper">
-
-  <p ng-show="cardCtrl.spinner" ><span class="glyphicon glyphicon-refresh spinning"></span> Recupero la scheda...</p>
-
-  <div ng-show="cardCtrl.errors" class="alert alert-danger" role="alert">
-    <p>
-      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-      <span class="sr-only">Error:</span>
-      Errore durante il recupero della scheda, riprova più tardi.
-    </p>
-  </div>
-
-  <div ng-show="scheda">
-    <h1>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h1>
-      <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}"/>
-      <a href="{{scheda.filename_url}}"><p>Scarica documento originale<p></a>
-      <p>Identificativo dichiarazione {{scheda.id}}</p>
-      <p></p>
-  </div>
-
+<pt-card declaration-id="{{cardPageController.declarationId}}"></pt-card>
 </div>
