@@ -1,4 +1,3 @@
-// TODO create an element fro this?
 angular.module('PatrimoniTrasparenti')
   .controller('CardController', ['$scope', 'Declarations', function($scope, Declarations){
     $scope.spinner = true;

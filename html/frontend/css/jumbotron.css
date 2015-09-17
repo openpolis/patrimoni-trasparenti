@@ -61,3 +61,6 @@ body {
 ::-webkit-scrollbar-track {
     background: #ddd;
 }
+.white, .white a {
+    color: #fff;
+  }

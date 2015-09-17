@@ -1,7 +1,8 @@
 angular.module('PatrimoniTrasparenti')
   .controller('SearchController', ['$scope', '$compile', '$location', 'Declarations', function($scope, $compile, $location, Declarations) {
     this.searchObj = {id:'', value:''};
-    controller = this;
+    var controller = this;
+    controller.spinner = false;
     /* config object */
     $scope.myOption = {
         options: {
@@ -10,15 +11,25 @@ angular.module('PatrimoniTrasparenti')
             onlySelectValid: true,
             source: function (request, response) {
                 var data = [];
+                controller.spinner = true;
+                //console.log("making req to autocompl, spinner and $scope:", $scope.Spinner, $scope)
+                console.log("req:", request)
                 Declarations.getAutocompleteAll(request.term)
                   .success(function(rData){
+                    controller.spinner = false;
+                    if (!rData.length) {
+                        rData.push({
+                            value: 'Non trovato, digita un termine completo',
+                            id: ''
+                        });
+                    }
                     response(rData);
                   });
                 data = $scope.myOption.methods.filter(data, request.term);
 
                 if (!data.length) {
                     data.push({
-                        value: 'Non trovato',
+                        value: 'Non trovato, digita un termine completo',
                         id: ''
                     });
                 }

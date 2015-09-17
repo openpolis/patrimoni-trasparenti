@@ -11,11 +11,12 @@
   </div>
 
   <div ng-show="scheda" class="panel panel-default">
-    <div class="panel-heading"><h2>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}} {{scheda.anno_dichiarazione}}</h2></div>
+    <div class="panel-heading"><h3>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}} {{scheda.anno_dichiarazione}}</h3></div>
     <div class="panel-body">
         <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}" alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
         <p><b>Data di nascita:</b> {{scheda.data_nascita | date:'dd-MM-yyyy'}}</p>
         <p><b>Residenza:</b> {{scheda.comune_residenza|capitalize:all}} ({{scheda.provincia_residenza|capitalize:team}})</p>
+        <p><b>Stato civile:</b> {{scheda.stato_civile}}</p>
         <p><b>Incarico:</b> {{scheda.incarico}}</p>
         <p><b>Professione:</b> {{scheda.professione}}</p>
         <p><b>Gruppo:</b> {{scheda.gruppo.acronym}} - {{scheda.gruppo.name}}</p>
@@ -43,7 +44,7 @@
           <td>{{scheda.totale_730|currency:"€"}}</td>
         </tr>
       </tbody>
-    <table> <!-- reddito -->
+    </table> <!-- reddito -->
     <div class="panel-heading">Beni immobili {{scheda.beni_immobili.length}}</div>
     <table class="table">
       <thead>
@@ -84,7 +85,7 @@
           </td>
         </tr>
       </tbody>
-    <table> <!-- immobili -->
+    </table> <!-- immobili -->
     <div class="panel-footer">
       <a href="{{scheda.filename_url}}"><p>Scarica documento originale<p></a>
       <p>Identificativo dichiarazione {{scheda.id}}</p>
