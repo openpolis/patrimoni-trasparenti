@@ -28,18 +28,19 @@ type codiceUtilizzo struct {
 
 // BeneImmobile modella la singola voce della sezione beni immobili.
 type BeneImmobile struct {
-	Persona            string           `bson:"persona" json:"persona"`
-	Diritto            string           `bson:"natura_diritto" json:"natura_diritto"`
-	Descrizione        string           `bson:"descrizione" json:"descrizione"`
-	Provincia          string           `bson:"provincia" json:"provincia"`
-	Comune             string           `bson:"comune" json:"comune"`
-	RenditaCatastale   float32          `bson:"rendita_catastale" json:"rendita_catastale"`
-	CodiceUtilizzo     []codiceUtilizzo `bson:"codice_utilizzo" json:"codice_utilizzo"`
-	RedditoDom         float32          `bson:"reddito_dominicale" json:"reddito_dominicale"`
-	RedditoAgrario     float32          `bson:"reddito_agrario" json:"reddito_agrario"`
-	CategoriaCatastale string           `bson:"categoria_catastale" json:"categoria_catastale"`
-	QuotaPossesso      float32          `bson:"quota_posseso" json:"quota_posseso"`
-	Annotazioni        string           `bson:"annotazioni" json:"annotazioni"`
+	Persona          string  `bson:"persona" json:"persona"`
+	Diritto          string  `bson:"natura_diritto" json:"natura_diritto"`
+	Descrizione      string  `bson:"descrizione" json:"descrizione"`
+	Provincia        string  `bson:"provincia" json:"provincia"`
+	Comune           string  `bson:"comune" json:"comune"`
+	RenditaCatastale float32 `bson:"rendita_catastale" json:"rendita_catastale"`
+	//CodiceUtilizzo     []codiceUtilizzo `bson:"codice_utilizzo" json:"codice_utilizzo"`
+	CodiceUtilizzo     string  `bson:"codice_utilizzo" json:"codice_utilizzo"`
+	RedditoDom         float32 `bson:"reddito_dominicale" json:"reddito_dominicale"`
+	RedditoAgrario     float32 `bson:"reddito_agrario" json:"reddito_agrario"`
+	CategoriaCatastale string  `bson:"categoria_catastale" json:"categoria_catastale"`
+	QuotaPossesso      float32 `bson:"quota_posseso" json:"quota_posseso"`
+	Annotazioni        string  `bson:"annotazioni" json:"annotazioni"`
 }
 
 // BeneMobile modella la singola voce della sezione beni mobili.
@@ -75,6 +76,7 @@ type Ruolo struct {
 	Sede           `bson:",inline"`
 	Persona        string `bson:"persona" json:"persona"`
 	Denominazione  string `bson:"denominazione" json:"denominazione"`
+	AttPrevalente  string `bson:"attivita_prevalente" json:"attivita_prevalente"`
 	NaturaIncarico string `bson:"natura_incarico" json:"natura_incarico"`
 	Annotazioni    string `bson:"annotazioni" json:"annotazioni"`
 }
