@@ -21,16 +21,25 @@ type VoceReddito struct {
 	Totale      float32 `bson:"totale" json:"totale"`
 }
 
+type codiceUtilizzo struct {
+	Codice string `bson:"codice" json:"codice"`
+	Giorni int    `bson:"giorni" json:"giorni"`
+}
+
 // BeneImmobile modella la singola voce della sezione beni immobili.
 type BeneImmobile struct {
-	Persona            string  `bson:"persona" json:"persona"`
-	Diritto            string  `bson:"natura_diritto" json:"natura_diritto"`
-	Descrizione        string  `bson:"descrizione" json:"descrizione"`
-	Provincia          string  `bson:"provincia" json:"provincia"`
-	Comune             string  `bson:"comune" json:"comune"`
-	RenditaCatastale   float32 `bson:"rendita_catastale" json:"rendita_catastale"`
-	CategoriaCatastale string  `bson:"categoria_catastale" json:"categoria_catastale"`
-	Annotazioni        string  `bson:"annotazioni" json:"annotazioni"`
+	Persona            string           `bson:"persona" json:"persona"`
+	Diritto            string           `bson:"natura_diritto" json:"natura_diritto"`
+	Descrizione        string           `bson:"descrizione" json:"descrizione"`
+	Provincia          string           `bson:"provincia" json:"provincia"`
+	Comune             string           `bson:"comune" json:"comune"`
+	RenditaCatastale   float32          `bson:"rendita_catastale" json:"rendita_catastale"`
+	CodiceUtilizzo     []codiceUtilizzo `bson:"codice_utilizzo" json:"codice_utilizzo"`
+	RedditoDom         float32          `bson:"reddito_dominicale" json:"reddito_dominicale"`
+	RedditoAgrario     float32          `bson:"reddito_agrario" json:"reddito_agrario"`
+	CategoriaCatastale string           `bson:"categoria_catastale" json:"categoria_catastale"`
+	QuotaPossesso      float32          `bson:"quota_posseso" json:"quota_posseso"`
+	Annotazioni        string           `bson:"annotazioni" json:"annotazioni"`
 }
 
 // BeneMobile modella la singola voce della sezione beni mobili.
@@ -38,6 +47,8 @@ type BeneMobile struct {
 	Persona              string `bson:"persona" json:"persona"`
 	Tipologia            string `bson:"tipologia" json:"tipologia"`
 	CavalliFiscali       string `bson:"cavalli_fiscali" json:"cavalli_fiscali"`
+	Modello              string `bson:"modello" json:"modello"`
+	Marca                string `bson:"marca" json:"marca"`
 	AnnoImmatricolazione int    `bson:"anno_immatricolazione" json:"anno_immatricolazione"`
 	Annotazioni          string `bson:"annotazioni" json:"annotazioni"`
 }
@@ -53,6 +64,7 @@ type Partecipazione struct {
 	Sede            `bson:",inline"`
 	Persona         string  `bson:"persona" json:"persona"`
 	Denominazione   string  `bson:"denominazione" json:"denominazione"`
+	AttPrevalente   string  `bson:"attivita_prevalente" json:"attivita_prevalente"`
 	NumeroQuote     string  `bson:"numero_azioni_quote" json:"numero_azioni_quote"`
 	ValoreEconomico float32 `bson:"valore_economico" json:"valore_economico"`
 	Annotazioni     string  `bson:"annotazioni" json:"annotazioni"`
@@ -108,14 +120,19 @@ type Declaration struct {
 	TotaleSpeseElettorali        float32          `bson:"totale_spese_elettorali" json:"totale_spese_elettorali"`
 	QuotaForfettariaSpese        float32          `bson:"quota_forfettaria_spese" json:"quota_forfettaria_spese"`
 
-	DichiarazioneElettorale bool   `bson:"dichiarazione_elettorale" json:"dichiarazione_elettorale"`
-	DocumentiAppello        bool   `bson:"documenti_appello" json:"documenti_appello"`
-	DichiarazioneConiuge    bool   `bson:"dichiarazione_coniuge" json:"dichiarazione_coniuge"`
-	DichiaraziniIncomplete  string `bson:"dichiarazioni_incomplete" json:"dichiarazioni_incomplete"`
-	ModelloRedditi          string `bson:"modello_redditi" json:"modello_redditi"`
-	QuadriPresentati        string `bson:"quadri_presentati" json:"quadri_presentati"`
-	Variazioni              bool   `bson:"variazioni" json:"variazioni"`
-	Note                    string `bson:"note" json:"note"`
+	DichiarazioneElettorale bool `bson:"dichiarazione_elettorale" json:"dichiarazione_elettorale"`
+	DocumentiAppello        bool `bson:"documenti_appello" json:"documenti_appello"`
+	DichiarazioneConiuge    bool `bson:"dichiarazione_coniuge" json:"dichiarazione_coniuge"`
+	// XXX no more used, it can be removed
+	DichiaraziniIncomplete string `bson:"dichiarazioni_incomplete" json:"dichiarazioni_incomplete"`
+	ModelloRedditi         string `bson:"modello_redditi" json:"modello_redditi"`
+	// XXX no more used, it can be removed
+	QuadriPresentati string `bson:"quadri_presentati" json:"quadri_presentati"`
+
+	IndiceCompletezza int    `bson:"indice_completezza" json:"indice_completezza"`
+	NoteCompletezza   string `bson:"note_completezza" json:"note_completezza"`
+	Variazioni        bool   `bson:"variazioni" json:"variazioni"`
+	Note              string `bson:"note" json:"note"`
 
 	// This is the original file name for delcaration.
 	// Not intended to be modified.

@@ -15,6 +15,8 @@ type choice struct {
 	ID    string `json:"id"`
 }
 
+// Maybe could be usefull for partial match:
+// http://stackoverflow.com/questions/20806822/mongo-aggregation-with-relevance-match-multiple-fields
 func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
