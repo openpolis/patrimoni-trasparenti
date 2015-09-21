@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  var apiTarget = 'http://patrimoni.staging.openpolis.it/api/p/' // main API endpoint
+  var apiTarget = 'http://patrimoni.staging.openpolis.it/api/p/'; // main API endpoint
 
   var app = angular.module('dossierApp', ['ng-admin']);
 
@@ -1192,14 +1192,6 @@
 						.template(templateDownloadRect)
 						.label("File rettifica"),
       ]);
-
-
-    admin.menu(nga.menu()
-      .addChild(nga.menu(parlamentari).icon('<span class="glyphicon glyphicon-file"></span>')) // customize the entity menu icon
-      .addChild(nga.menu().title('Other')
-        .addChild(nga.menu().title('Stats').icon('').link('/stats'))
-      )
-    );
 
     nga.configure(admin);
   });
