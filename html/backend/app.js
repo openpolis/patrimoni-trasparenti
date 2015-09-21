@@ -271,7 +271,7 @@
                 '</select></td>'+
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
-                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
+                '<td><select ng-model="obj.provincia_sede">' +
                   '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia_sede === option.id">{{option.name}}</option>'+
                 '</select></td>'+
                 '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" /></td>' +
@@ -303,7 +303,7 @@
                 '</select></td>'+
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
-                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
+                '<td><select ng-model="obj.provincia_sede">' +
                   '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia_sede === option.id">{{option.name}}</option>'+
                 '</select></td>'+
                 '<td><input ng-model="obj.numero_azioni_quote" size=4 placeholder="Quote" type="text" value="{{obj.numero_azioni_quote}}" /></td>' +
@@ -359,8 +359,8 @@
                 '</select></td>'+
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
-                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
-                  '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
+                '<td><select ng-model="obj.provincia_sede">' +
+                  '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia_sede === option.id">{{option.name}}</option>'+
                 '</select></td>'+
                 '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" /></td>' +
                 '<td><input ng-model="obj.attivita_prevalente" size=12 placeholder="Attività prevalente" type="text" value="{{obj.attivita_prevalente}}"/></td>' +
@@ -389,7 +389,7 @@
                 '</select></td>'+
                 '<td><input ng-model="obj.denominazione" size=12 placeholder="Denominazione" type="text" value="{{obj.denominazione}}" /></td>' +
                 '<td><input ng-model="obj.citta_sede" size=8 placeholder="Città sede" type="text" value="{{obj.citta_sede}}" /></td>' +
-                '<td><select name="prov-name" ng-model="obj.provincia_sede">' +
+                '<td><select ng-model="obj.provincia_sede">' +
                   '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}">{{option.name}}</option>'+
                 '</select></td>'+
                 '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" /></td>' +
@@ -411,6 +411,10 @@
               '<th>Provincia</th>' +
               '<th>Comune</th>' +
               '<th>Rendita catastale</th>' +
+              '<th>Codice utilizzo</th>' +
+              '<th>Reddito dominicale</th>' +
+              '<th>Reddito agrario</th>' +
+              '<th>Quota possesso</th>' +
               '<th>Categoria catastale</th>' +
               '<th>Annotazioni</th>' +
             '</tr></thead>' +
@@ -422,6 +426,9 @@
                 '<td>{{obj.provincia}}</td>' +
                 '<td>{{obj.comune}}</td>' +
                 '<td>{{obj.rendita_catastale}}</td>' +
+                '<td>{{obj.codice_utilizzo}}</td>' +
+                '<td>{{obj.reddito_dominicale}}</td>' +
+                '<td>{{obj.reddito_agrario}}</td>' +
                 '<td>{{obj.categoria_catastale}}</td>' +
                 '<td>{{obj.annotazioni}}</td>' +
               '</tr>' +
@@ -439,7 +446,7 @@
           '<th ng-show="obj.descrizione === \'fabbricato\'">Rendita catastale</th>' +
           '<th ng-show="obj.descrizione === \'fabbricato\'">Codice utilizzo</th>' +
           '<th ng-show="obj.descrizione === \'terreno\'">Reddito dominicale</th>' +
-          '<th ng-show="obj.descrizione === \'terreno\'">Reddito agricolo</th>' +
+          '<th ng-show="obj.descrizione === \'terreno\'">Reddito agrario</th>' +
           '<th ng-show="obj.natura_diritto === \'comproprietà\'">Quota possesso</th>' +
           '<th>Categoria catastale</th>' +
           '<th>Annotazioni</th>' +
@@ -460,7 +467,7 @@
             '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.rendita_catastale" size=5 type="number" value="{{obj.rendita_catastale}}"/></td>' +
             '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.codice_utilizzo" size=5 value="{{obj.codice_utilizzo}}"/></td>' +
             '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_dominicale" size=5 type="number" value="{{obj.reddito_dominicale}}"/></td>' +
-            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_agricolo" size=5 type="number" value="{{obj.reddito_agricolo}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_agrario" size=5 type="number" value="{{obj.reddito_agrario}}"/></td>' +
             '<td ng-show="obj.natura_diritto === \'comproprietà\'"><input ng-model="obj.quota_posseso" type="number" value="{{obj.quota_posseso}}"/></td>' +
             '<td><input ng-model="obj.categoria_catastale" size=8 placeholder="Categoria" type="text" value="{{obj.categoria_catastale}}"/></td>' +
             '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note" type="text" value="{{obj.annotazioni}}"/></td>' +
@@ -471,23 +478,27 @@
         '<button type="button" class="btn btn-default btn-sm" ng-click="entry.values.beni_immobili.push({})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Aggiungi bene</button>';
 
     var templateBeniImmobiliInsert =
-        '<table ng-controller="main" class="table">' +
+        '<table ng-controller="main" class="table" ng-repeat="obj in entry.values.beni_immobili">' +
         '<thead><tr>' +
           '<th>Persona</th>' +
           '<th>Natura diritto</th>' +
           '<th>Descrizione</th>' +
           '<th>Provincia</th>' +
           '<th>Comune</th>' +
+          '<th ng-show="obj.descrizione === \'fabbricato\'">Rendita catastale</th>' +
+          '<th ng-show="obj.descrizione === \'fabbricato\'">Codice utilizzo</th>' +
+          '<th ng-show="obj.descrizione === \'terreno\'">Reddito dominicale</th>' +
+          '<th ng-show="obj.descrizione === \'terreno\'">Reddito agrario</th>' +
+          '<th ng-show="obj.natura_diritto === \'comproprietà\'">Quota possesso</th>' +
+          '<th>Categoria catastale</th>' +
           '<th>Annotazioni</th>' +
         '</tr></thead>' +
         '<tbody>' +
-          '<tr ng-repeat="obj in entry.values.beni_immobili">' +
-            '<td><select ng-model="obj.persona">' +
-              '<option ng-repeat="option in personaChoices.availableOptions" value="{{option.id}}" ng-selected="obj.persona === option.id">{{option.name}}</option>'+
-            '</select></td>'+
-            '<td><select name="select_diritto" ng-model="obj.natura_diritto">'+
-              '<option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option>'+
-            '</select></td>' +
+          '<tr>' +
+                '<td><select ng-model="obj.persona">' +
+                  '<option ng-repeat="option in personaChoices.availableOptions" value="{{option.id}}" ng-selected="obj.persona === option.id">{{option.name}}</option>'+
+                '</select></td>'+
+                '<td><select name="select_diritto" ng-model="obj.natura_diritto" ><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
             '<td><select ng-model="obj.descrizione">' +
               '<option ng-repeat="option in descrizioneChoices.availableOptions" value="{{option.id}}" ng-selected="obj.descrizione === option.id">{{option.name}}</option>'+
             '</select></td>'+
@@ -495,7 +506,13 @@
               '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
             '</select></td>'+
             '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" /></td>' +
-            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note"/ type="text" value="{{obj.annotazioni}}" /></td>' +
+            '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.rendita_catastale" size=5 type="number" value="{{obj.rendita_catastale}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.codice_utilizzo" size=5 value="{{obj.codice_utilizzo}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_dominicale" size=5 type="number" value="{{obj.reddito_dominicale}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_agrario" size=5 type="number" value="{{obj.reddito_agrario}}"/></td>' +
+            '<td ng-show="obj.natura_diritto === \'comproprietà\'"><input ng-model="obj.quota_posseso" type="number" value="{{obj.quota_posseso}}"/></td>' +
+            '<td><input ng-model="obj.categoria_catastale" size=8 placeholder="Categoria" type="text" value="{{obj.categoria_catastale}}"/></td>' +
+            '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note" type="text" value="{{obj.annotazioni}}"/></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_immobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
           '</tr>' +
         '</tbody>' +
