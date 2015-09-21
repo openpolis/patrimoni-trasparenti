@@ -13,7 +13,6 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -73,8 +72,7 @@ func getBoolFromNote(field string) bool {
 func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseNotes", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseNoteFile: %s", r)
 		}
 	}()
 	session := mSession.Copy()
@@ -149,8 +147,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 func ParseInfo(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseInfo", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseInfo: %s", r)
 		}
 	}()
 	url := exportUrl + "&gid=11"
@@ -203,8 +200,7 @@ func ParseInfo(p *incomes.Declaration, exportUrl string) (er error) {
 func ParseVociReddito(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseVociReddito", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseVociReddito: %s", r)
 		}
 	}()
 	redditi := make([]incomes.VoceReddito, 0, 5)
@@ -254,8 +250,7 @@ func ParseVociReddito(p *incomes.Declaration, exportUrl string) (er error) {
 func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseBeniImmobili", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseBeniImmobili: %s", r)
 		}
 	}()
 	beni := make([]incomes.BeneImmobile, 0, 5)
@@ -312,8 +307,7 @@ func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) (er error) {
 func ParseBeniMobili(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseBeniMobili", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseBeniMobili: %s", r)
 		}
 	}()
 	beni := make([]incomes.BeneMobile, 0, 5)
@@ -356,8 +350,7 @@ func ParseBeniMobili(p *incomes.Declaration, exportUrl string) (er error) {
 func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParsePartecipazioni", r)
-			er = r.(error)
+			er = fmt.Errorf("ParsePartecipazioni: %s", r)
 		}
 	}()
 	ruoli := make([]incomes.Partecipazione, 0, 5)
@@ -411,8 +404,7 @@ func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) (er error) {
 func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseAmmministrazioni", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseAmmministrazioni: %s", r)
 		}
 	}()
 	ruoli := make([]incomes.Ruolo, 0, 5)
@@ -450,8 +442,7 @@ func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) (er error) 
 func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseContributiElettorali", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseContributiElettorali: %s", r)
 		}
 	}()
 	voci := make([]incomes.Contributo, 0, 5)
@@ -503,8 +494,7 @@ func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) (er err
 func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error in ParseSpeseElettorali", r)
-			er = r.(error)
+			er = fmt.Errorf("ParseSpeseElettorali: %s", r)
 		}
 	}()
 	voci := make([]incomes.Contributo, 0, 5)
@@ -565,8 +555,7 @@ func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) (er error) {
 func DownloadAndParseDeclaration(file *drive.File) (poli incomes.Declaration, er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error", r)
-			er = errors.New("Fatal error parsing")
+			er = fmt.Errorf("DownloadAndParseDeclaration: %s", r)
 		}
 	}()
 	// XXX It seems that once read value are zeroed O.o
@@ -624,8 +613,7 @@ func getNotesYear(fName string) (int, error) {
 func DownloadAndParseNote(file *drive.File, session *mgo.Session) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("[ERROR] Fatal error", r)
-			er = errors.New("error parsing notes")
+			er = fmt.Errorf("DownloadAndParseNote: %s", r)
 		}
 	}()
 	// XXX It seems that once read value are zeroed O.o
