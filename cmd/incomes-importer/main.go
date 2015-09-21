@@ -58,8 +58,12 @@ func getNamesFromNote(field string) (name, surname string) {
 		name = v[0]
 		return
 	}
-	name = v[1]
 	surname = v[0]
+	for _, e := range v[1:] {
+		name += e + " "
+	}
+	name = strings.TrimRight(name, " ")
+	log.Println("name:", name, "surname:", surname)
 	return
 }
 
