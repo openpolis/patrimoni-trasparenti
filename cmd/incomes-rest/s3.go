@@ -30,6 +30,20 @@ func createS3link(fileName string) string {
 // DeclarationUploader get a declaration file via POST and
 // store it to s3.
 func DeclarationUploader(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		DeclarationUploaderPost(w, r)
+		return
+	case "OPTIONS":
+		w.Header().Add("Access-Control-Allow-Methods", "POST")
+		w.Header().Add("Access-Control-Allow-Headers", "content-type")
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+}
+
+func DeclarationUploaderPost(w http.ResponseWriter, r *http.Request) {
 	s3c := &s3.S3{
 		Bucket:    conf.S3bucket,
 		AccessKey: conf.S3key,
