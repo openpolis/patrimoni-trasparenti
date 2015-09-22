@@ -198,17 +198,17 @@ type OpResponse struct {
 // It can be passed also for other pies (radius is ignored).
 // Different categories have different color but different IDs in same category haven't.
 type TBPolarPoint struct {
-	Value    int    `json:"value"`
-	Radius   int    `json:"radius"`
-	Category string `json:"category"`
-	ID       string `json:"id"`
+	ID       string  `json:"id"`
+	Value    float64 `json:"value"`
+	Category string  `json:"category"`
+	Radius   int     `json:"radius"`
 }
 
 // TBItem models a single TB item aka a widget.
 type TBItem struct {
-	ID   string         `json:"id"`
-	Tip  string         `json:"tip"`
-	Data []TBPolarPoint `json:"data"`
+	ID   string      `json:"id"`
+	Tip  string      `json:"tip"`
+	Data interface{} `json:"data"`
 }
 
 // TBDashTest models JSON response for TadaBoard test dashboard.
@@ -217,19 +217,21 @@ type TBDashTest struct {
 	Status    bool              `json:"status,required"`
 	Error     error             `json:"error"`
 	Timestamp int64             `json:"timestamp"`
+	ID        string            `json:"id"`
 	Query     map[string]string `json:"query"`
-	Item      []TBItem          `json:"item"`
+	Items     []TBItem          `json:"item"`
 }
 
 // TBReq models single request made by TB.
-//[STRACER] 09:59:29.513576 {"method":"GET","customQuery":"","url":"http://patrimoni.staging.openpolis.it/api/tdb/test","query":{"provincia_residenza":"0"},"token":""}
+//[STRACER] 09:56:54.738290 decoded tbreq: map[url:http://patrimoni.staging.openpolis.it/api/tdb/test query:map[provincia_residenza:vt] token: method:GET customQuery:]
 type TBReq struct {
-	ID          string            `json:"id"`
-	Method      string            `json:"method"`
-	CustomQuery string            `json:"customQuery"`
-	URL         string            `json:"url"`
-	Query       map[string]string `json:"query"`
-	Token       string            `json:"token"`
+	ID          string `json:"id"`
+	Method      string `json:"method"`
+	CustomQuery string `json:"customQuery"`
+	URL         string `json:"url"`
+	// why not interface{}? Becuause TB passes everything as string :(
+	Query map[string]string `json:"query"`
+	Token string            `json:"token"`
 }
 
 //{
