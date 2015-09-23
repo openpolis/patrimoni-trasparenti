@@ -22,7 +22,7 @@ var Version = "unknown-rev"
 var BuildTime = "unknown-time"
 
 type daemonConf struct {
-	RemoteApi string
+	//RemoteApi string
 	Mongohost string
 	LogFile   string
 	Version   bool `cfgp:"v,show version and exit,"`
@@ -88,6 +88,8 @@ func UpdateData(r incomes.OpResponse, role string) error {
 		// OpId is not present :(
 		// We'll take it from image_uri
 		image_uri := sdata["image_uri"].(string)
+		sex := sdata["sex"].(string)
+		sex = strings.ToLower(sex)
 		op_id := strings.Split(image_uri, "=")[1]
 		sdata = r["group"].(map[string]interface{})
 		var name, acronym string
@@ -106,13 +108,14 @@ func UpdateData(r incomes.OpResponse, role string) error {
 		sdata = r["politician"].(map[string]interface{})
 		// FIXME I don't like this.
 		occupation := sdata["profession"].(map[string]interface{})["description"].(string)
-		stracer.Traceln("op api results, op_id:", op_id, "group:", group, "occupation:", occupation)
+		stracer.Traceln("op api results, op_id:", op_id, "group:", group, "occupation:", occupation, "sex:", sex)
 		role = strings.ToLower(role)
 		occupation = strings.ToLower(occupation)
 		d := incomes.PoliticalData{
 			Role:       role,
 			Group:      group,
 			Occupation: occupation,
+			Sex:        sex,
 		}
 		UpdateMongo(op_id, d)
 	}

@@ -184,6 +184,7 @@ type PoliticalData struct {
 	Group Group `bson:"gruppo" json:"gruppo"`
 	//ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
 	Occupation string `bson:"professione" json:"professione"`
+	Sex        string `bson:"sesso" json:"sesso"`
 }
 
 //============== Openpolis API
