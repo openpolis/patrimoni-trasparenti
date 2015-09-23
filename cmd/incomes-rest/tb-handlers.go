@@ -18,8 +18,15 @@ import (
 func assembleMatch(query map[string]string) bson.M {
 	match := bson.M{}
 	for k, v := range query {
+		if v == "" {
+			continue
+		}
 		if k == "anno_dichiarazione" {
 			match[k], _ = strconv.Atoi(v)
+			continue
+		}
+		if k == "acronimo_gruppo" {
+			match["gruppo.acronym"] = v
 			continue
 		}
 		match[k] = v
@@ -81,6 +88,33 @@ func makeAnnoList(coll *mgo.Collection) incomes.TBItem {
 	}
 }
 
+func makeProfessioneList(coll *mgo.Collection) incomes.TBItem {
+	data := make([]interface{}, 0)
+	results := []bson.M{}
+	pipe := coll.Pipe([]bson.M{
+		{"$group": bson.M{
+			"_id": "$professione",
+		},
+		},
+		{"$sort": bson.M{"_id": -1}},
+	})
+	iter := pipe.Iter()
+	err := iter.All(&results)
+	if err != nil {
+		ErrorLogger.Println("querying mongo", err)
+		return incomes.TBItem{}
+	}
+	for _, e := range results {
+		name := e["_id"].(string)
+		data = append(data, map[string]string{"id": name, "label": name})
+	}
+	return incomes.TBItem{
+		ID:   "11",
+		Tip:  "Professione",
+		Data: data,
+	}
+}
+
 func makeGruppoList(coll *mgo.Collection) incomes.TBItem {
 	data := make([]interface{}, 0)
 	results := []bson.M{}
@@ -110,10 +144,21 @@ func makeGruppoList(coll *mgo.Collection) incomes.TBItem {
 	}
 }
 
-func makeCompletezzaPie(query map[string]string, coll *mgo.Collection) incomes.TBItem {
+func makeSessoList() incomes.TBItem {
+	data := make([]interface{}, 0)
+	data = append(data, map[string]string{"id": "m", "label": "Uomo"})
+	data = append(data, map[string]string{"id": "f", "label": "Donna"})
+	return incomes.TBItem{
+		ID:   "12",
+		Tip:  "Sesso",
+		Data: data,
+	}
+}
+
+func makeCompletezzaPie(match bson.M, coll *mgo.Collection) incomes.TBItem {
 	results := []bson.M{}
 	pipe := coll.Pipe([]bson.M{
-		{"$match": assembleMatch(query)},
+		{"$match": match},
 		{"$group": bson.M{
 			"_id":   "$indice_completezza",
 			"total": bson.M{"$sum": 1},
@@ -145,17 +190,17 @@ func makeCompletezzaPie(query map[string]string, coll *mgo.Collection) incomes.T
 	}
 }
 
-func makeAutomobiliMean(query map[string]string, coll *mgo.Collection) incomes.TBItem {
+func makeRedditoMeanBar(match bson.M, coll *mgo.Collection) incomes.TBItem {
 	results := []bson.M{}
+	punti := make([]interface{}, 0, 14)
 	pipe := coll.Pipe([]bson.M{
-		{"$match": assembleMatch(query)},
-		{"$unwind": "$beni_mobili"},
+		{"$match": match},
 		{"$group": bson.M{
-			"_id":   "$indice_completezza",
+			"_id":   "$gruppo.acronym",
 			"total": bson.M{"$sum": 1},
+			"sum":   bson.M{"$sum": "$reddito_730"},
 		},
 		},
-		{"$sort": bson.M{"total": -1}},
 	})
 	iter := pipe.Iter()
 	err := iter.All(&results)
@@ -167,23 +212,63 @@ func makeAutomobiliMean(query map[string]string, coll *mgo.Collection) incomes.T
 		stracer.Traceln("empty results from mongo")
 		return incomes.TBItem{}
 	}
-	puntiWg1 := []interface{}{
-		incomes.TBPolarPoint{ID: "0", Value: float64(results[0]["total"].(int)), Category: "Ignota"},
-		incomes.TBPolarPoint{ID: "1", Value: 33, Category: "Insufficiente"},
-		incomes.TBPolarPoint{ID: "2", Value: 60, Category: "Bassa"},
-		incomes.TBPolarPoint{ID: "3", Value: 20, Category: "Bene"},
-		incomes.TBPolarPoint{ID: "4", Value: 20, Category: "Ottima"},
+	for i, v := range results {
+		m := map[string]interface{}{}
+		m["id"] = v["_id"]
+		m["x"] = i
+		// total cannot be zero, right? :)
+		mean := v["sum"].(float64) / float64(v["total"].(int))
+		m["y"] = mean
 	}
 	return incomes.TBItem{
-		ID:   "44444",
-		Tip:  "Auto",
-		Data: puntiWg1,
+		ID:   "15",
+		Tip:  "Valori di reddito medio per ogni gruppo parlamentare",
+		Data: punti,
 	}
 }
 
-func makeMediaReddito(query map[string]string, coll *mgo.Collection) incomes.TBItem {
+func makeAutomobiliMean(match bson.M, coll *mgo.Collection) incomes.TBItem {
 	results := []bson.M{}
-	err := coll.Find(assembleMatch(query)).All(&results)
+	pipe := coll.Pipe([]bson.M{
+		{"$match": match},
+		{"$unwind": "$beni_mobili"},
+		{"$group": bson.M{
+			//"_id":   "$beni_mobili.tipologia",
+			"_id":   "$op_id",
+			"total": bson.M{"$sum": 1},
+		},
+		},
+	})
+	iter := pipe.Iter()
+	err := iter.All(&results)
+	if err != nil {
+		ErrorLogger.Println("querying mongo", err)
+		return incomes.TBItem{}
+	}
+	if len(results) == 0 {
+		return incomes.TBItem{}
+	}
+	var mean float64
+	var sum int
+	total := len(results)
+	// This summs all, "motocicli, imbarcazioni etc"
+	for _, e := range results {
+		sum += e["total"].(int)
+	}
+	if total > 0 {
+		mean = float64(sum) / float64(total)
+	}
+	data := map[string]float64{"value": mean}
+	return incomes.TBItem{
+		ID:   "20",
+		Tip:  "Media automobili",
+		Data: data,
+	}
+}
+
+func makeRedditoMean(match bson.M, coll *mgo.Collection) incomes.TBItem {
+	results := []bson.M{}
+	err := coll.Find(match).All(&results)
 	if err != nil {
 		ErrorLogger.Println("querying mongo", err)
 		return incomes.TBItem{}
@@ -265,6 +350,8 @@ func TadaBoardHandlerTest(w http.ResponseWriter, r *http.Request) {
 		retQuery = tbReq.Query
 	}
 
+	match := assembleMatch(tbReq.Query)
+
 	stracer.Traceln("returning:", retQuery)
 	result := &incomes.TBDashTest{
 		Timestamp: time.Now().Unix(),
@@ -273,8 +360,12 @@ func TadaBoardHandlerTest(w http.ResponseWriter, r *http.Request) {
 			makeAnnoList(coll),
 			makeIncaricoList(coll),
 			makeGruppoList(coll),
-			makeCompletezzaPie(tbReq.Query, coll),
-			makeMediaReddito(tbReq.Query, coll),
+			makeProfessioneList(coll),
+			makeSessoList(),
+			makeCompletezzaPie(match, coll),
+			makeRedditoMean(match, coll),
+			makeAutomobiliMean(match, coll),
+			makeRedditoMeanBar(match, coll),
 		},
 	}
 
