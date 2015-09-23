@@ -1,6 +1,8 @@
 package incomes
 
 import (
+	"errors"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -78,4 +80,22 @@ func ExtractDistrict(s string) (city, district string) {
 	city = a[0]
 	district = strings.TrimRight(a[1], ")")
 	return
+}
+
+// LowerStruct change string field to lower case
+// of the passed struct.
+func LowerStruct(strPtr interface{}) error {
+	str := reflect.ValueOf(strPtr)
+	if str.Kind() != reflect.Ptr {
+		return errors.New("pointer to struct expected")
+	}
+	v := str.Elem()
+	for i := 0; i < v.NumField(); i++ {
+		fieldValue := v.Field(i)
+		if fieldValue.CanSet() && fieldValue.Kind() == reflect.String {
+			s := fieldValue.String()
+			fieldValue.SetString(strings.ToLower(s))
+		}
+	}
+	return nil
 }
