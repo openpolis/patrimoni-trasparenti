@@ -672,7 +672,7 @@ func SendToMongo(mSession *mgo.Session, p incomes.Declaration) {
 		"$set":         p,
 		"$currentDate": bson.M{"ultima_modifica": true},
 	}
-	sQuery := bson.M{"op_id": p.OpId}
+	sQuery := bson.M{"op_id": p.OpId, "anno_dichiarazione": p.AnnoDichiarazione}
 	i, err := coll.Upsert(sQuery, uQuery)
 	if err != nil {
 		log.Println("[ERROR] inserting", p, "into MongoDB:", err)

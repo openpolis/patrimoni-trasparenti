@@ -199,6 +199,7 @@ func makeRedditoMeanBar(match bson.M, coll *mgo.Collection) incomes.TBItem {
 			"_id":   "$gruppo.acronym",
 			"total": bson.M{"$sum": 1},
 			"sum":   bson.M{"$sum": "$totale_730"},
+			"name":  bson.M{"$last": "$gruppo.name"},
 		},
 		},
 	})
@@ -212,13 +213,14 @@ func makeRedditoMeanBar(match bson.M, coll *mgo.Collection) incomes.TBItem {
 		stracer.Traceln("empty results from mongo")
 		return incomes.TBItem{}
 	}
-	for i, v := range results {
+	for _, v := range results {
 		m := map[string]interface{}{}
 		m["id"] = v["_id"]
-		m["x"] = i
+		m["x"] = v["_id"]
 		// total cannot be zero, right? :)
 		mean := v["sum"].(float64) / float64(v["total"].(int))
 		m["y"] = mean
+		m["category"] = v["name"]
 		punti = append(punti, m)
 	}
 	return incomes.TBItem{
