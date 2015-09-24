@@ -665,12 +665,20 @@ func SendToMongo(mSession *mgo.Session, p incomes.Declaration) {
 	session := mSession.Copy()
 	defer session.Close()
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
-	err := coll.Insert(p)
+	// Avoid "saving declaration Mod on _id not allowed"
+	// thanks to "omitempty" in tag.
+	p.Id = bson.ObjectId("")
+	uQuery := bson.M{
+		"$set":         p,
+		"$currentDate": bson.M{"ultima_modifica": true},
+	}
+	sQuery := bson.M{"op_id": p.OpId}
+	i, err := coll.Upsert(sQuery, uQuery)
 	if err != nil {
-		log.Println("Error inserting", p, "into MongoDB:", err)
+		log.Println("[ERROR] inserting", p, "into MongoDB:", err)
 		return
 	}
-	log.Println(p, "sended to Mongo.")
+	log.Println("[INFO]", p, "sended to Mongo, updated:", i.Updated, "UpsertedId:", i.UpsertedId)
 }
 
 func dNameIsValid(title string) bool {

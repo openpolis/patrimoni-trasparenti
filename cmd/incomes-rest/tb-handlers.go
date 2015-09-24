@@ -198,7 +198,7 @@ func makeRedditoMeanBar(match bson.M, coll *mgo.Collection) incomes.TBItem {
 		{"$group": bson.M{
 			"_id":   "$gruppo.acronym",
 			"total": bson.M{"$sum": 1},
-			"sum":   bson.M{"$sum": "$reddito_730"},
+			"sum":   bson.M{"$sum": "$totale_730"},
 		},
 		},
 	})
@@ -219,6 +219,7 @@ func makeRedditoMeanBar(match bson.M, coll *mgo.Collection) incomes.TBItem {
 		// total cannot be zero, right? :)
 		mean := v["sum"].(float64) / float64(v["total"].(int))
 		m["y"] = mean
+		punti = append(punti, m)
 	}
 	return incomes.TBItem{
 		ID:   "15",

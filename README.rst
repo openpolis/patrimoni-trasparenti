@@ -57,4 +57,8 @@ Test it with::
 Note
 ----
 
-This code is *alpha* quality.
+This code is *alpha* quality because test coverage is too poorly.
+
+To run the few tests (where present)::
+
+        $ go test -cover

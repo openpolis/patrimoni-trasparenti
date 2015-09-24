@@ -115,7 +115,6 @@ func DichiarazioniHandlerGet(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-	stracer.Traceln("Parsed form from request:", r.Form)
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
 		ErrorLogger.Println("cannot find a db session")
@@ -143,14 +142,14 @@ func DichiarazioniHandlerGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Access-Control-Expose-Headers", "X-Total-Count")
 	err = query.All(&results)
 	if err != nil {
-		ErrorLogger.Println("retrieving parliamentarians from db", err)
+		ErrorLogger.Println("retrieving declarations from db", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
-		ErrorLogger.Println("encoding declaration in json", err)
+		ErrorLogger.Println("encoding declarations in json", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
@@ -241,7 +240,7 @@ func DichiarazioneHandlerGet(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(enhancedResult)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		ErrorLogger.Println("encoding parliamentarian in json", err)
+		ErrorLogger.Println("encoding declaration in json", err)
 		return
 	}
 	return
