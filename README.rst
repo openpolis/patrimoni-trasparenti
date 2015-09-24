@@ -22,7 +22,7 @@ Import notes files::
 
 ``incomes-rest`` system daemon that exposes private and public REST APIs for *incomes service*.
 
-Start/stop rest service::
+After installing provided upstart conf in ``/etc/init`` to start/stop rest service::
 
         # service incomes-rest start
         # service incomes-rest stop

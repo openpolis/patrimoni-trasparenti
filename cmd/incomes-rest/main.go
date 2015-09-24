@@ -176,6 +176,7 @@ func DichiarazioniHandlerPost(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("decoding declaration in json", err)
 		return
 	}
+	incomes.LowerStruct(&p)
 	id := bson.NewObjectId()
 	p.Id = id
 	err = coll.Insert(p)
@@ -263,6 +264,7 @@ func DichiarazioneHandlerPut(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("decoding declaration in json", err)
 		return
 	}
+	incomes.LowerStruct(&p)
 	objId, err := GetObjectIdHex(vars["id"])
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
