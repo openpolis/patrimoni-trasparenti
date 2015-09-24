@@ -23,7 +23,7 @@ Get auto generated map settings::
 
         curl localhost:9200/declarations/parliamentarians/_mapping?pretty=true > mapping.json
 
-Edit mapping as you like (es. add "index" : "not_analyzed") to avoid ES to index sigle words in sentences), remove original one and import the new::
+Edit mapping as you like (es. add "index" : "not_analyzed") to avoid ES to index sigle words in sentences), remove original one (*!this will erase all data!*) and import the new::
 
         curl -X DELETE localhost:9200/declarations/_mapping/parliamentarians
         curl -X PUT localhost:9200/declarations/_mapping/parliamentarians -d @mapping.json
