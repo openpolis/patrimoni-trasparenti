@@ -1,6 +1,6 @@
 {
 	"ImportPath": "bitbucket.org/eraclitux/op-incomes",
-	"GoVersion": "go1.5",
+	"GoVersion": "go1.5.1",
 	"Packages": [
 		"./..."
 	],
@@ -20,9 +20,14 @@
 			"Rev": "b1a1ff331416c54d7bee9474d55d7754b2ba20f1"
 		},
 		{
+			"ImportPath": "github.com/eraclitux/goparallel",
+			"Comment": "v0.1.0-alpha-1-g0464a39",
+			"Rev": "0464a398781c77bcb1a733e73579571e71fe2c24"
+		},
+		{
 			"ImportPath": "github.com/eraclitux/httph",
-			"Comment": "v0.1.0-alpha-2-g0cd6bb1",
-			"Rev": "0cd6bb1790ccb886f54f7432a523548dcc456943"
+			"Comment": "v0.1.0-alpha-4-g9c1aff8",
+			"Rev": "9c1aff80910c133e1f6b7ded5958b602e3ce0dc0"
 		},
 		{
 			"ImportPath": "github.com/eraclitux/stracer",
@@ -55,6 +60,14 @@
 		{
 			"ImportPath": "github.com/mgutz/logxi/v1",
 			"Rev": "3b9b8954fb030d7130a00f228ad2b8167b76a2c7"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/bcrypt",
+			"Rev": "1351f936d976c60a0a48d728281922cf63eafb8d"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/blowfish",
+			"Rev": "1351f936d976c60a0a48d728281922cf63eafb8d"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",

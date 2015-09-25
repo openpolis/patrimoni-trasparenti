@@ -8,8 +8,12 @@ package httph
 
 import (
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 
+	"github.com/eraclitux/stracer"
+	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2"
 )
 
@@ -64,7 +68,52 @@ func WithLog(logger *log.Logger, fn http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// HeaderJSON sets http header for json.
-func HeaderJSON(w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func MustAuth(cookieName string, a Hasher, next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie(cookieName)
+		if err == nil && cookie != nil {
+			sessionsMut.Lock()
+			_, ok := sessions[cookie.Value]
+			sessionsMut.Unlock()
+			if ok {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
+
+		error := func() {
+			time.Sleep(time.Duration(rand.Intn(100)+100) * time.Millisecond)
+			w.Header().Set("WWW-Authenticate", "Basic realm=\"Authorization Required\"")
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		}
+
+		username, passwd, ok := r.BasicAuth()
+		if !ok {
+			error()
+			return
+		}
+		stracer.Traceln(username, passwd)
+
+		hash, err := a.GetHash(username)
+		if err != nil {
+			error()
+			return
+		}
+		if err := bcrypt.CompareHashAndPassword(hash, []byte(passwd)); err != nil {
+			error()
+			return
+		}
+
+		sessionid := randomString(32)
+		sessionsMut.Lock()
+		sessions[sessionid] = struct{}{}
+		sessionsMut.Unlock()
+		http.SetCookie(w, &http.Cookie{
+			Name:   cookieName,
+			Value:  sessionid,
+			MaxAge: 0,
+		})
+
+		next.ServeHTTP(w, r)
+	})
 }

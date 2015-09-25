@@ -17,12 +17,16 @@ const (
 )
 
 // SharedData is a threadsafe container that enables
-// to share data between http handlers.
+// to share data between http handlers decorators.
 var SharedData Sharer
 
 type httpVars map[*http.Request]map[string]interface{}
 
+// TODO drop sessions every x time or memory leak here.
+var sessions map[string]struct{} = make(map[string]struct{})
+
 var httpVarsLock sync.RWMutex
+var sessionsMut sync.RWMutex
 
 // Sharer interface defines a container to store data
 // between net/http handlers.
@@ -32,6 +36,16 @@ type Sharer interface {
 	Delete(r *http.Request, k string) error
 	init(r *http.Request)
 	drop(r *http.Request)
+}
+
+// Hasher define a way to generalize
+// credentials retrieving from different
+// backends.
+type Hasher interface {
+	// GetHash retieve hashed password from
+	// backend for user u.
+	// It returns error if user is not found.
+	GetHash(u string) ([]byte, error)
 }
 
 func (m httpVars) init(r *http.Request) {
@@ -45,7 +59,7 @@ func (m httpVars) Insert(r *http.Request, k string, v interface{}) {
 	httpVarsLock.Lock()
 	defer httpVarsLock.Unlock()
 	if _, ok := m[r]; !ok {
-		panic("cannot find *http.Request in HTTPRequestSetter, use Init() and defer Drop()")
+		panic("cannot find *http.Request in HTTPRequestSetter, use init() and defer drop()")
 	}
 	m[r][k] = v
 }
@@ -92,5 +106,6 @@ func newSharer() Sharer {
 }
 
 func init() {
+	// TODO move this to declaration.
 	SharedData = newSharer()
 }
