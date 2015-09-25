@@ -2,6 +2,8 @@
 Openpolis patrimoni
 ===================
 
+.. contents::
+
 Private repo for Openpolis patrimoni APIs Rest & utils.
 
 ``cmd`` stores commands built using main ``incomes`` package.

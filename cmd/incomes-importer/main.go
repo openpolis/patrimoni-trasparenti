@@ -61,8 +61,7 @@ func (j *job) Execute() {
 		log.Println("[ERROR] parsing", politician, err, "it will not be sended")
 		return
 	}
-	log.Println("Parsed:", politician)
-	SendToMongo(mSession, politician)
+	SendToMongo(politician)
 }
 
 func getNamesFromNote(field string) (name, surname string) {
@@ -677,7 +676,7 @@ func GetFilesFromDrive(d *drive.Service) ([]*drive.File, error) {
 }
 
 // SendToMongo insert a single Declaration{} into db.
-func SendToMongo(mSession *mgo.Session, p incomes.Declaration) {
+func SendToMongo(p incomes.Declaration) {
 	session := mSession.Copy()
 	defer session.Close()
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
@@ -717,10 +716,10 @@ func NoteNameIsValid(title string) bool {
 func ParseDeclarations(files []*drive.File) {
 	jobs := []goparallel.Tasker{}
 	for _, f := range files {
-		log.Println("Parsing:", f.Title)
 		if dNameIsValid(f.Title) {
 			continue
 		}
+		log.Println("Packing job for:", f.Title)
 		jobs = append(jobs, &job{F: f})
 	}
 	// Force number of workers.
