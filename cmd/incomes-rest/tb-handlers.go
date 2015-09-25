@@ -269,6 +269,44 @@ func makeAutomobiliMean(match bson.M, coll *mgo.Collection) incomes.TBItem {
 	}
 }
 
+func makeImmobiliMean(match bson.M, coll *mgo.Collection) incomes.TBItem {
+	results := []bson.M{}
+	pipe := coll.Pipe([]bson.M{
+		{"$match": match},
+		{"$unwind": "$beni_immobili"},
+		{"$match": bson.M{"beni_immobili.descrizione": "fabbricato"}},
+		{"$group": bson.M{
+			"_id":   "$op_id",
+			"total": bson.M{"$sum": 1},
+		},
+		},
+	})
+	iter := pipe.Iter()
+	err := iter.All(&results)
+	if err != nil {
+		ErrorLogger.Println("querying mongo", err)
+		return incomes.TBItem{}
+	}
+	if len(results) == 0 {
+		return incomes.TBItem{}
+	}
+	var mean float64
+	var sum int
+	total := len(results)
+	for _, e := range results {
+		sum += e["total"].(int)
+	}
+	if total > 0 {
+		mean = float64(sum) / float64(total)
+	}
+	data := map[string]float64{"value": mean}
+	return incomes.TBItem{
+		ID:   "19",
+		Tip:  "Media immobili",
+		Data: data,
+	}
+}
+
 func makeRedditoMean(match bson.M, coll *mgo.Collection) incomes.TBItem {
 	results := []bson.M{}
 	err := coll.Find(match).All(&results)
@@ -368,6 +406,7 @@ func TadaBoardHandlerTest(w http.ResponseWriter, r *http.Request) {
 			makeCompletezzaPie(match, coll),
 			makeRedditoMean(match, coll),
 			makeAutomobiliMean(match, coll),
+			makeImmobiliMean(match, coll),
 			makeRedditoMeanBar(match, coll),
 		},
 	}
