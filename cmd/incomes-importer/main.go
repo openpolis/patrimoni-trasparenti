@@ -26,6 +26,7 @@ import (
 
 	incomes "bitbucket.org/eraclitux/op-incomes"
 	"code.google.com/p/goauth2/oauth"
+	"github.com/eraclitux/goparallel"
 	"github.com/eraclitux/stracer"
 	drive "google.golang.org/api/drive/v2"
 	"gopkg.in/mgo.v2"
@@ -47,6 +48,21 @@ var config = &oauth.Config{
 	RedirectURL:  "urn:ietf:wg:oauth:2.0:oob",
 	AuthURL:      "https://accounts.google.com/o/oauth2/auth",
 	TokenURL:     "https://accounts.google.com/o/oauth2/token",
+}
+var mSession *mgo.Session
+
+type job struct {
+	F *drive.File
+}
+
+func (j *job) Execute() {
+	politician, err := DownloadAndParseDeclaration(j.F)
+	if err != nil {
+		log.Println("[ERROR] parsing", politician, err, "it will not be sended")
+		return
+	}
+	log.Println("Parsed:", politician)
+	SendToMongo(mSession, politician)
 }
 
 func getNamesFromNote(field string) (name, surname string) {
@@ -698,25 +714,22 @@ func NoteNameIsValid(title string) bool {
 	return true
 }
 
-func ParseDeclarations(files []*drive.File, session *mgo.Session) {
+func ParseDeclarations(files []*drive.File) {
+	jobs := []goparallel.Tasker{}
 	for _, f := range files {
 		log.Println("Parsing:", f.Title)
 		if dNameIsValid(f.Title) {
 			continue
 		}
-		politician, err := DownloadAndParseDeclaration(f)
-		if err != nil {
-			log.Println("[ERROR] parsing", politician, err)
-			continue
-		}
-		log.Println("Parsed:", politician)
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			SendToMongo(session, politician)
-		}()
+		jobs = append(jobs, &job{F: f})
 	}
-	wg.Wait()
+	// Force number of workers.
+	// FIXME parametrize this.
+	goparallel.WorkersNumber = 4
+	err := goparallel.RunBlocking(jobs)
+	if err != nil {
+		log.Println("[ERROR] running tasks:", err)
+	}
 }
 
 func ParseNotes(files []*drive.File, session *mgo.Session) {
@@ -749,11 +762,14 @@ func main() {
 		log.Fatalf("%s %s", Version, BuildTime)
 	}
 	config.ClientSecret = pKeyFlag
-	session, err := mgo.Dial(mongoHost)
+	// Make clear that we are assignating to global
+	// var.
+	var err error
+	mSession, err = mgo.Dial(mongoHost)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer session.Close()
+	defer mSession.Close()
 
 	// Generate a URL to visit for authorization.
 	authUrl := config.AuthCodeURL("state")
@@ -780,8 +796,10 @@ func main() {
 	files, _ := GetFilesFromDrive(service)
 	if parseNotes {
 		log.Println("Preparing for note parsing")
-		ParseNotes(files, session)
+		// FIXME remove mSession, take it
+		// from global var
+		ParseNotes(files, mSession)
 	} else {
-		ParseDeclarations(files, session)
+		ParseDeclarations(files)
 	}
 }
