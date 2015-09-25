@@ -337,6 +337,7 @@ func makeRedditoMean(match bson.M, coll *mgo.Collection) incomes.TBItem {
 // it with default values otherway.
 func initQuery(q map[string]string) bool {
 	if len(q) == 0 {
+		q = make(map[string]string)
 		q["anno_dichiarazione"] = "2014"
 		stracer.Traceln("empty query modified:", q)
 		return true
