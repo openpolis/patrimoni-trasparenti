@@ -25,7 +25,7 @@ func SanitizeFloat(line string) string {
 	} else if reDot.MatchString(line) {
 		// "12.000,00" --> "12000,00"
 		line = reDot.ReplaceAllString(line, "$1$2")
-		stracer.Traceln("SanitizeFloat after inside redot", line)
+		stracer.Traceln("SanitizeFloat after inside redot:", line)
 	}
 	reComma := regexp.MustCompile("(\"[0-9]+),([0-9]+\")")
 	// "12000,00" --> "12000.00"

@@ -64,7 +64,12 @@ func (j *job) Execute() {
 	SendToMongo(politician)
 }
 
-func getNamesFromNote(field string) (name, surname string) {
+func getNamesFromNote(field string, compositeSurname bool) (name, surname string) {
+	defer func() {
+		if r := recover(); r != nil {
+			stracer.Tracef("[ERROR] getNamesFromNote: %s for %s", r, field)
+		}
+	}()
 	if len(field) == 0 {
 		return
 	}
@@ -73,12 +78,20 @@ func getNamesFromNote(field string) (name, surname string) {
 		name = v[0]
 		return
 	}
-	surname = v[0]
-	for _, e := range v[1:] {
-		name += e + " "
+	if compositeSurname && len(v) == 3 {
+		name = v[2]
+		for _, e := range v[:2] {
+			surname += e + " "
+		}
+	} else {
+		surname = v[0]
+		for _, e := range v[1:] {
+			name += e + " "
+		}
 	}
 	name = strings.TrimRight(name, " ")
-	log.Println("name:", name, "surname:", surname)
+	surname = strings.TrimRight(surname, " ")
+	stracer.Traceln("getNamesFromNote, name:", name, "surname:", surname)
 	return
 }
 
@@ -117,7 +130,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 		line = SanitizeString(line)
 		values := strings.Split(line, ",")
 		stracer.Traceln("splitted line", values, "length:", len(values))
-		n, s := getNamesFromNote(values[0])
+		n, s := getNamesFromNote(values[0], false)
 		sQuery := bson.M{"nome": n, "cognome": s, "anno_dichiarazione": year}
 		uQuery := bson.M{}
 		if len(values) == 9 {
@@ -150,7 +163,12 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 			sQuery = bson.M{"nome": s, "cognome": n, "anno_dichiarazione": year}
 			err = coll.Update(sQuery, uQuery)
 			if err != nil {
-				log.Println("[ERROR] updating notes in declaration:", n, s, year, err)
+				n, s := getNamesFromNote(values[0], true)
+				sQuery = bson.M{"nome": n, "cognome": s, "anno_dichiarazione": year}
+				err = coll.Update(sQuery, uQuery)
+				if err != nil {
+					log.Println("[ERROR] updating notes in declaration:", n, s, year, err)
+				}
 			}
 		}
 	}
@@ -188,9 +206,9 @@ func ParseInfo(p *incomes.Declaration, exportUrl string) (er error) {
 		values := strings.Split(line, ",")
 		switch i {
 		case 1:
-			p.Cognome = values[1]
+			p.Cognome = strings.Trim(values[1], " ")
 		case 2:
-			p.Nome = values[1]
+			p.Nome = strings.Trim(values[1], " ")
 		case 3:
 			date, err := incomes.ParseDate(values[1])
 			if err != nil {
@@ -292,6 +310,7 @@ func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) (er error) {
 		line = SanitizeString(line)
 		line = SanitizeFloat(line)
 		fields := strings.Split(line, ",")
+		stracer.Traceln("ParseBeniImmobili line:", line)
 		var bene incomes.BeneImmobile
 		// Data format has changed, fields were added.
 		if len(fields) == 6 {
