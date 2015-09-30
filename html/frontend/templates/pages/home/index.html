@@ -1,6 +1,15 @@
 <div class ="home-wrapper">
   <h1>Patrimoni trasparenti</h1>
   <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
-  <iframe src='https://www.tadaboard.com/e/tz5eUMY7qddP1ycHZ4Wd' frameborder='0' width='1140' height='2600'>
+
+  <form ng-controller="SearchController as searchCtl" ng-submit="searchCtl.search()">
+    <div class="input-group">
+      <input ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text" placeholder="Inizia a cercare..." class="form-control" >
+      <span class="input-group-btn">
+        <button ng-click="searchCtl.search()" class="btn btn-default" type="button">Cerca</button>
+      </span>
+      <label ng-show="searchCtl.spinner"><span class="glyphicon glyphicon-refresh spinning white"></span></label>
+    </div><!-- /input-group -->
+  </form>
+
 </div>

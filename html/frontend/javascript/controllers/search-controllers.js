@@ -11,12 +11,25 @@ angular.module('PatrimoniTrasparenti')
             onlySelectValid: true,
             source: function (request, response) {
                 var data = [];
-                controller.spinner = true;
                 //console.log("making req to autocompl, spinner and $scope:", $scope.Spinner, $scope)
                 console.log("req:", request)
+                // Do not make remote call if term is too short.
+                if (request.term.length <= 2) {
+                  rData = [];
+                  rData.push({
+                      value: 'Non trovato, digita un termine completo',
+                      id: ''
+                  });
+                  response(rData);
+                  return;
+                };
+                controller.spinner = true;
                 Declarations.getAutocompleteAll(request.term)
                   .success(function(rData){
                     controller.spinner = false;
+                    for (var i in rData) {
+                      rData[i].label = $compile('<p><img ng-src="favicon.ico"/> '+rData[i].value+'</p>')($scope)
+                    };
                     if (!rData.length) {
                         rData.push({
                             value: 'Non trovato, digita un termine completo',
@@ -52,9 +65,13 @@ angular.module('PatrimoniTrasparenti')
             close: function( event, ui ) {
                 console.log("closed!");
                 console.log('searchObj:', controller.searchObj);
-                console.log(ui.item);
             }
         },
         methods: {}
+    };
+
+    // My definitions
+    controller.search = function() {
+      console.log("searchObj when clicked:", this.searchObj["value"]);
     };
   }]);
