@@ -341,16 +341,21 @@ func main() {
 	router := mux.NewRouter()
 	// ===== Public APIs
 	router.HandleFunc("/", httph.WithLog(InfoLogger, HomeHandler))
-	router.HandleFunc("/api/dichiarazioni/{id}",
+	router.HandleFunc("/api/politici/{op_id}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
-					httph.WithMongo(mongoSession, DichiarazioneHandlerGet))))).Methods("GET")
+					httph.WithMongo(mongoSession, PoliticoHandlerGet))))).Methods("GET")
 	router.HandleFunc("/api/autocompleter",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, AutocompleterHandler))))).Methods("GET")
+	router.HandleFunc("/api/dichiarazioni/{id}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, DichiarazioneHandlerGet))))).Methods("GET")
 	router.HandleFunc("/api/dichiarazioni/classifiche/{kind}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(

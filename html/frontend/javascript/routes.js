@@ -9,9 +9,16 @@ angular.module('PatrimoniTrasparenti')
     .when('/scheda/:id', {
     templateUrl: '/templates/pages/scheda/index.html',
     controller: function($routeParams) {
-      this.declarationId = $routeParams.id;
+      this.opId = $routeParams.id;
     },
-    controllerAs: 'cardPageController'
+    controllerAs: 'cardCtrl'
+  })
+    .when('/gruppo/:acronym', {
+    templateUrl: '/templates/pages/gruppo/index.html',
+    controller: function($routeParams) {
+      this.acronym = $routeParams.acronym;
+    },
+    controllerAs: 'gruppoCtrl'
   })
     .otherwise({ redirectTo: '/' });
 

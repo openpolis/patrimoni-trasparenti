@@ -1,11 +1,14 @@
 angular.module('PatrimoniTrasparenti')
   .controller('CardController', ['$scope', 'Declarations', function($scope, Declarations){
+    $scope.selectYear = function(i) {
+      $scope.scheda = $scope.schede[i] ;
+    };
     $scope.spinner = true;
-    // FIXME create an open version of this API
-    Declarations.get($scope.declarationId)
-      .success(function(scheda){
+    Declarations.getFor($scope.opId)
+      .success(function(schede){
         $scope.spinner = false;
-        $scope.scheda = scheda;
+        $scope.schede = schede;
+        $scope.scheda = schede[0];
       })
       .catch(function(resp) {
         $scope.spinner = false;

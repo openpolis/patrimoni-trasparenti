@@ -3,7 +3,7 @@ angular.module("PatrimoniTrasparenti")
     return {
       restrict: "E",
       scope: {
-        declarationId: "@"
+        opId: "@"
       },
       templateUrl: "templates/directives/pt-card.html",
       controller: 'CardController',

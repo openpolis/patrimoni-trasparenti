@@ -34,12 +34,22 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 
 	session := sessionInterface.(*mgo.Session)
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	// Find parties.
 	results := []bson.M{}
+	rgx := []bson.M{
+		{"name": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
+		{"acronym": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
+	}
 	pipe := coll.Pipe([]bson.M{
-		{"$match": bson.M{"$text": bson.M{"$search": textSearch}}},
-		{"$sort": bson.M{"cognome": -1}},
-		{"$project": bson.M{"_id": 0, "id": "$_id", "anno": "$anno_dichiarazione", "value": bson.M{"$concat": []string{"$cognome", " ", "$nome"}}}},
-		{"$limit": 200},
+		{"$group": bson.M{
+			"_id":     "$gruppo.name",
+			"name":    bson.M{"$last": "$gruppo.name"},
+			"acronym": bson.M{"$last": "$gruppo.acronym"},
+		},
+		},
+		{"$match": bson.M{"$or": rgx}},
+		{"$sort": bson.M{"acronym": 1}},
+		{"$project": bson.M{"_id": 0, "id": "$_id", "value": bson.M{"$concat": []string{"$acronym", " - ", "$name"}}, "acronym": "$acronym"}},
 	})
 	iter := pipe.Iter()
 	err = iter.All(&results)
@@ -48,12 +58,38 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("retrieving declarations from db", err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	// Find people
+	peopleResults := []bson.M{}
+	peopleRgx := []bson.M{
+		{"nome": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
+		{"cognome": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
+	}
+	pipe = coll.Pipe([]bson.M{
+		{"$group": bson.M{
+			"_id":     "$op_id",
+			"nome":    bson.M{"$last": "$nome"},
+			"cognome": bson.M{"$last": "$cognome"},
+		},
+		},
+		{"$match": bson.M{"$or": peopleRgx}},
+		{"$sort": bson.M{"cognome": 1}},
+		{"$project": bson.M{"_id": 0, "id": "$_id", "value": bson.M{"$concat": []string{"$cognome", " ", "$nome"}}}},
+		{"$limit": 150},
+	})
+	iter = pipe.Iter()
+	err = iter.All(&peopleResults)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		ErrorLogger.Println("retrieving declarations from db", err)
+		return
+	}
+	results = append(results, peopleResults...)
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("encoding choices in json", err)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	return
 }

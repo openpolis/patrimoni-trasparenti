@@ -1,5 +1,5 @@
 angular.module('PatrimoniTrasparenti')
-  .controller('SearchController', ['$scope', '$compile', '$location', 'Declarations', function($scope, $compile, $location, Declarations) {
+  .controller('SearchController', ['$scope', '$compile', '$location', '$filter', 'Declarations', function($scope, $compile, $location, $filter, Declarations) {
     this.searchObj = {id:'', value:''};
     var controller = this;
     controller.spinner = false;
@@ -14,10 +14,10 @@ angular.module('PatrimoniTrasparenti')
                 //console.log("making req to autocompl, spinner and $scope:", $scope.Spinner, $scope)
                 console.log("req:", request)
                 // Do not make remote call if term is too short.
-                if (request.term.length <= 2) {
+                if (request.term.length < 2) {
                   rData = [];
                   rData.push({
-                      value: 'Non trovato, digita un termine completo',
+                      value: 'Digita almeno 2 lettere',
                       id: ''
                   });
                   response(rData);
@@ -28,11 +28,11 @@ angular.module('PatrimoniTrasparenti')
                   .success(function(rData){
                     controller.spinner = false;
                     for (var i in rData) {
-                      rData[i].label = $compile('<p><img ng-src="favicon.ico"/> '+rData[i].value+'</p>')($scope)
+                      rData[i].label = $compile('<p><img ng-src="favicon.ico"/> '+$filter('capitalize')(rData[i].value, 'all')+'</p>')($scope)
                     };
                     if (!rData.length) {
                         rData.push({
-                            value: 'Non trovato, digita un termine completo',
+                            value: 'Non trovato',
                             id: ''
                         });
                     }
@@ -42,7 +42,7 @@ angular.module('PatrimoniTrasparenti')
 
                 if (!data.length) {
                     data.push({
-                        value: 'Non trovato, digita un termine completo',
+                        value: 'Ricerca in corso...',
                         id: ''
                     });
                 }
@@ -60,7 +60,11 @@ angular.module('PatrimoniTrasparenti')
                 console.log(controller.searchObj);
                 console.log('ui:', ui);
                 console.log(ui.item);
-                $location.path('/scheda/'+ui.item.id);
+                if ('acronym' in ui.item) {
+                  $location.path('/gruppo/'+ui.item.acronym);
+                } else {
+                  $location.path('/scheda/'+ui.item.id);
+                };
             },
             close: function( event, ui ) {
                 console.log("closed!");

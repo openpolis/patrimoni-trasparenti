@@ -4,11 +4,14 @@
 
   <form ng-controller="SearchController as searchCtl" ng-submit="searchCtl.search()">
     <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">
+      <span ng-show="searchCtl.spinner" class="glyphicon glyphicon-refresh spinning"></span>
+      <span ng-hide="searchCtl.spinner" class="glyphicon glyphicon-search"></span>
+      </span>
       <input ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text" placeholder="Inizia a cercare..." class="form-control" >
       <span class="input-group-btn">
         <button ng-click="searchCtl.search()" class="btn btn-default" type="button">Cerca</button>
       </span>
-      <label ng-show="searchCtl.spinner"><span class="glyphicon glyphicon-refresh spinning white"></span></label>
     </div><!-- /input-group -->
   </form>
 
