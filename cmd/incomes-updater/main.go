@@ -168,7 +168,7 @@ func updateSingle(ep string) {
 		target = incomes.OpApi + "/politici/instcharges?institution_id=4&started_after=2010-01-16"
 	case "senatore":
 		target = incomes.OpApi + "/politici/instcharges?institution_id=5&started_after=2010-01-16"
-	case "membro":
+	case "governo":
 		target = incomes.OpApi + "/politici/instcharges?institution_id=3&started_after=2010-01-16"
 	default:
 		ErrorLogger.Println("unknown politician type", ep)
@@ -195,7 +195,7 @@ func updateSingle(ep string) {
 func updateAll() {
 	updateSingle("parlamentare")
 	updateSingle("senatore")
-	updateSingle("membro")
+	updateSingle("governo")
 }
 
 func main() {
