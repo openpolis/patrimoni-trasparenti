@@ -341,6 +341,11 @@ func main() {
 	router := mux.NewRouter()
 	// ===== Public APIs
 	router.HandleFunc("/", httph.WithLog(InfoLogger, HomeHandler))
+	router.HandleFunc("/api/gruppi/{acronym}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, GruppoHandlerGet))))).Methods("GET")
 	router.HandleFunc("/api/politici/{op_id}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
