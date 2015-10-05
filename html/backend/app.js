@@ -464,11 +464,11 @@
               '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
             '</select></td>'+
             '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" /></td>' +
-            '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.rendita_catastale" size=5 type="number" value="{{obj.rendita_catastale}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.rendita_catastale" size=5 type="number" step="any" value="{{obj.rendita_catastale}}"/></td>' +
             '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.codice_utilizzo" size=5 value="{{obj.codice_utilizzo}}"/></td>' +
-            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_dominicale" size=5 type="number" value="{{obj.reddito_dominicale}}"/></td>' +
-            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_agrario" size=5 type="number" value="{{obj.reddito_agrario}}"/></td>' +
-            '<td ng-show="obj.natura_diritto === \'comproprietà\'"><input ng-model="obj.quota_posseso" type="number" value="{{obj.quota_posseso}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_dominicale" size=5 type="number" step="any" value="{{obj.reddito_dominicale}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_agrario" size=5 type="number" step="any" value="{{obj.reddito_agrario}}"/></td>' +
+            '<td ng-show="obj.natura_diritto === \'comproprietà\'"><input ng-model="obj.quota_posseso" type="number" step="any" value="{{obj.quota_posseso}}"/></td>' +
             '<td><input ng-model="obj.categoria_catastale" size=8 placeholder="Categoria" type="text" value="{{obj.categoria_catastale}}"/></td>' +
             '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note" type="text" value="{{obj.annotazioni}}"/></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_immobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
@@ -506,11 +506,11 @@
               '<option ng-repeat="option in dataProvince.availableOptions" value="{{option.id}}" ng-selected="obj.provincia === option.id">{{option.name}}</option>'+
             '</select></td>'+
             '<td><input ng-model="obj.comune" size=8 placeholder="Comune"/ value="{{obj.comune}}" /></td>' +
-            '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.rendita_catastale" size=5 type="number" value="{{obj.rendita_catastale}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.rendita_catastale" size=5 type="number" step="any" value="{{obj.rendita_catastale}}"/></td>' +
             '<td ng-show="obj.descrizione === \'fabbricato\'"><input ng-model="obj.codice_utilizzo" size=5 value="{{obj.codice_utilizzo}}"/></td>' +
-            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_dominicale" size=5 type="number" value="{{obj.reddito_dominicale}}"/></td>' +
-            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_agrario" size=5 type="number" value="{{obj.reddito_agrario}}"/></td>' +
-            '<td ng-show="obj.natura_diritto === \'comproprietà\'"><input ng-model="obj.quota_posseso" type="number" value="{{obj.quota_posseso}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_dominicale" size=5 type="number" step="any" value="{{obj.reddito_dominicale}}"/></td>' +
+            '<td ng-show="obj.descrizione === \'terreno\'"><input ng-model="obj.reddito_agrario" size=5 type="number" step="any" value="{{obj.reddito_agrario}}"/></td>' +
+            '<td ng-show="obj.natura_diritto === \'comproprietà\'"><input ng-model="obj.quota_posseso" type="number" step="any" value="{{obj.quota_posseso}}"/></td>' +
             '<td><input ng-model="obj.categoria_catastale" size=8 placeholder="Categoria" type="text" value="{{obj.categoria_catastale}}"/></td>' +
             '<td><input ng-model="obj.annotazioni" size=14 placeholder="Note" type="text" value="{{obj.annotazioni}}"/></td>' +
             '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.beni_immobili.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
