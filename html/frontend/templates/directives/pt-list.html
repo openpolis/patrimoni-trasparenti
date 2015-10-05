@@ -32,6 +32,7 @@
         </li>
       </ul>     
     </div> <!-- panel-body -->
+    <p>Totale: {{results.length}}</p>
     <div ng-repeat="result in results | orderBy: orderK" class="media">
       <div class="media-left">
         <a href="#/scheda/{{result.op_id}}">
@@ -39,7 +40,7 @@
         </a>
       </div>
       <div class="media-body">
-        <h3 class="media-heading">{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}</h3>
+        <h3 class="media-heading"><a href="#/scheda/{{result.op_id}}">{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}</a></h3>
         <p>
           <b>Data nascita:</b> {{result.data_nascita|date:'d/M/yyyy'}}<br>
           <b>Istituzione:</b> {{result.istituzione}}<br>

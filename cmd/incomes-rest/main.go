@@ -208,6 +208,8 @@ func DichiarazioniHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// DichiarazioniHandlerPost return a single declaration.
+// OLD
 func DichiarazioneHandlerGet(w http.ResponseWriter, r *http.Request) {
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {

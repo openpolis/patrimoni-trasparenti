@@ -21,7 +21,8 @@ func PoliticoHandlerGet(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	session := sessionInterface.(*mgo.Session)
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
-	results := []bson.M{}
+	//results := []bson.M{}
+	results := []incomes.DeclarationPolitical{}
 	sQuery := bson.M{"op_id": vars["op_id"]}
 	err := coll.Find(sQuery).Sort("-anno_dichiarazione").All(&results)
 	if err != nil {
@@ -29,8 +30,16 @@ func PoliticoHandlerGet(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("retrieving declarations from db", err)
 		return
 	}
+	enhancedResults := make([]incomes.DeclarationEnhanced, len(results))
+	for i, d := range results {
+		enhancedResults[i] = incomes.DeclarationEnhanced{
+			DeclarationPolitical: d,
+			UrlFileOrig:          createS3link(d.File),
+			UrlFileRect:          createS3link(d.FileRectification),
+		}
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	err = json.NewEncoder(w).Encode(results)
+	err = json.NewEncoder(w).Encode(enhancedResults)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("encoding declarations in json", err)

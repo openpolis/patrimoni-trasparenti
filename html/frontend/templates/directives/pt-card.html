@@ -27,15 +27,16 @@
         <li ng-repeat="dichiarazione in schede" ng-class="{'active': scheda.anno_dichiarazione === dichiarazione.anno_dichiarazione}" ng-click="selectYear($index)" role="presentation"><a href="">{{dichiarazione.anno_dichiarazione}}</a></li>
       </ul>     
       <br>
-      <p><b>Totale reddito:</b> {{scheda.totale_730|currency:"€"}}</p>
-      <p><b>Numero immobili:</b> {{scheda.beni_immobili.length}}</p>
-      <p><b>Numero beni mobili:</b> {{scheda.beni_mobili.length}}</p>
+      <p><b>Indice Completezza:</b> {{scheda.indice_completezza}}</p>
+      <p><a href="" ng-click="scrollTo('modello-redditi')"><b>Totale reddito:</b></a> {{scheda.totale_730|currency:"€"}}</p>
+      <p><a href="" ng-click="scrollTo('beni-immobili')"><b>Numero immobili:</b></a> {{scheda.beni_immobili.length}}</p>
+      <p><a href="" ng-click="scrollTo('beni-mobili')"><b>Numero beni mobili:</b></a> {{scheda.beni_mobili.length}}</p>
       <p><b>Contributi elettorali:</b> {{scheda.totale_contributi_elettorali|currency:"€"}}</p>
       <p><b>Spese elettorali:</b> {{scheda.totale_spese_elettorali|currency:"€"}}</p>
       <p><b>Partecipazioni societarie:</b> {{scheda.partecipazioni_soc.length}}</p>
     </div> <!-- panel-body -->
 
-    <div class="panel-heading" style="clear:both">Voci reddito {{scheda.anno_dichiarazione}}</div>
+    <div class="panel-heading" id="modello-redditi" style="clear:both">Voci reddito {{scheda.anno_dichiarazione}}</div>
     <table class="table">
       <thead>
         <tr>
@@ -59,7 +60,7 @@
         </tr>
       </tbody>
     </table> <!-- reddito -->
-    <div class="panel-heading">Beni immobili {{scheda.anno_dichiarazione}}: {{scheda.beni_immobili.length}}</div>
+    <div class="panel-heading" id="beni-immobili">Beni immobili {{scheda.anno_dichiarazione}}: {{scheda.beni_immobili.length}}</div>
     <table class="table">
       <thead>
         <tr>
@@ -81,7 +82,7 @@
         </tr>
       </tbody>
     <table> <!-- immobili -->
-    <div class="panel-heading">Beni mobili {{scheda.anno_dichiarazione}}: {{scheda.beni_mobili.length}}</div>
+    <div class="panel-heading" id="beni-mobili">Beni mobili {{scheda.anno_dichiarazione}}: {{scheda.beni_mobili.length}}</div>
     <table class="table">
       <thead>
         <tr>
@@ -99,10 +100,9 @@
           </td>
         </tr>
       </tbody>
-    </table> <!-- immobili -->
+    </table> <!-- mobili -->
     <div class="panel-footer">
       <a href="{{scheda.filename_url}}"><p>Scarica documento originale<p></a>
-      <p>Identificativo dichiarazione {{scheda.id}}</p>
       <!-- <li ng-repeat="(key, value) in scheda">{{key}}: {{value}}</li> -->
     </div> <!-- panel-footer -->
   </div> <!-- panel-default -->
