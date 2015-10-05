@@ -9,7 +9,30 @@
     </p>
   </div>
   <div ng-show="results" class="panel panel-default">
-    <div ng-repeat="result in results" class="media">
+    <div class="panel-body">
+       Ordina i risultati
+      <ul class="nav nav-pills nav-justified">
+        <li ng-class="{'active': orderK === 'cognome'}" ng-click="selectOrder('cognome')" role="presentation">
+          <a><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Cognome</a>
+        </li>
+        <li ng-class="{'active': orderK === '-cognome'}" ng-click="selectOrder('-cognome')" role="presentation">
+          <a><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Cognome</a>
+        </li>
+        <li ng-class="{'active': orderK === '-data_nascita'}" ng-click="selectOrder('-data_nascita')" role="presentation">
+          <a><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Età</a>
+        </li>
+        <li ng-class="{'active': orderK === 'data_nascita'}" ng-click="selectOrder('data_nascita')" role="presentation">
+          <a><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Età</a>
+        </li>
+        <li ng-class="{'active': orderK === 'reddito_medio'}" ng-click="selectOrder('reddito_medio')" role="presentation">
+          <a><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Reddito</a>
+        </li>
+        <li ng-class="{'active': orderK === '-reddito_medio'}" ng-click="selectOrder('-reddito_medio')" role="presentation">
+          <a><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Reddito</a>
+        </li>
+      </ul>     
+    </div> <!-- panel-body -->
+    <div ng-repeat="result in results | orderBy: orderK" class="media">
       <div class="media-left">
         <a href="#/scheda/{{result.op_id}}">
           <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{result.op_id}}" alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}" class="media-object">
@@ -18,8 +41,10 @@
       <div class="media-body">
         <h3 class="media-heading">{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}</h3>
         <p>
-          <b>Incarico:</b> {{result.incarico}}<br>
-          <b>Professione:</b> {{result.professione}}
+          <b>Data nascita:</b> {{result.data_nascita|date:'d/M/yyyy'}}<br>
+          <b>Istituzione:</b> {{result.istituzione}}<br>
+          <b>Professione:</b> {{result.professione}}<br>
+          <b>Media reddito:</b> {{result.reddito_medio|currency:"€"}}
         </p>
       </div>
     </div>

@@ -62,6 +62,8 @@ angular.module('PatrimoniTrasparenti')
                 console.log(ui.item);
                 if ('acronym' in ui.item) {
                   $location.path('/gruppo/'+ui.item.acronym);
+                } else if ('istitution' in ui.item) {
+                  $location.path('/istituzione/'+ui.item.istitution);
                 } else {
                   $location.path('/scheda/'+ui.item.id);
                 };

@@ -13,6 +13,13 @@ angular.module('PatrimoniTrasparenti')
     },
     controllerAs: 'cardCtrl'
   })
+    .when('/istituzione/:id', {
+    templateUrl: '/templates/pages/istituzione/index.html',
+    controller: function($routeParams) {
+      this.istitution = $routeParams.id;
+    },
+    controllerAs: 'istituzionCtrl'
+  })
     .when('/gruppo/:acronym', {
     templateUrl: '/templates/pages/gruppo/index.html',
     controller: function($routeParams) {

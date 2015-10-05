@@ -164,9 +164,9 @@ func updateSingle(ep string) {
 	var target string
 	InfoLogger.Println("retrieve data for", ep)
 	switch ep {
-	case "parlamentare":
+	case "parlamento":
 		target = incomes.OpApi + "/politici/instcharges?institution_id=4&started_after=2010-01-16"
-	case "senatore":
+	case "senato":
 		target = incomes.OpApi + "/politici/instcharges?institution_id=5&started_after=2010-01-16"
 	case "governo":
 		target = incomes.OpApi + "/politici/instcharges?institution_id=3&started_after=2010-01-16"
@@ -193,8 +193,8 @@ func updateSingle(ep string) {
 }
 
 func updateAll() {
-	updateSingle("parlamentare")
-	updateSingle("senatore")
+	updateSingle("parlamento")
+	updateSingle("senato")
 	updateSingle("governo")
 }
 

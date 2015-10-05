@@ -39,7 +39,7 @@ func PoliticoHandlerGet(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func GruppoHandlerGet(w http.ResponseWriter, r *http.Request) {
+func ListHandlerGet(w http.ResponseWriter, r *http.Request) {
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
 	if !ok {
 		ErrorLogger.Println("cannot find a db session")
@@ -52,25 +52,31 @@ func GruppoHandlerGet(w http.ResponseWriter, r *http.Request) {
 	results := []bson.M{}
 	pipe := coll.Pipe([]bson.M{
 		{"$group": bson.M{
-			"_id":         "$op_id",
-			"nome":        bson.M{"$last": "$nome"},
-			"cognome":     bson.M{"$last": "$cognome"},
-			"gruppo":      bson.M{"$last": "$gruppo.name"},
-			"acronym":     bson.M{"$last": "$gruppo.acronym"},
-			"incarico":    bson.M{"$last": "$incarico"},
-			"professione": bson.M{"$last": "$professione"},
+			"_id":               "$op_id",
+			"nome":              bson.M{"$last": "$nome"},
+			"cognome":           bson.M{"$last": "$cognome"},
+			"data_nascita":      bson.M{"$last": "$data_nascita"},
+			"gruppo":            bson.M{"$last": "$gruppo.name"},
+			"gruppo_acronym":    bson.M{"$last": "$gruppo.acronym"},
+			"istituzione":       bson.M{"$last": "$incarico"},
+			"professione":       bson.M{"$last": "$professione"},
+			"tot_reddito":       bson.M{"$sum": "$totale_730"},
+			"num_dichiarazioni": bson.M{"$sum": 1},
 		},
 		},
-		{"$match": bson.M{"acronym": vars["acronym"]}},
+		{"$match": bson.M{vars["type"]: vars["key"]}},
 		{"$sort": bson.M{"cognome": 1}},
 		{"$project": bson.M{
 			"_id": 0, "op_id": "$_id",
-			"cognome":     "$cognome",
-			"nome":        "$nome",
-			"incarico":    "$incarico",
-			"professione": "$professione",
-		}},
-		{"$limit": 150},
+			"cognome":       "$cognome",
+			"nome":          "$nome",
+			"data_nascita":  "$data_nascita",
+			"istituzione":   "$istituzione",
+			"professione":   "$professione",
+			"reddito_medio": bson.M{"$divide": []string{"$tot_reddito", "$num_dichiarazioni"}},
+		},
+		},
+		//{"$limit": 150},
 	})
 	iter := pipe.Iter()
 	err := iter.All(&results)

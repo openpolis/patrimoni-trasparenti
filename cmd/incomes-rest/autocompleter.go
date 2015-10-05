@@ -34,13 +34,30 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 
 	session := sessionInterface.(*mgo.Session)
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
-	// Find parties.
-	results := []bson.M{}
+	// Find roles.
+	roleResults := []bson.M{}
 	rgx := []bson.M{
+		{"name": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
+	}
+	pipe := coll.Pipe([]bson.M{
+		{"$group": bson.M{
+			"_id":  "$incarico",
+			"name": bson.M{"$last": "$incarico"},
+		},
+		},
+		{"$match": bson.M{"$or": rgx}},
+		{"$sort": bson.M{"name": 1}},
+		{"$project": bson.M{"_id": 0, "id": "$_id", "value": "$name", "istitution": "$name"}},
+	})
+	iter := pipe.Iter()
+	err = iter.All(&roleResults)
+	// Find parties.
+	partiesResults := []bson.M{}
+	rgx = []bson.M{
 		{"name": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
 		{"acronym": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
 	}
-	pipe := coll.Pipe([]bson.M{
+	pipe = coll.Pipe([]bson.M{
 		{"$group": bson.M{
 			"_id":     "$gruppo.name",
 			"name":    bson.M{"$last": "$gruppo.name"},
@@ -51,8 +68,8 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		{"$sort": bson.M{"acronym": 1}},
 		{"$project": bson.M{"_id": 0, "id": "$_id", "value": bson.M{"$concat": []string{"$acronym", " - ", "$name"}}, "acronym": "$acronym"}},
 	})
-	iter := pipe.Iter()
-	err = iter.All(&results)
+	iter = pipe.Iter()
+	err = iter.All(&partiesResults)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		ErrorLogger.Println("retrieving declarations from db", err)
@@ -84,6 +101,9 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("retrieving declarations from db", err)
 		return
 	}
+	results := make([]bson.M, 0, len(roleResults)+len(partiesResults)+len(peopleResults))
+	results = append(results, roleResults...)
+	results = append(results, partiesResults...)
 	results = append(results, peopleResults...)
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
