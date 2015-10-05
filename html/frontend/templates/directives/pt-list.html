@@ -30,13 +30,17 @@
         <li ng-class="{'active': orderK === '-reddito_medio'}" ng-click="selectOrder('-reddito_medio')" role="presentation">
           <a><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Reddito</a>
         </li>
-      </ul>     
+      </ul>
     </div> <!-- panel-body -->
     <p>Totale: {{results.length}}</p>
     <div ng-repeat="result in results | orderBy: orderK" class="media">
       <div class="media-left">
         <a href="#/scheda/{{result.op_id}}">
-          <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{result.op_id}}" alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}" class="media-object">
+          <img
+            bn-lazy-src="http://politici.openpolis.it/politician/picture?content_id={{result.op_id}}"
+            alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}"
+            class="media-object"
+            />
         </a>
       </div>
       <div class="media-body">
