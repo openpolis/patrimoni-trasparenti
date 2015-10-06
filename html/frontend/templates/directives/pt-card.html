@@ -11,10 +11,12 @@
   </div>
 
   <div ng-show="scheda" class="panel panel-default">
-    <a ng-show="scheda.indice_completezza < 3" href="#/campagna">
-      <img style="position: absolute; top: 100; right: 1; border: 0; z-index:1000" alt="Dichiarazione incompleta" ng-src="assets/images/incompleta_left_red_aa0000.png">
-    </a>
-    <div class="panel-heading"><h3>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h3></div>
+    <div class="panel-heading" style="position:relative">
+      <h3>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h3>
+      <a ng-show="scheda.indice_completezza < 3" href="#/campagna" style="position: absolute; top: 0px; right: 0px; border: 0; z-index:1000">
+        <img alt="Dichiarazione incompleta" ng-src="assets/images/incompleta_rigth_red_aa0000.png">
+      </a>
+    </div>
     <div class="panel-body col-md-8">
       <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}" alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
       <p><b>Data di nascita:</b> {{scheda.data_nascita | date:'dd-MM-yyyy'}}</p>
