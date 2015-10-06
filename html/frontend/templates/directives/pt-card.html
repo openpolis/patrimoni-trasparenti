@@ -11,6 +11,7 @@
   </div>
 
   <div ng-show="scheda" class="panel panel-default">
+    <a href="#/campagna"><img style="position: absolute; top: 100; right: 1; border: 0; z-index:1000" alt="Dichiarazione incompleta" ng-src="assets/images/incompleta_left_red_aa0000.png"></a>
     <div class="panel-heading"><h3>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h3></div>
     <div class="panel-body col-md-8">
       <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}" alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
@@ -25,15 +26,16 @@
       <p>Seleziona anno dichiarazione:</p>
       <ul class="nav nav-pills nav-justified">
         <li ng-repeat="dichiarazione in schede" ng-class="{'active': scheda.anno_dichiarazione === dichiarazione.anno_dichiarazione}" ng-click="selectYear($index)" role="presentation"><a href="">{{dichiarazione.anno_dichiarazione}}</a></li>
-      </ul>     
+      </ul>
       <br>
       <p><b>Indice Completezza:</b> {{scheda.indice_completezza}}</p>
       <p><a href="" ng-click="scrollTo('modello-redditi')"><b>Totale reddito:</b></a> {{scheda.totale_730|currency:"€"}}</p>
       <p><a href="" ng-click="scrollTo('beni-immobili')"><b>Numero immobili:</b></a> {{scheda.beni_immobili.length}}</p>
       <p><a href="" ng-click="scrollTo('beni-mobili')"><b>Numero beni mobili:</b></a> {{scheda.beni_mobili.length}}</p>
-      <p><b>Contributi elettorali:</b> {{scheda.totale_contributi_elettorali|currency:"€"}}</p>
-      <p><b>Spese elettorali:</b> {{scheda.totale_spese_elettorali|currency:"€"}}</p>
-      <p><b>Partecipazioni societarie:</b> {{scheda.partecipazioni_soc.length}}</p>
+      <p><a href="" ng-click="scrollTo('partecipazioni-soc')"><b>Partecipazioni:</b></a> {{scheda.partecipazioni_soc.length}}</p>
+      <p><a href="" ng-click="scrollTo('amministrazioni-soc')"><b>Amministrazioni:</b></a> {{scheda.amministrazioni_soc.length}}</p>
+      <p><a href="" ng-click="scrollTo('contributi-elettorali')"><b>Contributi elettorali:</b></a> {{scheda.totale_contributi_elettorali|currency:"€"}}</p>
+      <p><a href="" ng-click="scrollTo('spese-elettorali')"><b>Spese elettorali:</b></a> {{scheda.totale_spese_elettorali|currency:"€"}}</p>
     </div> <!-- panel-body -->
 
     <div class="panel-heading" id="modello-redditi" style="clear:both">Voci reddito {{scheda.anno_dichiarazione}}</div>
@@ -101,6 +103,80 @@
         </tr>
       </tbody>
     </table> <!-- mobili -->
+    <div class="panel-heading" id="partecipazioni-soc">Partecipazioni in società {{scheda.anno_dichiarazione}}: {{scheda.partecipazioni_soc.length}}</div>
+    <table ng-show="scheda.partecipazioni_soc.length" class="table">
+      <thead>
+        <tr>
+          <th>Persona</th>
+          <th>Tipologia</th>
+          <th>Cavalli fiscali</th>
+          <th>Anno immatr.</th>
+          <th>Annotazioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="voce in scheda.partecipazioni_soc">
+          <td ng-repeat="(k, v) in voce">
+            {{v}}
+          </td>
+        </tr>
+      </tbody>
+    </table> <!-- partecipazioni_soc -->
+    <div class="panel-heading" id="amministrazioni-soc">Amministrazioni di società {{scheda.anno_dichiarazione}}: {{scheda.amministrazioni_soc.length}}</div>
+    <table ng-show="scheda.amministrazioni_soc.length" class="table">
+      <thead>
+        <tr>
+          <th>Persona</th>
+          <th>Tipologia</th>
+          <th>Cavalli fiscali</th>
+          <th>Anno immatr.</th>
+          <th>Annotazioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="voce in scheda.amministrazioni_soc">
+          <td ng-repeat="(k, v) in voce">
+            {{v}}
+          </td>
+        </tr>
+      </tbody>
+    </table> <!-- amministrazioni_soc -->
+    <div class="panel-heading" id="contributi-elettorali">Contributi elettorali {{scheda.anno_dichiarazione}}: {{scheda.totale_contributi_elettorali|currency:"€"}}</div>
+    <table ng-show="scheda.totale_contributi_elettorali" class="table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Elezione</th>
+          <th>Anno</th>
+          <th>Importo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="voce in scheda.contributi_elettorali">
+          <td ng-repeat="(k, v) in voce">
+            {{v}}
+          </td>
+        </tr>
+      </tbody>
+    </table> <!-- contributi_elettorali -->
+    <div class="panel-heading" id="spese-elettorali">Spese elettorali {{scheda.anno_dichiarazione}}: {{scheda.totale_spese_elettorali|currency:"€"}}</div>
+    <table ng-show="scheda.totale_spese_elettorali" class="table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Elezione</th>
+          <th>Anno</th>
+          <th>Importo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="voce in scheda.spese_elettorali">
+          <td ng-repeat="(k, v) in voce">
+            {{v}}
+          </td>
+        </tr>
+      </tbody>
+    </table> <!-- spese_elettorali -->
     <div class="panel-footer">
       <a href="{{scheda.filename_url}}"><p>Scarica documento originale<p></a>
       <!-- <li ng-repeat="(key, value) in scheda">{{key}}: {{value}}</li> -->

@@ -6,6 +6,9 @@ angular.module('PatrimoniTrasparenti')
     .when('/faq', {
     templateUrl: '/templates/pages/faq/index.html'
   })
+    .when('/campagna', {
+    templateUrl: '/templates/pages/campagna/index.html'
+  })
     .when('/scheda/:id', {
     templateUrl: '/templates/pages/scheda/index.html',
     controller: function($routeParams) {
