@@ -598,6 +598,7 @@ func DownloadAndParseDeclaration(file *drive.File) (poli incomes.Declaration, er
 	}()
 	// XXX It seems that once read value are zeroed O.o
 	fileName := file.Title
+	fmt.Println("[INFO] parsing file:", fileName)
 	exportUrl := file.ExportLinks["text/csv"]
 	politician := incomes.Declaration{}
 	err := ParseTitle(&politician, fileName)

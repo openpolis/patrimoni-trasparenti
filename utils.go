@@ -49,7 +49,7 @@ func ParseFloat(s string) float32 {
 			return 0
 		}
 		stracer.Traceln("error converting to float", s, err)
-		return 0
+		return float32(-1)
 	}
 	return float32(value)
 }
