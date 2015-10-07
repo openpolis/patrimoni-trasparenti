@@ -11,6 +11,7 @@
   </div>
 
   <div ng-show="scheda" class="panel panel-default">
+    <!-- relative position to make badge absolute positionning work -->
     <div class="panel-heading" style="position:relative">
       <h3>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h3>
       <a ng-show="scheda.indice_completezza < 3" href="#/campagna" style="position: absolute; top: 0px; right: 0px; border: 0; z-index:1000">
@@ -32,7 +33,7 @@
         <li ng-repeat="dichiarazione in schede" ng-class="{'active': scheda.anno_dichiarazione === dichiarazione.anno_dichiarazione}" ng-click="selectYear($index)" role="presentation"><a href="">{{dichiarazione.anno_dichiarazione}}</a></li>
       </ul>
       <br>
-      <p><b>Indice Completezza:</b> {{scheda.indice_completezza}}</p>
+      <p><b>Completezza:</b> <star-rating stars-number="scheda.indice_completezza"></star-rating></p>
       <p><a href="" ng-click="scrollTo('modello-redditi')"><b>Totale reddito:</b></a> {{scheda.totale_730|currency:"€"}}</p>
       <p><a href="" ng-click="scrollTo('beni-immobili')"><b>Numero immobili:</b></a> {{scheda.beni_immobili.length}}</p>
       <p><a href="" ng-click="scrollTo('beni-mobili')"><b>Numero beni mobili:</b></a> {{scheda.beni_mobili.length}}</p>

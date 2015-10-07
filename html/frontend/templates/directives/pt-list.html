@@ -1,4 +1,4 @@
-<div>
+<div class="pt-list">
   <p ng-show="spinner" ><span class="glyphicon glyphicon-refresh spinning"></span> Ricerca in corso...</p>
 
   <div ng-show="errors" class="alert alert-danger" role="alert">
@@ -9,8 +9,11 @@
     </p>
   </div>
   <div ng-show="results" class="panel panel-default">
+    <div class="panel-heading" style="position:relative">
+      <h2>{{type}} / {{key|capitalize:all}}</h2>
+    </div>
     <div class="panel-body">
-       Ordina i risultati
+      <p>Ordina i {{results.length}} risultati:</p>
       <ul class="nav nav-pills nav-justified">
         <li ng-class="{'active': orderK === 'cognome'}" ng-click="selectOrder('cognome')" role="presentation">
           <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Cognome</a>
@@ -32,7 +35,6 @@
         </li>
       </ul>
     </div> <!-- panel-body -->
-    <p>Totale: {{results.length}}</p>
     <div ng-repeat="result in results | orderBy: orderK" class="media">
       <div class="media-left">
         <a href="#/scheda/{{result.op_id}}">

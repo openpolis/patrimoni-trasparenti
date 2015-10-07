@@ -61,6 +61,15 @@ body {
 ::-webkit-scrollbar-track {
     background: #ddd;
 }
+
 .white, .white a {
     color: #fff;
-  }
+}
+
+.pt-list img {
+  max-width: 120px;
+}
+
+img.autocompleter-img {
+  max-width: 50px;
+}

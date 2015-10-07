@@ -28,7 +28,11 @@ angular.module('PatrimoniTrasparenti')
                   .success(function(rData){
                     controller.spinner = false;
                     for (var i in rData) {
-                      rData[i].label = $compile('<p><img ng-src="favicon.ico"/> '+$filter('capitalize')(rData[i].value, 'all')+'</p>')($scope)
+                      rData[i].label = $compile(
+                      '<p><img class="autocompleter-img" ng-src="http://politici.openpolis.it/politician/picture?content_id='+rData[i].id+'"/> '+
+                      $filter('capitalize')(rData[i].value, 'all') +
+                      '</p>'
+                      )($scope)
                     };
                     if (!rData.length) {
                         rData.push({
