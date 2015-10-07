@@ -9,15 +9,14 @@
   // Define custom filter to calculate totals.
   app.filter('sumByKey', function () {
       return function (data, key) {
-
-          if (!data || typeof (data) === 'undefined' || typeof (key) === 'undefined') {
-              return 0;
-          }
-          var sum = 0;
-          for (var i = data.length - 1; i >= 0; i--) {
-              sum += parseInt(data[i][key]);
-          }
-          return sum;
+        if (!data || typeof (data) === 'undefined' || typeof (key) === 'undefined') {
+            return 0;
+        }
+        var sum = 0;
+        for (var i = data.length - 1; i >= 0; i--) {
+            sum += parseFloat(data[i][key]);
+        }
+        return sum;
       };
   });
 
@@ -1016,6 +1015,8 @@
             .label('Dichiarazione coniuge'),
         nga.field('variazioni', 'boolean')
             .label('Variazioni'),
+        nga.field('completezza_redditi', 'boolean')
+            .label('Completezza redditi'),
         nga.field('modello_redditi')
             .label('Modello redditi'),
         nga.field('indice_completezza', 'number')
@@ -1115,6 +1116,8 @@
             .label('Dichiarazione coniuge'),
         nga.field('variazioni', 'boolean')
             .label('Variazioni'),
+        nga.field('completezza_redditi', 'boolean')
+            .label('Completezza redditi'),
         nga.field('modello_redditi')
             .label('Modello redditi'),
         nga.field('indice_completezza', 'number')
@@ -1177,6 +1180,8 @@
             .label('Dichiarazione coniuge'),
         nga.field('variazioni', 'boolean')
             .label('Variazioni'),
+        nga.field('completezza_redditi', 'boolean')
+            .label('Completezza redditi'),
         nga.field('dichiarazioni_incomplete')
             .label('Dichiarazioni incomplete'),
         nga.field('modello_redditi')
