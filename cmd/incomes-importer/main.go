@@ -96,7 +96,7 @@ func getNamesFromNote(field string, compositeSurname bool) (name, surname string
 }
 
 func getBoolFromNote(field string) bool {
-	y := regexp.MustCompile(`.*s[iiì].*`)
+	y := regexp.MustCompile(`(.*s[iiì].*|[:space:]*\bcomplet.\b[:space:]*)`)
 	stracer.Traceln("string to cast to bool:", field, "result:", y.MatchString(field))
 	return y.MatchString(field)
 }
@@ -139,7 +139,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 				"documenti_appello":        values[2],
 				"dichiarazione_coniuge":    getBoolFromNote(values[3]),
 				"modello_redditi":          values[4],
-				"quadri_presentati":        values[5],
+				"completezza_redditi":      getBoolFromNote(values[5]),
 				"dichiarazioni_incomplete": values[6],
 				"note":       values[7],
 				"variazioni": getBoolFromNote(values[8]),
@@ -151,7 +151,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 				"documenti_appello":        values[2],
 				"dichiarazione_coniuge":    getBoolFromNote(values[3]),
 				"modello_redditi":          values[4],
-				"quadri_presentati":        values[5],
+				"completezza_redditi":      getBoolFromNote(values[5]),
 				"dichiarazioni_incomplete": values[6],
 				"note": values[7],
 			},

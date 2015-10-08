@@ -129,7 +129,7 @@ type Declaration struct {
 	DichiaraziniIncomplete string `bson:"dichiarazioni_incomplete" json:"dichiarazioni_incomplete"`
 	ModelloRedditi         string `bson:"modello_redditi" json:"modello_redditi"`
 	// XXX no more used, it can be removed
-	//QuadriPresentati string `bson:"quadri_presentati" json:"quadri_presentati"`
+	//QuadriPresentati    string `bson:"quadri_presentati" json:"quadri_presentati"`
 	ComplettezzaRedditi bool `bson:"completezza_redditi" json:"completezza_redditi"`
 
 	IndiceCompletezza int    `bson:"indice_completezza" json:"indice_completezza"`
