@@ -13,8 +13,10 @@
 package main
 
 import (
+	"encoding/csv"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"regexp"
@@ -117,18 +119,25 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		values, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump first line.
 		if i == 0 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		line = SanitizeString(line)
-		values := strings.Split(line, ",")
+		for i, s := range values {
+			s = strings.ToLower(s)
+			values[i] = SanitizeString(s)
+		}
 		stracer.Traceln("splitted line", values, "length:", len(values))
 		n, s := getNamesFromNote(values[0], false)
 		sQuery := bson.M{"nome": n, "cognome": s, "anno_dichiarazione": year}
@@ -171,9 +180,6 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 				}
 			}
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		return err
 	}
 	return nil
 }
