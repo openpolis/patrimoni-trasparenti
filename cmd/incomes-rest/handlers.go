@@ -60,6 +60,7 @@ func ListHandlerGet(w http.ResponseWriter, r *http.Request) {
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	results := []bson.M{}
 	pipe := coll.Pipe([]bson.M{
+		{"$sort": bson.M{"anno_dichiarazione": 1}},
 		{"$group": bson.M{
 			"_id":               "$op_id",
 			"nome":              bson.M{"$last": "$nome"},
@@ -67,7 +68,7 @@ func ListHandlerGet(w http.ResponseWriter, r *http.Request) {
 			"data_nascita":      bson.M{"$last": "$data_nascita"},
 			"gruppo":            bson.M{"$last": "$gruppo.name"},
 			"gruppo_acronym":    bson.M{"$last": "$gruppo.acronym"},
-			"istituzione":       bson.M{"$last": "$incarico"},
+			"istituzione":       bson.M{"$last": "$istituzione"},
 			"professione":       bson.M{"$last": "$professione"},
 			"tot_reddito":       bson.M{"$sum": "$totale_730"},
 			"num_dichiarazioni": bson.M{"$sum": 1},

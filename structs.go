@@ -180,9 +180,12 @@ type Group struct {
 	//Onane   string `bson:"oname" json:"oname"`
 }
 type PoliticalData struct {
-	Role string `bson:"incarico" json:"incarico"`
+	Institution string `bson:"istituzione" json:"istituzione"`
+	// charge_type_descr, only for government members
+	Charge string `bson:"incarico" json:"incarico"`
 	// Only for parliamentary and senate.
 	Group Group `bson:"gruppo" json:"gruppo"`
+	Party Group `bson:"partito" json:"partito"`
 	//ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
 	Occupation string `bson:"professione" json:"professione"`
 	Sex        string `bson:"sesso" json:"sesso"`

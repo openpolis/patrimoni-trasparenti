@@ -23,9 +23,11 @@
       <p><b>Data di nascita:</b> {{scheda.data_nascita | date:'dd-MM-yyyy'}}</p>
       <p><b>Residenza:</b> {{scheda.comune_residenza|capitalize:all}} ({{scheda.provincia_residenza|capitalize:team}})</p>
       <p><b>Stato civile:</b> {{scheda.stato_civile}}</p>
-      <p><b>Incarico:</b> <a ng-href="#/istituzione/{{scheda.incarico}}">{{scheda.incarico}}</a></p>
+      <p><b>Istituzione:</b> <a ng-href="#/istituzione/{{scheda.istituzione}}">{{scheda.istituzione}}</a></p>
+      <p><b>Incarico:</b> {{scheda.incarico}}</a></p>
       <p><b>Professione:</b> {{scheda.professione}}</p>
-      <p><b>Gruppo:</b> <a ng-href="#/gruppo/{{scheda.gruppo.acronym}}">{{scheda.gruppo.acronym}} - {{scheda.gruppo.name}}</a></p>
+      <p ng-show="scheda.gruppo.acronym"><b>Gruppo:</b> <a ng-href="#/gruppo/{{scheda.gruppo.acronym}}">{{scheda.gruppo.acronym}} - {{scheda.gruppo.name}}</a></p>
+      <p><b>Partito:</b> {{scheda.partito.acronym}} - {{scheda.partito.name}}</a></p>
     </div> <!-- panel-body -->
     <div class="panel-body col-md-4">
       <p>Seleziona anno dichiarazione:</p>

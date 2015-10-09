@@ -41,8 +41,8 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	pipe := coll.Pipe([]bson.M{
 		{"$group": bson.M{
-			"_id":  "$incarico",
-			"name": bson.M{"$last": "$incarico"},
+			"_id":  "$istituzione",
+			"name": bson.M{"$last": "$istituzione"},
 		},
 		},
 		{"$match": bson.M{"$or": rgx}},

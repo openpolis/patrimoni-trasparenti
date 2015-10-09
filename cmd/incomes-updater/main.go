@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"bitbucket.org/eraclitux/op-incomes"
@@ -64,14 +66,14 @@ func GetPoliticalData(opId string) incomes.PoliticalData {
 
 // UpdateMongo updates all declarations with a given Openpolis id
 // with political data.
-func UpdateMongo(opId string, d incomes.PoliticalData) error {
+func UpdateMongo(opId string, d incomes.PoliticalData, year int) error {
 	session := mSession.Copy()
 	defer session.Close()
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
 	uQuery := bson.M{
 		"$set": d,
 	}
-	fQuery := bson.M{"op_id": opId}
+	fQuery := bson.M{"op_id": opId, "anno_dichiarazione": year}
 	_, err := coll.UpdateAll(fQuery, uQuery)
 	if err != nil {
 		ErrorLogger.Println("updating", opId, err)
@@ -81,18 +83,24 @@ func UpdateMongo(opId string, d incomes.PoliticalData) error {
 	return nil
 }
 
-func UpdateData(r incomes.OpResponse, role string) error {
+func UpdateData(r incomes.OpResponse, institution string, year int) error {
 	// FIXME better way?
 	for _, r := range r.Results {
 		sdata := r["politician"].(map[string]interface{})
 		// OpId is not present :(
 		// We'll take it from image_uri
 		image_uri := sdata["image_uri"].(string)
+		var charge string
+		if r["charge_type_descr"] != nil {
+			charge = r["charge_type_descr"].(string)
+			charge = strings.ToLower(charge)
+		}
 		sex := sdata["sex"].(string)
 		sex = strings.ToLower(sex)
 		op_id := strings.Split(image_uri, "=")[1]
-		sdata = r["group"].(map[string]interface{})
+
 		var name, acronym string
+		sdata = r["group"].(map[string]interface{})
 		if sdata["name"] != nil {
 			name = sdata["name"].(string)
 		}
@@ -105,19 +113,35 @@ func UpdateData(r incomes.OpResponse, role string) error {
 			Name:    name,
 			Acronym: acronym,
 		}
+		sdata = r["party"].(map[string]interface{})
+		if sdata["name"] != nil {
+			name = sdata["name"].(string)
+		}
+		if sdata["acronym"] != nil {
+			acronym = sdata["acronym"].(string)
+		}
+		name = strings.ToLower(name)
+		acronym = strings.ToLower(acronym)
+		party := incomes.Group{
+			Name:    name,
+			Acronym: acronym,
+		}
+
 		sdata = r["politician"].(map[string]interface{})
 		// FIXME I don't like this.
 		occupation := sdata["profession"].(map[string]interface{})["description"].(string)
-		stracer.Traceln("op api results, op_id:", op_id, "group:", group, "occupation:", occupation, "sex:", sex)
-		role = strings.ToLower(role)
+		stracer.Traceln("op api results, op_id:", op_id, "group:", group, "occupation:", occupation, "sex:", sex, "charge_type_descr:", charge)
+		institution = strings.ToLower(institution)
 		occupation = strings.ToLower(occupation)
 		d := incomes.PoliticalData{
-			Role:       role,
-			Group:      group,
-			Occupation: occupation,
-			Sex:        sex,
+			Institution: institution,
+			Charge:      charge,
+			Group:       group,
+			Party:       party,
+			Occupation:  occupation,
+			Sex:         sex,
 		}
-		UpdateMongo(op_id, d)
+		UpdateMongo(op_id, d, year)
 	}
 	return nil
 }
@@ -125,9 +149,10 @@ func UpdateData(r incomes.OpResponse, role string) error {
 type data struct {
 	next string
 	// Counts number of pages retrieved.
-	counter int
-	Role    string
-	Target  string
+	counter     int
+	Institution string
+	Target      string
+	Year        int
 }
 
 func (d *data) Next() bool {
@@ -156,27 +181,28 @@ func (d *data) Get() error {
 	stracer.Traceln("op api next:", r.Next)
 	// No error checking because one day it
 	// will run in its own goroutine.
-	UpdateData(r, d.Role)
+	UpdateData(r, d.Institution, d.Year)
 	return nil
 }
 
-func updateSingle(ep string) {
+func updateSingle(ep string, year int) {
 	var target string
 	InfoLogger.Println("retrieve data for", ep)
 	switch ep {
 	case "camera":
-		target = incomes.OpApi + "/politici/instcharges?institution_id=4&started_after=2010-01-16"
+		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=4&date=", strconv.Itoa(year))
 	case "senato":
-		target = incomes.OpApi + "/politici/instcharges?institution_id=5&started_after=2010-01-16"
+		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=5&date=", strconv.Itoa(year))
 	case "governo":
-		target = incomes.OpApi + "/politici/instcharges?institution_id=3&started_after=2010-01-16"
+		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=3&date=", strconv.Itoa(year))
 	default:
 		ErrorLogger.Println("unknown politician type", ep)
 		return
 	}
 	data := data{
-		Target: target,
-		Role:   ep,
+		Year:        year,
+		Target:      target,
+		Institution: ep,
 	}
 	err := data.Get()
 	if err != nil {
@@ -193,9 +219,13 @@ func updateSingle(ep string) {
 }
 
 func updateAll() {
-	updateSingle("camera")
-	updateSingle("senato")
-	updateSingle("governo")
+	// FIXME get from MongoDB
+	years := []int{2013, 2014}
+	for _, y := range years {
+		updateSingle("camera", y)
+		updateSingle("senato", y)
+		updateSingle("governo", y)
+	}
 }
 
 func main() {
