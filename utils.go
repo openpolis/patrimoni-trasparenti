@@ -38,10 +38,16 @@ func ParseDate(d string) (time.Time, error) {
 	return date, nil
 }
 
+func deNotate(line string) string {
+	s := strings.Replace(line, `.`, ``, -1)
+	return strings.Replace(s, `,`, `.`, -1)
+}
+
 // ParseFloat extends string.ParseFloat returnig 0.0
 // in case of empty string.
 // FIXME return error
 func ParseFloat(s string) float32 {
+	s = deNotate(s)
 	value, err := strconv.ParseFloat(s, 32)
 	if err != nil {
 		// Empty string is zero for us not an error.

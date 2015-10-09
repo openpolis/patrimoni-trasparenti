@@ -135,8 +135,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 			continue
 		}
 		for i, s := range values {
-			s = strings.ToLower(s)
-			values[i] = SanitizeString(s)
+			values[i] = strings.ToLower(s)
 		}
 		stracer.Traceln("splitted line", values, "length:", len(values))
 		n, s := getNamesFromNote(values[0], false)
@@ -253,18 +252,24 @@ func ParseVociReddito(p *incomes.Declaration, exportUrl string) (er error) {
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		fields, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump invalid lines.
 		if i == 0 || i == 6 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		line = SanitizeFloat(line)
-		fields := strings.Split(line, ",")
+		for i, s := range fields {
+			fields[i] = strings.ToLower(s)
+		}
 		if i == 7 {
 			p.TotaleVociRedditoDichiarante = incomes.ParseFloat(fields[1])
 			p.TotaleVociRedditoConiuge = incomes.ParseFloat(fields[2])
@@ -283,9 +288,6 @@ func ParseVociReddito(p *incomes.Declaration, exportUrl string) (er error) {
 		redditi = append(redditi, voceReddito)
 		i++
 	}
-	if err := scanner.Err(); err != nil {
-		return err
-	}
 	p.VociReddito = redditi
 	return nil
 }
@@ -303,20 +305,24 @@ func ParseBeniImmobili(p *incomes.Declaration, exportUrl string) (er error) {
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		fields, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump first lines.
 		if i <= 1 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		line = SanitizeString(line)
-		line = SanitizeFloat(line)
-		fields := strings.Split(line, ",")
-		stracer.Traceln("ParseBeniImmobili line:", line)
+		for i, s := range fields {
+			fields[i] = strings.ToLower(s)
+		}
 		var bene incomes.BeneImmobile
 		// Data format has changed, fields were added.
 		if len(fields) == 6 {
@@ -361,18 +367,24 @@ func ParseBeniMobili(p *incomes.Declaration, exportUrl string) (er error) {
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		fields, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump first lines.
 		if i <= 1 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		line = SanitizeString(line)
-		fields := strings.Split(line, ",")
+		for i, s := range fields {
+			fields[i] = strings.ToLower(s)
+		}
 		year, err := incomes.Atoi(fields[3])
 		if err != nil {
 			log.Println("[ERROR] converting to int 'AnnoImmatricolazione' for", p, err, "it will be zero.")
@@ -404,19 +416,24 @@ func ParsePartecipazioni(p *incomes.Declaration, exportUrl string) (er error) {
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		fields, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump first lines.
 		if i <= 1 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		line = SanitizeString(line)
-		line = SanitizeFloat(line)
-		fields := strings.Split(line, ",")
+		for i, s := range fields {
+			fields[i] = strings.ToLower(s)
+		}
 		var ruolo incomes.Partecipazione
 		// Data format has changed, fields were added.
 		if len(fields) < 7 {
@@ -458,17 +475,24 @@ func ParseAmmministrazioni(p *incomes.Declaration, exportUrl string) (er error) 
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		fields, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump first lines.
 		if i <= 1 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		fields := strings.Split(line, ",")
+		for i, s := range fields {
+			fields[i] = strings.ToLower(s)
+		}
 		ruolo := incomes.Ruolo{
 			Sede:           incomes.Sede{CittaSede: fields[2], ProvinciaSede: fields[3]},
 			Persona:        fields[0],
@@ -496,19 +520,24 @@ func ParseContributiElettorali(p *incomes.Declaration, exportUrl string) (er err
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		fields, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump first lines.
 		if i <= 1 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		line = SanitizeFloat(line)
-		fields := strings.Split(line, ",")
-		// Skip empty lines
+		for i, s := range fields {
+			fields[i] = strings.ToLower(s)
+		}
 		if fields[0] == "" {
 			i++
 			continue
@@ -548,22 +577,28 @@ func ParseSpeseElettorali(p *incomes.Declaration, exportUrl string) (er error) {
 		return err
 	}
 	defer resp.Body.Close()
-	scanner := bufio.NewScanner(resp.Body)
+	csvReader := csv.NewReader(resp.Body)
 	i := 0
-	for scanner.Scan() {
+	for {
+		fields, err := csvReader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return err
+		}
 		// Jump invalid lines.
 		if i <= 1 {
 			i++
 			continue
 		}
-		line := scanner.Text()
-		line = strings.ToLower(line)
-		line = SanitizeFloat(line)
-		fields := strings.Split(line, ",")
 		// Skip empty lines
 		if fields[0] == "" {
 			i++
 			continue
+		}
+		for i, s := range fields {
+			fields[i] = strings.ToLower(s)
 		}
 		if fields[0] == "totale parziale" {
 			i++
@@ -750,7 +785,7 @@ func ParseDeclarations(files []*drive.File) {
 	}
 	// Force number of workers.
 	// FIXME parametrize this.
-	goparallel.WorkersNumber = 4
+	goparallel.WorkersNumber = 6
 	err := goparallel.RunBlocking(jobs)
 	if err != nil {
 		log.Println("[ERROR] running tasks:", err)
