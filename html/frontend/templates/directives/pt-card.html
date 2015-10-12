@@ -35,7 +35,7 @@
         <li ng-repeat="dichiarazione in schede" ng-class="{'active': scheda.anno_dichiarazione === dichiarazione.anno_dichiarazione}" ng-click="selectYear($index)" role="presentation"><a href="">{{dichiarazione.anno_dichiarazione}}</a></li>
       </ul>
       <br>
-      <p><b>Completezza:</b> <star-rating stars-number="scheda.indice_completezza"></star-rating></p>
+      <p><b>Completezza:</b> <star-rating stars-number="scheda.indice_completezza" max=3></star-rating></p>
       <p><a href="" ng-click="scrollTo('modello-redditi')"><b>Totale reddito:</b></a> {{scheda.totale_730|currency:"€"}}</p>
       <p><a href="" ng-click="scrollTo('beni-immobili')"><b>Numero immobili:</b></a> {{scheda.beni_immobili.length}}</p>
       <p><a href="" ng-click="scrollTo('beni-mobili')"><b>Numero beni mobili:</b></a> {{scheda.beni_mobili.length}}</p>
