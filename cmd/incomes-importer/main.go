@@ -103,6 +103,12 @@ func getBoolFromNote(field string) bool {
 	return y.MatchString(field)
 }
 
+func getOpId(values []string) string {
+	if len(values) == 10 {
+		return values[9]
+	}
+	return values[10]
+}
 func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -139,9 +145,15 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 		}
 		stracer.Traceln("splitted line", values, "length:", len(values))
 		n, s := getNamesFromNote(values[0], false)
-		sQuery := bson.M{"nome": n, "cognome": s, "anno_dichiarazione": year}
+		sQuery := bson.M{}
 		uQuery := bson.M{}
-		if len(values) == 9 {
+		opId := getOpId(values)
+		if opId != "" {
+			sQuery = bson.M{"op_id": opId, "anno_dichiarazione": year}
+		} else {
+			sQuery = bson.M{"nome": n, "cognome": s, "anno_dichiarazione": year}
+		}
+		if len(values) == 10 {
 			uQuery = bson.M{"$set": bson.M{
 				"dichiarazione_elettorale": getBoolFromNote(values[1]),
 				"documenti_appello":        values[2],
