@@ -104,10 +104,11 @@ func getBoolFromNote(field string) bool {
 }
 
 func getOpId(values []string) string {
+	stracer.Traceln("values:", values)
 	if len(values) == 10 {
 		return values[9]
 	}
-	return values[10]
+	return values[8]
 }
 func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error) {
 	defer func() {
