@@ -40,9 +40,10 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		{"name": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
 	}
 	pipe := coll.Pipe([]bson.M{
+		{"$unwind": "$incarichi"},
 		{"$group": bson.M{
-			"_id":  "$istituzione",
-			"name": bson.M{"$last": "$istituzione"},
+			"_id":  "$incarichi.istituzione",
+			"name": bson.M{"$last": "$incarichi.istituzione"},
 		},
 		},
 		{"$match": bson.M{"$or": rgx}},
