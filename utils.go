@@ -89,8 +89,8 @@ func ExtractDistrict(s string) (city, district string) {
 	return
 }
 
-// LowerStruct change string field to lower case
-// of the passed struct.
+// LowerStruct changes string field to lower case
+// for the passed struct.
 func LowerStruct(strPtr interface{}) error {
 	str := reflect.ValueOf(strPtr)
 	if str.Kind() != reflect.Ptr {

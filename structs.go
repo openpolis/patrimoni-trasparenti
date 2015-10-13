@@ -179,16 +179,24 @@ type Group struct {
 	Acronym string `bson:"acronym" json:"acronym"`
 	//Onane   string `bson:"oname" json:"oname"`
 }
-type PoliticalData struct {
+
+type Charge struct {
 	Institution string `bson:"istituzione" json:"istituzione"`
 	// charge_type_descr, only for government members
+	// es. "ministro, sottosegretario etc."
 	Charge string `bson:"incarico" json:"incarico"`
 	// Only for parliamentary and senate.
-	Group Group `bson:"gruppo" json:"gruppo"`
-	Party Group `bson:"partito" json:"partito"`
-	//ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
-	Occupation string `bson:"professione" json:"professione"`
-	Sex        string `bson:"sesso" json:"sesso"`
+	Group            Group  `bson:"gruppo" json:"gruppo"`
+	Party            Group  `bson:"partito" json:"partito"`
+	ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
+}
+
+// PoliticalData models data retrieved via openpolitici REST apis.
+type PoliticalData struct {
+	// Politician can have more than one charge.
+	Charges    []Charge `bson:"incarichi" json:"incarichi"`
+	Occupation string   `bson:"professione" json:"professione"`
+	Sex        string   `bson:"sesso" json:"sesso"`
 }
 
 //============== Openpolis API

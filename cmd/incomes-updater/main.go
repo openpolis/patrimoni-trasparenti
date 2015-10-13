@@ -70,8 +70,12 @@ func UpdateMongo(opId string, d incomes.PoliticalData, year int) error {
 	session := mSession.Copy()
 	defer session.Close()
 	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	noArrayData := bson.M{"professione": d.Occupation, "sesso": d.Sex}
+	// index otherway we got [a, b, [c,]]
+	arrayData := bson.M{"incarichi": d.Charges[0]}
 	uQuery := bson.M{
-		"$set": d,
+		"$set":      noArrayData,
+		"$addToSet": arrayData,
 	}
 	fQuery := bson.M{"op_id": opId, "anno_dichiarazione": year}
 	_, err := coll.UpdateAll(fQuery, uQuery)
@@ -93,7 +97,14 @@ func UpdateData(r incomes.OpResponse, institution string, year int) error {
 		var charge string
 		if r["charge_type_descr"] != nil {
 			charge = r["charge_type_descr"].(string)
+			if r["description"] != nil && r["description"] != "" {
+				charge = fmt.Sprintf("%s %s", charge, r["description"])
+			}
 			charge = strings.ToLower(charge)
+		}
+		var district string
+		if r["constituency_descr"] != nil {
+			district = r["constituency_descr"].(string)
 		}
 		sex := sdata["sex"].(string)
 		sex = strings.ToLower(sex)
@@ -133,13 +144,19 @@ func UpdateData(r incomes.OpResponse, institution string, year int) error {
 		stracer.Traceln("op api results, op_id:", op_id, "group:", group, "occupation:", occupation, "sex:", sex, "charge_type_descr:", charge)
 		institution = strings.ToLower(institution)
 		occupation = strings.ToLower(occupation)
+		charges := []incomes.Charge{
+			{
+				Institution:      institution,
+				Charge:           charge,
+				Group:            group,
+				Party:            party,
+				ElectionDistrict: district,
+			},
+		}
 		d := incomes.PoliticalData{
-			Institution: institution,
-			Charge:      charge,
-			Group:       group,
-			Party:       party,
-			Occupation:  occupation,
-			Sex:         sex,
+			Charges:    charges,
+			Occupation: occupation,
+			Sex:        sex,
 		}
 		UpdateMongo(op_id, d, year)
 	}
