@@ -16,8 +16,8 @@ angular.module('PatrimoniTrasparenti')
     },
     controllerAs: 'cardCtrl'
   })
-    .when('/istituzione/:id', {
-    templateUrl: '/templates/pages/istituzione/index.html',
+    .when('/istituzioni/:id', {
+    templateUrl: '/templates/pages/istituzioni/index.html',
     controller: function($routeParams) {
       this.istitution = $routeParams.id;
     },

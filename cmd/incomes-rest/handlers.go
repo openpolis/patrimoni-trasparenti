@@ -61,14 +61,15 @@ func ListHandlerGet(w http.ResponseWriter, r *http.Request) {
 	results := []bson.M{}
 	pipe := coll.Pipe([]bson.M{
 		{"$sort": bson.M{"anno_dichiarazione": 1}},
+		{"$unwind": "$incarichi"},
 		{"$group": bson.M{
 			"_id":               "$op_id",
 			"nome":              bson.M{"$last": "$nome"},
 			"cognome":           bson.M{"$last": "$cognome"},
 			"data_nascita":      bson.M{"$last": "$data_nascita"},
-			"gruppo":            bson.M{"$last": "$gruppo.name"},
-			"gruppo_acronym":    bson.M{"$last": "$gruppo.acronym"},
-			"istituzione":       bson.M{"$last": "$istituzione"},
+			"gruppo":            bson.M{"$addToSet": "$incarichi.gruppo.name"},
+			"gruppo_acronym":    bson.M{"$addToSet": "$incarichi.gruppo.acronym"},
+			"istituzioni":       bson.M{"$addToSet": "$incarichi.istituzione"},
 			"professione":       bson.M{"$last": "$professione"},
 			"tot_reddito":       bson.M{"$sum": "$totale_730"},
 			"num_dichiarazioni": bson.M{"$sum": 1},
@@ -77,11 +78,12 @@ func ListHandlerGet(w http.ResponseWriter, r *http.Request) {
 		{"$match": bson.M{vars["type"]: vars["key"]}},
 		{"$sort": bson.M{"cognome": 1}},
 		{"$project": bson.M{
-			"_id": 0, "op_id": "$_id",
+			"_id":           0,
+			"op_id":         "$_id",
 			"cognome":       "$cognome",
 			"nome":          "$nome",
 			"data_nascita":  "$data_nascita",
-			"istituzione":   "$istituzione",
+			"istituzioni":   "$istituzioni",
 			"professione":   "$professione",
 			"reddito_medio": bson.M{"$divide": []string{"$tot_reddito", "$num_dichiarazioni"}},
 		},

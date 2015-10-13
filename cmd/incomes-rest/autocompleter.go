@@ -59,10 +59,11 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		{"acronym": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
 	}
 	pipe = coll.Pipe([]bson.M{
+		{"$unwind": "$incarichi"},
 		{"$group": bson.M{
-			"_id":     "$gruppo.name",
-			"name":    bson.M{"$last": "$gruppo.name"},
-			"acronym": bson.M{"$last": "$gruppo.acronym"},
+			"_id":     "$incarichi.gruppo.name",
+			"name":    bson.M{"$last": "$incarichi.gruppo.name"},
+			"acronym": bson.M{"$last": "$incarichi.gruppo.acronym"},
 		},
 		},
 		{"$match": bson.M{"$or": rgx}},

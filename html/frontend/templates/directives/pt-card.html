@@ -25,7 +25,7 @@
       <p><b>Stato civile:</b> {{scheda.stato_civile}}</p>
       <p><b>Professione:</b> {{scheda.professione}}</p>
       <div ng-repeat="incarico in scheda.incarichi" class="alert alert-info" role="alert">
-        <p><b>Istituzione:</b> <a ng-href="#/istituzione/{{incarico.istituzione}}">{{incarico.istituzione}}</a></p>
+        <p><b>Istituzione:</b> <a ng-href="#/istituzioni/{{incarico.istituzione}}">{{incarico.istituzione}}</a></p>
         <p><b>Incarico:</b> {{incarico.incarico}}</a></p>
         <p ng-show="incarico.gruppo.acronym"><b>Gruppo:</b> <a ng-href="#/gruppo/{{incarico.gruppo.acronym}}">{{incarico.gruppo.acronym}} - {{incarico.gruppo.name}}</a></p>
         <p><b>Partito:</b> {{incarico.partito.acronym}} - {{incarico.partito.name}}</a></p>
