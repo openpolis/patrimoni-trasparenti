@@ -34,26 +34,27 @@
           <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Reddito</a>
         </li>
       </ul>
+
+      <div ng-repeat="result in results | orderBy: orderK" class="media" style="max-width:450px;float:left">
+        <div class="media-left">
+          <a href="#/scheda/{{result.op_id}}">
+            <img
+              bn-lazy-src="http://politici.openpolis.it/politician/picture?content_id={{result.op_id}}"
+              alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}"
+              class="media-object"
+              />
+          </a>
+        </div>
+        <div class="media-body">
+          <h3 class="media-heading"><a href="#/scheda/{{result.op_id}}">{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}</a></h3>
+          <p>
+            <b>Data nascita:</b> {{result.data_nascita|date:'d/M/yyyy'}}<br>
+            <b>Istituzioni:</b> {{result.istituzioni}}<br>
+            <b>Professione:</b> {{result.professione}}<br>
+            <b>Media reddito:</b> {{result.reddito_medio|currency:"€"}}
+          </p>
+        </div>
+      </div><!-- ng-repeat-->
     </div> <!-- panel-body -->
-    <div ng-repeat="result in results | orderBy: orderK" class="media">
-      <div class="media-left">
-        <a href="#/scheda/{{result.op_id}}">
-          <img
-            bn-lazy-src="http://politici.openpolis.it/politician/picture?content_id={{result.op_id}}"
-            alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}"
-            class="media-object"
-            />
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="#/scheda/{{result.op_id}}">{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}</a></h3>
-        <p>
-          <b>Data nascita:</b> {{result.data_nascita|date:'d/M/yyyy'}}<br>
-          <b>Istituzioni:</b> {{result.istituzioni}}<br>
-          <b>Professione:</b> {{result.professione}}<br>
-          <b>Media reddito:</b> {{result.reddito_medio|currency:"€"}}
-        </p>
-      </div>
-    </div>
   </div> <!-- panel-end -->
 </div>

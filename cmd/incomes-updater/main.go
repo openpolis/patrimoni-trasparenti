@@ -105,6 +105,7 @@ func UpdateData(r incomes.OpResponse, institution string, year int) error {
 		var district string
 		if r["constituency_descr"] != nil {
 			district = r["constituency_descr"].(string)
+			district = strings.ToLower(district)
 		}
 		sex := sdata["sex"].(string)
 		sex = strings.ToLower(sex)

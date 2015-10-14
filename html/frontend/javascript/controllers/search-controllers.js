@@ -68,6 +68,8 @@ angular.module('PatrimoniTrasparenti')
                   $location.path('/gruppo/'+ui.item.acronym);
                 } else if ('istitution' in ui.item) {
                   $location.path('/istituzioni/'+ui.item.istitution);
+                } else if ('district' in ui.item) {
+                  $location.path('/circoscrizioni/'+ui.item.district);
                 } else {
                   $location.path('/scheda/'+ui.item.id);
                 };

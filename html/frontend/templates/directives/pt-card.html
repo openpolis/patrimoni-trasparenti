@@ -29,7 +29,7 @@
         <p><b>Incarico:</b> {{incarico.incarico}}</a></p>
         <p ng-show="incarico.gruppo.acronym"><b>Gruppo:</b> <a ng-href="#/gruppo/{{incarico.gruppo.acronym}}">{{incarico.gruppo.acronym}} - {{incarico.gruppo.name}}</a></p>
         <p><b>Partito:</b> {{incarico.partito.acronym}} - {{incarico.partito.name}}</a></p>
-        <p ng-show="incarico.circoscrizione"><b>Circoscrizione:</b> {{incarico.circoscrizione}}</p>
+        <p ng-show="incarico.circoscrizione"><b>Circoscrizione:</b> <a ng-href="#/circoscrizioni/{{incarico.circoscrizione}}">{{incarico.circoscrizione}}</a></p>
       </div>
     </div> <!-- panel-body -->
     <div class="panel-body col-md-4">

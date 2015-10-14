@@ -77,7 +77,29 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("retrieving declarations from db", err)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	// Find districts.
+	districtsResults := []bson.M{}
+	rgx = []bson.M{
+		{"name": bson.M{"$regex": bson.RegEx{textSearch, "i"}}},
+	}
+	pipe = coll.Pipe([]bson.M{
+		{"$unwind": "$incarichi"},
+		{"$group": bson.M{
+			"_id":  "$incarichi.circoscrizione",
+			"name": bson.M{"$last": "$incarichi.circoscrizione"},
+		},
+		},
+		{"$match": bson.M{"$or": rgx}},
+		{"$sort": bson.M{"name": 1}},
+		{"$project": bson.M{"_id": 0, "id": "$_id", "value": "$name", "district": "$name"}},
+	})
+	iter = pipe.Iter()
+	err = iter.All(&districtsResults)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		ErrorLogger.Println("retrieving declarations from db", err)
+		return
+	}
 	// Find people
 	peopleResults := []bson.M{}
 	peopleRgx := []bson.M{
@@ -106,6 +128,7 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 	results := make([]bson.M, 0, len(roleResults)+len(partiesResults)+len(peopleResults))
 	results = append(results, roleResults...)
 	results = append(results, partiesResults...)
+	results = append(results, districtsResults...)
 	results = append(results, peopleResults...)
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
@@ -113,5 +136,6 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("encoding choices in json", err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	return
 }

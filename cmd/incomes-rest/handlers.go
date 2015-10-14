@@ -70,6 +70,7 @@ func ListHandlerGet(w http.ResponseWriter, r *http.Request) {
 			"gruppo":            bson.M{"$addToSet": "$incarichi.gruppo.name"},
 			"gruppo_acronym":    bson.M{"$addToSet": "$incarichi.gruppo.acronym"},
 			"istituzioni":       bson.M{"$addToSet": "$incarichi.istituzione"},
+			"circoscrizioni":    bson.M{"$addToSet": "$incarichi.circoscrizione"},
 			"professione":       bson.M{"$last": "$professione"},
 			"tot_reddito":       bson.M{"$sum": "$totale_730"},
 			"num_dichiarazioni": bson.M{"$sum": 1},

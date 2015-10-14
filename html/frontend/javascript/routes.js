@@ -23,6 +23,13 @@ angular.module('PatrimoniTrasparenti')
     },
     controllerAs: 'istituzionCtrl'
   })
+    .when('/circoscrizioni/:id', {
+    templateUrl: '/templates/pages/circoscrizioni/index.html',
+    controller: function($routeParams) {
+      this.district = $routeParams.id;
+    },
+    controllerAs: 'districtCtrl'
+  })
     .when('/gruppo/:acronym', {
     templateUrl: '/templates/pages/gruppo/index.html',
     controller: function($routeParams) {
