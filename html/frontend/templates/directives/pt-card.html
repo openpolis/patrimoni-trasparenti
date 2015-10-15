@@ -19,7 +19,7 @@
       </a>
     </div>
     <div class="panel-body col-md-8">
-      <img ng-src="http://politici.openpolis.it/politician/picture?content_id={{scheda.op_id}}" alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
+      <img ng-src="http://op_openparlamento_images.s3.amazonaws.com/parlamentari/picture/{{scheda.op_id}}.jpeg" alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
       <p><b>Data di nascita:</b> {{scheda.data_nascita | date:'dd-MM-yyyy'}}</p>
       <p><b>Residenza:</b> {{scheda.comune_residenza|capitalize:all}} ({{scheda.provincia_residenza|capitalize:team}})</p>
       <p><b>Stato civile:</b> {{scheda.stato_civile}}</p>

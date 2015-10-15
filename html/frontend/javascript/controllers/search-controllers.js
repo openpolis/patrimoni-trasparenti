@@ -29,7 +29,7 @@ angular.module('PatrimoniTrasparenti')
                     controller.spinner = false;
                     for (var i in rData) {
                       rData[i].label = $compile(
-                      '<p><img class="autocompleter-img" ng-src="http://politici.openpolis.it/politician/picture?content_id='+rData[i].id+'"/> '+
+                      '<p><img ng-src="http://op_openparlamento_images.s3.amazonaws.com/parlamentari/thumb/'+rData[i].id+'.jpeg"/> '+
                       $filter('capitalize')(rData[i].value, 'all') +
                       '</p>'
                       )($scope)
