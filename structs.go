@@ -189,6 +189,7 @@ type Charge struct {
 	Group            Group  `bson:"gruppo" json:"gruppo"`
 	Party            Group  `bson:"partito" json:"partito"`
 	ElectionDistrict string `bson:"circoscrizione" json:"circoscrizione"`
+	ElectionType     string `bson:"tipo_elezione" json:"tipo_elezione"`
 }
 
 // PoliticalData models data retrieved via openpolitici REST apis.

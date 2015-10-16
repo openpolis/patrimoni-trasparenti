@@ -103,9 +103,12 @@ func UpdateData(r incomes.OpResponse, institution string, year int) error {
 			charge = strings.ToLower(charge)
 		}
 		var district string
+		var election_type string
 		if r["constituency_descr"] != nil {
 			district = r["constituency_descr"].(string)
 			district = strings.ToLower(district)
+			election_type = r["constituency_election_type"].(string)
+			election_type = strings.ToLower(election_type)
 		}
 		sex := sdata["sex"].(string)
 		sex = strings.ToLower(sex)
@@ -152,6 +155,7 @@ func UpdateData(r incomes.OpResponse, institution string, year int) error {
 				Group:            group,
 				Party:            party,
 				ElectionDistrict: district,
+				ElectionType:     election_type,
 			},
 		}
 		d := incomes.PoliticalData{
