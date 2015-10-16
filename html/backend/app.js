@@ -29,6 +29,18 @@
           {id:'terreno', name:'Terreno'}
         ]
     },
+    $scope.dirittoChoices = {
+        availableOptions: [
+          {id:'', name:'Non specificato'},
+          {id:'proprietà', name:'Proprietà'},
+          {id:'comproprietà', name:'Comproprietà'},
+          {id:'usufrutto', name:'Terreno'},
+          {id:'uso', name:'Uso'},
+          {id:'abitazione', name:'Abitazione'},
+          {id:'ipoteca', name:'Ipoteca'},
+          {id:'servitù', name:'Servitù'}
+        ]
+    },
 
     $scope.personaChoices = {
         availableOptions: [
@@ -452,10 +464,12 @@
         '</tr></thead>' +
         '<tbody>' +
           '<tr>' +
-                '<td><select ng-model="obj.persona">' +
-                  '<option ng-repeat="option in personaChoices.availableOptions" value="{{option.id}}" ng-selected="obj.persona === option.id">{{option.name}}</option>'+
-                '</select></td>'+
-                '<td><select name="select_diritto" ng-model="obj.natura_diritto" ><option value="proprietà">Proprietà</option><option value="comproprietà">Comproprietà</option><option value="usufrutto">Usufrutto</option></select></td>' +
+            '<td><select ng-model="obj.persona">' +
+              '<option ng-repeat="option in personaChoices.availableOptions" value="{{option.id}}" ng-selected="obj.persona === option.id">{{option.name}}</option>'+
+            '</select></td>'+
+            '<td><select ng-model="obj.natura_diritto">' +
+              '<option ng-repeat="option in dirittoChoices.availableOptions" value="{{option.id}}" ng-selected="obj.natura_diritto === option.id">{{option.name}}</option>'+
+            '</select></td>'+
             '<td><select ng-model="obj.descrizione">' +
               '<option ng-repeat="option in descrizioneChoices.availableOptions" value="{{option.id}}" ng-selected="obj.descrizione === option.id">{{option.name}}</option>'+
             '</select></td>'+
