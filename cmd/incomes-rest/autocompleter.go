@@ -87,11 +87,12 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 		{"$group": bson.M{
 			"_id":  "$incarichi.circoscrizione",
 			"name": bson.M{"$last": "$incarichi.circoscrizione"},
+			"type": bson.M{"$last": "$incarichi.tipo_elezione"},
 		},
 		},
 		{"$match": bson.M{"$or": rgx}},
 		{"$sort": bson.M{"name": 1}},
-		{"$project": bson.M{"_id": 0, "id": "$_id", "value": "$name", "district": "$name"}},
+		{"$project": bson.M{"_id": 0, "id": "$_id", "district": "$name", "value": bson.M{"$concat": []string{"$name", " (", "$type", ")"}}}},
 	})
 	iter = pipe.Iter()
 	err = iter.All(&districtsResults)
