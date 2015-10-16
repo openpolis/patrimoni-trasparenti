@@ -1074,13 +1074,13 @@
             .template(template730Edit),
         nga.field('totale_730_dichiarante', 'number')
 						.attributes({ step: 'any' }).format('0.00')
-            .label('Totale 730 dichiarante'),
+            .label('Totale reddito dichiarante'),
         nga.field('totale_730_coniuge', 'number')
 						.attributes({ step: 'any' }).format('0.00')
-            .label('Totale 730 coniuge'),
+            .label('Totale reddito coniuge'),
         nga.field('totale_730', 'number')
 						.attributes({ step: 'any' }).format('0.00')
-            .label('Totale 730'),
+            .label('Totale coniuge'),
         nga.field('beni_immobili', 'template')
             .label('Beni immobili')
             .template(templateBeniImmobiliEdit),
@@ -1182,8 +1182,6 @@
             .label('Variazioni'),
         nga.field('completezza_redditi', 'boolean')
             .label('Completezza redditi'),
-        nga.field('dichiarazioni_incomplete')
-            .label('Dichiarazioni incomplete'),
         nga.field('modello_redditi')
             .label('Modello redditi'),
         nga.field('indice_completezza')
