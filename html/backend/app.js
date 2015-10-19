@@ -440,6 +440,7 @@
                 '<td>{{obj.codice_utilizzo}}</td>' +
                 '<td>{{obj.reddito_dominicale}}</td>' +
                 '<td>{{obj.reddito_agrario}}</td>' +
+                '<td>{{obj.quota_posseso}}</td>' +
                 '<td>{{obj.categoria_catastale}}</td>' +
                 '<td>{{obj.annotazioni}}</td>' +
               '</tr>' +
