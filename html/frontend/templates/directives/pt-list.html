@@ -33,6 +33,13 @@
         <li ng-class="{'active': orderK === '-reddito_medio'}" ng-click="selectOrder('-reddito_medio')" role="presentation">
           <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Reddito</a>
         </li>
+
+        <li ng-class="{'active': orderK === 'completezza_media'}" ng-click="selectOrder('completezza_media')" role="presentation">
+          <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Completezza</a>
+        </li>
+        <li ng-class="{'active': orderK === '-completezza_media'}" ng-click="selectOrder('-completezza_media')" role="presentation">
+          <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Completezza</a>
+        </li>
       </ul>
 
       <div ng-repeat="result in results | orderBy: orderK" class="media" style="max-width:450px;float:left">
