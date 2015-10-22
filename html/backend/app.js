@@ -34,7 +34,7 @@
           {id:'', name:'Non specificato'},
           {id:'proprietà', name:'Proprietà'},
           {id:'comproprietà', name:'Comproprietà'},
-          {id:'usufrutto', name:'Terreno'},
+          {id:'usufrutto', name:'Usufrutto'},
           {id:'uso', name:'Uso'},
           {id:'abitazione', name:'Abitazione'},
           {id:'ipoteca', name:'Ipoteca'},
@@ -247,6 +247,7 @@
               '<th>Città sede</th>' +
               '<th>Provincia sede</th>' +
               '<th>Quote</th>' +
+              '<th>Valore economico</th>' +
               '<th>Attività prevalente</th>' +
               '<th>Annotazioni</th>' +
             '</tr></thead>' +
@@ -257,6 +258,7 @@
                 '<td>{{obj.citta_sede}}</td>' +
                 '<td>{{obj.provincia_sede}}</td>' +
                 '<td>{{obj.numero_azioni_quote}}</td>' +
+                '<td>{{obj.valore_economico}}</td>' +
                 '<td>{{obj.attivita_prevalente}}</td>' +
                 '<td>{{obj.annotazioni}}</td>' +
               '</tr>' +
