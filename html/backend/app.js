@@ -378,7 +378,7 @@
                 '<td><input ng-model="obj.natura_incarico" size=10 placeholder="Incarico" type="text" value="{{obj.natura_incarico}}" /></td>' +
                 '<td><input ng-model="obj.attivita_prevalente" size=12 placeholder="Attività prevalente" type="text" value="{{obj.attivita_prevalente}}"/></td>' +
                 '<td><input ng-model="obj.annotazioni" size=12 placeholder="Annotazioni" type="text" value="{{obj.annotazioni}}"/></td>' +
-                '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.partecipazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
+                '<td><button type="button" class="btn btn-default btn-xs" ng-click="entry.values.amministrazioni_soc.splice($index, 1)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Rimuovi</button></td>' +
               '</tr>' +
             '</tbody>' +
             '</table>'+
