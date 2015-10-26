@@ -590,6 +590,12 @@
                 '<td></td>' +
                 '<td><span>{{entry.values.spese_elettorali|sumByKey:"importo"|currency:"&euro;"}}</span></td>' +
               '</tr>' +
+              '<tr>' +
+                '<td>Saldo contributi</td>' +
+                '<td></td>' +
+                '<td></td>' +
+                '<td><span>€{{entry.values.totale_contributi_elettorali - entry.values.totale_spese_elettorali}}</span></td>' +
+              '</tr>' +
             '</tbody>' +
             '</table>' +
 						'<button type="button" class="btn btn-default btn-sm" ng-click="entry.values.spese_elettorali.push({})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Aggiungi</button>';
@@ -628,6 +634,12 @@
                 '<td></td>' +
                 '<td></td>' +
                 '<td><span>{{entry.values.spese_elettorali|sumByKey:"importo"|currency:"&euro;"}}</span></td>' +
+              '</tr>' +
+              '<tr>' +
+                '<td>Saldo contributi</td>' +
+                '<td></td>' +
+                '<td></td>' +
+                '<td><span>€{{entry.values.totale_contributi_elettorali - entry.values.totale_spese_elettorali}}</span></td>' +
               '</tr>' +
             '</tbody>' +
             '</table>' +
