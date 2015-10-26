@@ -1097,7 +1097,7 @@
             .label('Totale reddito coniuge'),
         nga.field('totale_730', 'number')
 						.attributes({ step: 'any' }).format('0.00')
-            .label('Totale coniuge'),
+            .label('Totale redditi'),
         nga.field('beni_immobili', 'template')
             .label('Beni immobili')
             .template(templateBeniImmobiliEdit),
@@ -1169,7 +1169,7 @@
         nga.field('comune_residenza'),
         nga.field('provincia_residenza'),
         nga.field('reddito_730', 'template')
-            .label('Reddito')
+            .label('Totale redditi')
             .template(template730View),
         nga.field('beni_immobili', 'template')
             .label('Beni immobili')
