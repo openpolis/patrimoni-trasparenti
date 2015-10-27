@@ -20,6 +20,18 @@
       };
   });
 
+  app.controller('total730Controller', function ($scope) {
+    console.log($scope.entry.values.totale_730_dichiarante)
+    $scope.$watch('entry.values.totale_730_dichiarante', function(value) {
+          console.log("here", value);
+          $scope.entry.values.totale_730 = $scope.entry.values.totale_730_dichiarante+$scope.entry.values.totale_730_coniuge;
+    });
+    $scope.$watch('entry.values.totale_730_coniuge', function(value) {
+          console.log("here", value);
+          $scope.entry.values.totale_730 = $scope.entry.values.totale_730_dichiarante+$scope.entry.values.totale_730_coniuge;
+    });
+  });
+
   app.controller('main', function ($scope, $rootScope, $location) {
 
     $scope.descrizioneChoices = {
@@ -919,6 +931,8 @@
 						'<button ng-show="showAddRedd" type="button" class="btn btn-default btn-sm" ng-click="entry.values.reddito_730.push({})"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Aggiungi voce</button>' +
 						'<button ng-hide="showAddRedd" type="button" class="btn btn-default btn-sm" ng-click="entry.values.reddito_730=[{}];showAddRedd=1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Aggiungi voci</button><br>';
 
+    var templateTotale730 = '<input ng-controller="total730Controller" ng-model="entry.values.totale_730" value={{entry.values.totale_730}}>'
+
 		var templateDownloadOrig = '<a href="{{entry.values.filename_url}}">Scarica {{entry.values.filename}}</a>';
 		// FIXME
 		// ng-show="{{entry.values.filename_rectification_url}}" gives error on console.
@@ -1107,9 +1121,9 @@
         nga.field('totale_730_coniuge', 'number')
 						.attributes({ step: 'any' }).format('0.00')
             .label('Totale reddito coniuge'),
-        nga.field('totale_730', 'number')
-						.attributes({ step: 'any' }).format('0.00')
-            .label('Totale redditi'),
+        nga.field('totale_730', 'template')
+            .label('Totale redditi')
+            .template(templateTotale730),
         nga.field('beni_immobili', 'template')
             .label('Beni immobili')
             .template(templateBeniImmobiliEdit),
