@@ -6,9 +6,9 @@ BTIME=`date -u +%s`
 # reduction of binaries sizes/
 cd ./cmd/incomes-rest
 godep go build -ldflags "-w -X main.Version=${GIT_TAG} -X main.BuildTime=${BTIME}" -o ../../bin/incomes-rest
-cd -
-cd ./cmd/incomes-importer
+cd ../incomes-importer
 godep go build -ldflags "-w -X main.Version=${GIT_TAG} -X main.BuildTime=${BTIME}" -o ../../bin/incomes-importer
-cd -
-cd ./cmd/incomes-updater
+cd ../incomes-updater
 godep go build -ldflags "-w -X main.Version=${GIT_TAG} -X main.BuildTime=${BTIME}" -o ../../bin/incomes-updater
+cd ../incomes-images-resizer
+godep go build -ldflags "-w -X main.Version=${GIT_TAG} -X main.BuildTime=${BTIME}" -o ../../bin/incomes-images-resizer
