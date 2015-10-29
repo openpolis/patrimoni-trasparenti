@@ -67,13 +67,15 @@ func GetAndUpload(list []map[string]string) error {
 		log.Println("processing:", e["_id"], e["nome"], e["cognome"])
 		resp, err := http.Get("http://politici.openpolis.it/politician/picture?content_id=" + e["_id"])
 		if err != nil {
+			log.Println("[ERROR] in http req:", err)
 			continue
 		}
 
 		// decode jpeg into image.Image
 		img, err := jpeg.Decode(resp.Body)
 		if err != nil {
-			return err
+			log.Println("[ERROR] decoding:", err)
+			continue
 		}
 
 		// Adapt height to width

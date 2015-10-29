@@ -16,8 +16,8 @@
 		},
 		{
 			"ImportPath": "github.com/eraclitux/cfgp",
-			"Comment": "v1.0.0-alpha-2-gb1a1ff3",
-			"Rev": "b1a1ff331416c54d7bee9474d55d7754b2ba20f1"
+			"Comment": "v1.0.0-alpha-2-ga7d4f80",
+			"Rev": "a7d4f8012f86941df6a81cd7c7cce78c8042119b"
 		},
 		{
 			"ImportPath": "github.com/eraclitux/goparallel",
@@ -60,6 +60,10 @@
 		{
 			"ImportPath": "github.com/mgutz/logxi/v1",
 			"Rev": "3b9b8954fb030d7130a00f228ad2b8167b76a2c7"
+		},
+		{
+			"ImportPath": "github.com/nfnt/resize",
+			"Rev": "dc93e1b98c579d90ee2fa15c1fd6dac34f6e7899"
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/bcrypt",

@@ -42,7 +42,7 @@
 //
 // cfgp tries to be modular and easily extendible to support different formats.
 //
-// This is a work in progress, better packages are out there.
+// This is a work in progress, APIs can change.
 package cfgp
 
 import (
