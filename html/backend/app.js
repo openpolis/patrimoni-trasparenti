@@ -23,11 +23,9 @@
   app.controller('total730Controller', function ($scope) {
     console.log($scope.entry.values.totale_730_dichiarante)
     $scope.$watch('entry.values.totale_730_dichiarante', function(value) {
-          console.log("here", value);
           $scope.entry.values.totale_730 = $scope.entry.values.totale_730_dichiarante+$scope.entry.values.totale_730_coniuge;
     });
     $scope.$watch('entry.values.totale_730_coniuge', function(value) {
-          console.log("here", value);
           $scope.entry.values.totale_730 = $scope.entry.values.totale_730_dichiarante+$scope.entry.values.totale_730_coniuge;
     });
   });

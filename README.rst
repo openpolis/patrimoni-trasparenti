@@ -29,6 +29,10 @@ After installing provided upstart conf in ``/etc/init`` to start/stop rest servi
         # service incomes-rest start
         # service incomes-rest stop
 
+Resize imgages and pu them on S3::
+
+        export CFGP_FILE_PATH=./config/conf.cfg; ./bin/incomes-images-resizer
+
 Configuration
 -------------
 
