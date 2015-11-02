@@ -28,8 +28,18 @@ angular.module('PatrimoniTrasparenti')
                   .success(function(rData){
                     controller.spinner = false;
                     for (var i in rData) {
+                      var image_path = "";
+                      if ('acronym' in rData[i]) {
+                        image_path = '<p><img ng-src="http://patrimonitrasparenti_static_files.s3.amazonaws.com/icons/ico_gruppo.png"/> '
+                      } else if ('istitution' in rData[i]) {
+                        image_path = '<p><img ng-src="http://patrimonitrasparenti_static_files.s3.amazonaws.com/icons/ico_istituzione.png"/> '
+                      } else if ('district' in rData[i]) {
+                        image_path = '<p><img ng-src="http://patrimonitrasparenti_static_files.s3.amazonaws.com/icons/ico_circoscrizione.png"/> '
+                      } else {
+                        image_path = '<p><img ng-src="http://op_openparlamento_images.s3.amazonaws.com/parlamentari/thumb/'+rData[i].id+'.jpeg"/> '
+                      }
                       rData[i].label = $compile(
-                      '<p><img ng-src="http://op_openparlamento_images.s3.amazonaws.com/parlamentari/thumb/'+rData[i].id+'.jpeg"/> '+
+                      image_path +
                       $filter('capitalize')(rData[i].value, 'all') +
                       '</p>'
                       )($scope)

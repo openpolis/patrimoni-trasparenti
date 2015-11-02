@@ -33,6 +33,10 @@ Resize imgages and pu them on S3::
 
         export CFGP_FILE_PATH=./config/conf.cfg; ./bin/incomes-images-resizer
 
+Set all files in a bucket/dir public using s3cmd::
+
+        s3cmd setacl --acl-public --recursive s3://op_openparlamento_images/big
+
 Configuration
 -------------
 
