@@ -157,7 +157,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 		if len(values) == 10 {
 			uQuery = bson.M{"$set": bson.M{
 				"dichiarazione_elettorale": getBoolFromNote(values[1]),
-				"documenti_appello":        values[2],
+				"documenti_appello":        getBoolFromNote(values[2]),
 				"dichiarazione_coniuge":    getBoolFromNote(values[3]),
 				"modello_redditi":          values[4],
 				"completezza_redditi":      getBoolFromNote(values[5]),
@@ -169,7 +169,7 @@ func ParseNoteFile(exportUrl string, year int, mSession *mgo.Session) (er error)
 		} else {
 			uQuery = bson.M{"$set": bson.M{
 				"dichiarazione_elettorale": getBoolFromNote(values[1]),
-				"documenti_appello":        values[2],
+				"documenti_appello":        getBoolFromNote(values[2]),
 				"dichiarazione_coniuge":    getBoolFromNote(values[3]),
 				"modello_redditi":          values[4],
 				"completezza_redditi":      getBoolFromNote(values[5]),
