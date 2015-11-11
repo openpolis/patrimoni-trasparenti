@@ -1078,7 +1078,7 @@
         nga.field('anno_dichiarazione', 'number')
           .validation({ required: true, minlength: 4, maxlength: 4 }),
         nga.field('op_id')
-          .validation({ required: true, minlength: 2 }),
+          .validation({ required: true }),
         nga.field('nome') // the default edit field type is "string", and displays as a text input
           .attributes({ placeholder: 'Nome' }) // you can add custom attributes, too
           .validation({ required: true, minlength: 2, maxlength: 100 }), // add validation rules for fields
