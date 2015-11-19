@@ -1,67 +1,129 @@
 <div class="pt-list">
-  <p ng-show="spinner" ><span class="glyphicon glyphicon-refresh spinning"></span> Ricerca in corso...</p>
-
-  <div ng-show="errors" class="alert alert-danger" role="alert">
-    <p>
-      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-      <span class="sr-only">Error:</span>
-      Errore durante la ricerca, riprova più tardi.
-    </p>
-  </div>
-  <div ng-show="results" class="panel panel-default">
-    <div class="panel-heading" style="position:relative">
-      <h2>{{type}} / {{key|capitalize:all}}</h2>
+    <div class="page-heading">
+        <h1 class="container">Risultati della ricerca</h1>
     </div>
-    <div class="panel-body">
-      <p>Ordina i {{results.length}} risultati:</p>
-      <ul class="nav nav-pills nav-justified">
-        <li ng-class="{'active': orderK === 'cognome'}" ng-click="selectOrder('cognome')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Cognome</a>
-        </li>
-        <li ng-class="{'active': orderK === '-cognome'}" ng-click="selectOrder('-cognome')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Cognome</a>
-        </li>
-        <li ng-class="{'active': orderK === '-data_nascita'}" ng-click="selectOrder('-data_nascita')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Età</a>
-        </li>
-        <li ng-class="{'active': orderK === 'data_nascita'}" ng-click="selectOrder('data_nascita')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Età</a>
-        </li>
-        <li ng-class="{'active': orderK === 'reddito_medio'}" ng-click="selectOrder('reddito_medio')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Reddito</a>
-        </li>
-        <li ng-class="{'active': orderK === '-reddito_medio'}" ng-click="selectOrder('-reddito_medio')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Reddito</a>
-        </li>
+    <div ng-show="spinner" class="PT-dialog-msg">
+        <p>
+            <span class="glyphicon glyphicon-refresh spinning"></span> Ricerca in corso...
+        </p>
+    </div>
 
-        <li ng-class="{'active': orderK === 'completezza_media'}" ng-click="selectOrder('completezza_media')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Completezza</a>
-        </li>
-        <li ng-class="{'active': orderK === '-completezza_media'}" ng-click="selectOrder('-completezza_media')" role="presentation">
-          <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Completezza</a>
-        </li>
-      </ul>
+    <div ng-show="errors" class="PT-dialog-msg alert alert-danger" role="alert">
+        <p>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Errore durante la ricerca, riprova più tardi.
+        </p>
+    </div>
+    <div ng-show="results">
+        <div class="container">
+            <div class="PT-results-controls">
+                <div class="row">
+                    <div class="col-md-4">
+                        <b>{{results.length}}</b> risultati in <b>{{type}} / {{key|capitalize:all}}</b>
+                    </div>
+                    <div class="col-md-8">
 
-      <div ng-repeat="result in results | orderBy: orderK" class="media" style="max-width:450px;float:left">
-        <div class="media-left">
-          <a href="#/scheda/{{result.op_id}}">
-            <img
-              bn-lazy-src="http://op_openparlamento_images.s3.amazonaws.com/parlamentari/picture/{{result.op_id}}.jpeg"
-              alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}"
-              class="media-object"
-              />
-          </a>
+                        Ordina per:
+
+                        <select class="selectpicker">
+                            <option value="cognome" role="presentation">Cognome crescente</option>
+                            <option value="-cognome" role="presentation">Cognome decrescente</option>
+                            <option value="data_nascita" role="presentation">Età crescente</option>
+                            <option value="-data_nascita" role="presentation">Età decrescente</option>
+                            <option value="reddito_medio" role="presentation">Reddito crescente</option>
+                            <option value="-reddito_medio" role="presentation">Reddito decrescente</option>
+                            <option value="completezza_media" role="presentation">Completezza crescente</option>
+                            <option value="-completezza_media" role="presentation">Completezza decrescente</option>
+                        </select>
+
+
+                        <!-- I controlli per l'ordinamento dei risultati devono essere applicati alla select box qui sopra -->
+
+                        <!--
+                          <ul class="nav nav-pills nav-justified">
+                            <li ng-class="{'active': orderK === 'cognome'}" ng-click="selectOrder('cognome')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Cognome</a>
+                            </li>
+                            <li ng-class="{'active': orderK === '-cognome'}" ng-click="selectOrder('-cognome')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                                Cognome</a>
+                            </li>
+                            <li ng-class="{'active': orderK === '-data_nascita'}" ng-click="selectOrder('-data_nascita')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Età</a>
+                            </li>
+                            <li ng-class="{'active': orderK === 'data_nascita'}" ng-click="selectOrder('data_nascita')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Età</a>
+                            </li>
+                            <li ng-class="{'active': orderK === 'reddito_medio'}" ng-click="selectOrder('reddito_medio')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Reddito</a>
+                            </li>
+                            <li ng-class="{'active': orderK === '-reddito_medio'}" ng-click="selectOrder('-reddito_medio')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                                Reddito</a>
+                            </li>
+                            <li ng-class="{'active': orderK === 'completezza_media'}"
+                                ng-click="selectOrder('completezza_media')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Completezza</a>
+                            </li>
+                            <li ng-class="{'active': orderK === '-completezza_media'}"
+                                ng-click="selectOrder('-completezza_media')"
+                                role="presentation">
+                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                                Completezza</a>
+                            </li>
+                          </ul>
+                          -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div ng-repeat="result in results | orderBy: orderK">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a href="#/scheda/{{result.op_id}}">
+                                            <img
+                                                    bn-lazy-src="http://op_openparlamento_images.s3.amazonaws.com/parlamentari/picture/{{result.op_id}}.jpeg"
+                                                    alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}"
+                                                    class="media-object"
+                                                    width="91"
+                                                    height="126"
+                                            />
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            <a href="#/scheda/{{result.op_id}}">
+                                                {{result.nome|capitalize:all}}
+                                                {{result.cognome|capitalize:all}}
+                                            </a>
+                                        </h4>
+
+                                        <p>
+                                            Data nascita: <b>{{result.data_nascita|date:'d/M/yyyy'}}</b><br>
+                                            Istituzioni: <b>{{result.istituzioni}}</b><br>
+                                            Professione: <b>{{result.professione}}</b><br>
+                                            Media reddito: <b>{{result.reddito_medio|currency:"€"}}</b>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- ng-repeat-->
+            </div><!-- row-->
         </div>
-        <div class="media-body">
-          <h3 class="media-heading"><a href="#/scheda/{{result.op_id}}">{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}</a></h3>
-          <p>
-            <b>Data nascita:</b> {{result.data_nascita|date:'d/M/yyyy'}}<br>
-            <b>Istituzioni:</b> {{result.istituzioni}}<br>
-            <b>Professione:</b> {{result.professione}}<br>
-            <b>Media reddito:</b> {{result.reddito_medio|currency:"€"}}
-          </p>
-        </div>
-      </div><!-- ng-repeat-->
-    </div> <!-- panel-body -->
-  </div> <!-- panel-end -->
+
+    </div> <!-- panel-end -->
 </div>

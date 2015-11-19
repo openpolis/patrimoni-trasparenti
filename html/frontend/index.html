@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="it" ng-app="PatrimoniTrasparenti">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,108 +12,204 @@
     <title>Openpolis patrimoni trasparenti</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
-    <link href="css/jumbotron.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300'>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
+</head>
 
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+<body>
+<nav class="navbar navbar-static">
+    <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#/">Patrimoni trasparenti</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/"><img src="assets/images/logo.png" alt="Patrimoni trasparenti" width="228" height="42" data-src2x="assets/images/logo@2x.png"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#/">Home</a></li>
-            <li><a href="#/faq">Faq</a></li>
-          </ul>
-          <form ng-controller="SearchController as searchCtl" class="navbar-form navbar-right">
-            <div class="form-group">
-              <label ng-show="searchCtl.spinner"><span class="glyphicon glyphicon-refresh spinning white"></span></label>
-              <input ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text" placeholder="Inizia a cercare..." class="form-control" >
-            </div>
-            <button type="submit" class="btn btn-success">cerca</button>
-          </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/">Il progetto</a></li>
+                <li><a href="#/">La campagna</a></li>
+                <li><a href="#/">Il MiniDossier</a></li>
+            </ul>
+            <!-- Il modulo di ricerca nella navbar è nascosto per default
+                 deve essere visualizzato con codice angular nei rooting in cui è necessario
+                 (tutti tranne la home ???)
+             -->
+            <form ng-controller="SearchController as searchCtl" class="navbar-form navbar-left" style="display: none;">
+                <div class="form-group">
+                    <label ng-show="searchCtl.spinner"><span class="glyphicon glyphicon-refresh spinning white"></span></label>
+                    <input ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text" placeholder="Cerca..." class="form-control" >
+                </div>
+            </form>
         </div><!--/.navbar-collapse -->
-      </div>
-    </nav>
-
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <div ng-view></div>
-      </div>
     </div>
+</nav>
 
+<div class="container">
+    <div class="breadcrumbs-box">
+        <hr/>
+        <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Library</a></li>
+            <li class="active">Data</li>
+        </ol>
+    </div>
+</div>
+
+<div ng-view></div>
+
+<footer id="PT-footer">
     <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-4 col">
+                <h4>Associazione Openpolis</h4>
+
+                <p>via degli Equi 42 - 00185 Roma<br/>
+                    T. 06.83608392<br/>
+                    associazione@openpolis.it<br/>
+                    C.I. 97532050586
+                </p>
+
+                <p class="social-links">
+                    <a href="http://twitter.com/openpolis" title="Twitter" target="_blank">
+                        <img src="assets/images/ico_twitter.png" alt="Twitter" width="27" height="27" data-src2x="assets/images/ico_twitter@2x.png">
+                    </a>
+                    <a href="http://www.facebook.com/openpolis" title="Facebook" target="_blank">
+                        <img src="assets/images/ico_facebook.png" alt="Facebook" width="27" height="27" data-src2x="assets/images/ico_facebook@2x.png">
+                    </a>
+                    <a href="https://plus.google.com/+openpolis" title="Google+" target="_blank">
+                        <img src="assets/images/ico_gplus.png" alt="Google+" width="27" height="27" data-src2x="assets/images/ico_gplus@2x.png">
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCVoiHyBePeQb8PcD9h5e1Ow" title="YouTube" target="_blank">
+                        <img src="assets/images/ico_youtube.png" alt="YouTube" width="27" height="27" data-src2x="assets/images/ico_youtube@2x.png">
+                    </a>
+                    <a href="http://www.linkedin.com/company/openpolis/" title="LinkedIn" target="_blank">
+                        <img src="assets/images/ico_linkedin.png" alt="LinkedIn" width="27" height="27" data-src2x="assets/images/ico_linkedin@2x.png">
+                    </a>
+                    <a href="http://blog.openpolis.it/" title="OpenBlog" target="_blank">
+                        <img src="assets/images/ico_blog.png" alt="OpenBlog" width="27" height="27" data-src2x="assets/images/ico_blog@2x.png">
+                    </a>
+                </p>
+            </div>
+            <div class="col-md-4 col">
+                <div class="newsletter-box">
+                    <h4>Newsletter</h4>
+                    <p>Aggiornamenti su attività, campagne <br/> e ricerche di openpolis.</p>
+                    <hr/>
+                    <form class="row">
+                        <div class="newsletter-subscribe">
+                            <div class="col-md-4 col-gutter-min">
+                                <div class="form-group">
+                                    <label for="newsletter-email">Email</label>
+                                    <input type="email" class="form-control" id="newsletter-email">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-gutter-min">
+                                <div class="form-group">
+                                    <label for="newsletter-name">Nome</label>
+                                    <input type="password" class="form-control" id="newsletter-name">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-gutter-min">
+                                <div class="form-group">
+                                    <label for="newsletter-name">&nbsp;</label>
+                                    <button type="submit" class="form-control post-link">Iscriviti</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4 col">
+                <div class="funding-campaign">
+                    <p>
+                        <a href="http://www.openpolis.it/sostienici/" title="ASSOCIATI" target="_blank">
+                            <img src="assets/images/associati.png" alt="ASSOCIATI" width="60" height="55" data-src2x="assets/images/associati@2x.png">
+                        </a>
+                        <a href="http://www.openpolis.it/sostienici/dona/" title="DONA" target="_blank">
+                            <img src="assets/images/dona.png" alt="DONA" width="60" height="55" data-src2x="assets/images/dona@2x.png">
+                        </a>
+                        <a href="http://www.openpolis.it/5xmille/" title="SCEGLI" target="_blank">
+                            <img src="assets/images/scegli.png" alt="SCEGLI" width="60" height="55" data-src2x="assets/images/scegli@2x.png">
+                        </a>
+                    </p>
+                    <br/>
+
+                    <p><img src="assets/images/iban.png" alt="IBAN" width="26" height="10" data-src2x="assets/images/iban@2x.png"><br/>
+                        <strong>IT47 C050 1803 2000 0000 0131 034</strong>
+                    <hr/>
+                    <img src="assets/images/codicefiscale.png" alt="CODICE FISCALE" width="89" height="10" data-src2x="assets/images/codicefiscale@2x.png"><br/>
+                        <strong>97532050586</strong></p>
+                </div>
+
+            </div>
         </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
+    </div><!-- /container -->
+</footer>
 
-      <hr>
+<!-- Retina image support
+================================================== -->
+<script>
+    Retina = function() {
+        return {
+            init: function(){
+                //Get pixel ratio and perform retina replacement
+                var pixelRatio = !!window.devicePixelRatio ? window.devicePixelRatio : 1;
+                if (pixelRatio > 1) {
+                    $("img").each(function(idx, el){
+                        el = $(el);
+                        if (el.attr("data-src2x")) {
+                            el.attr("data-src-orig", el.attr("src"));
+                            el.attr("src", el.attr("data-src2x"));
+                        }
+                    });
+                }
+            }
+        };
+    }();
 
-      <footer>
-        <p>&copy; Openpolis 2015</p>
-      </footer>
-    </div> <!-- /container -->
+    //Init
+    Retina.init();
+</script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="assets/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
-
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script>
-
-    <!-- Our JavaScript
-    ================================================== -->
-    <script src="javascript/app.js"></script>
-    <script src="javascript/routes.js"></script>
-    <script src="javascript/controllers/card-controllers.js"></script>
-    <script src="javascript/controllers/search-controllers.js"></script>
-    <script src="javascript/controllers/list-controllers.js"></script>
-    <script src="javascript/services/declarations.js"></script>
-    <script src="javascript/directives/pt-card.js"></script>
-    <script src="javascript/directives/paginated-list.js"></script>
-    <script src="javascript/directives/lazy-load.js"></script>
-    <script src="javascript/directives/stars.js"></script>
-    <script src="assets/bower_components/ui-autocomplete/autocomplete.js"></script>
-  </body>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script>
+<!-- Our JavaScript
+================================================== -->
+<script src="javascript/app.js"></script>
+<script src="javascript/routes.js"></script>
+<script src="javascript/controllers/card-controllers.js"></script>
+<script src="javascript/controllers/search-controllers.js"></script>
+<script src="javascript/controllers/list-controllers.js"></script>
+<script src="javascript/services/declarations.js"></script>
+<script src="javascript/directives/pt-card.js"></script>
+<script src="javascript/directives/paginated-list.js"></script>
+<script src="javascript/directives/lazy-load.js"></script>
+<script src="javascript/directives/stars.js"></script>
+<script src="assets/bower_components/ui-autocomplete/autocomplete.js"></script>
+</body>
 </html>
 

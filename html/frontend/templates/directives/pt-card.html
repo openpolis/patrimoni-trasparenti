@@ -1,195 +1,373 @@
 <div class="single-card">
-
-  <p ng-show="spinner" ><span class="glyphicon glyphicon-refresh spinning"></span> Recupero la scheda...</p>
-
-  <div ng-show="errors" class="alert alert-danger" role="alert">
-    <p>
-      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-      <span class="sr-only">Error:</span>
-      Errore durante il recupero della scheda, riprova più tardi.
-    </p>
-  </div>
-
-  <div ng-show="scheda" class="panel panel-default">
-    <!-- relative position to make badge absolute positionning work -->
-    <div class="panel-heading" style="position:relative">
-      <h3>{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h3>
-      <a ng-show="scheda.indice_completezza < 3" href="#/campagna" style="position: absolute; top: 0px; right: 0px; border: 0; z-index:1000">
-        <img alt="Dichiarazione incompleta" ng-src="assets/images/incompleta_rigth_red_aa0000.png">
-      </a>
+    <div class="page-heading">
+        <h1 class="container">{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}</h1>
     </div>
-    <div class="panel-body col-md-8">
-      <img ng-src="http://op_openparlamento_images.s3.amazonaws.com/big/{{scheda.op_id}}.jpg" alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
-      <p><b>Data di nascita:</b> {{scheda.data_nascita | date:'dd-MM-yyyy'}}</p>
-      <p><b>Residenza:</b> {{scheda.comune_residenza|capitalize:all}} ({{scheda.provincia_residenza|capitalize:team}})</p>
-      <p><b>Stato civile:</b> {{scheda.stato_civile}}</p>
-      <p><b>Professione:</b> {{scheda.professione}}</p>
-      <div ng-repeat="incarico in scheda.incarichi" class="alert alert-info" role="alert">
-        <p><b>Istituzione:</b> <a ng-href="#/istituzioni/{{incarico.istituzione}}">{{incarico.istituzione}}</a></p>
-        <p><b>Incarico:</b> {{incarico.incarico}}</a></p>
-        <p ng-show="incarico.gruppo.acronym"><b>Gruppo:</b> <a ng-href="#/gruppo/{{incarico.gruppo.acronym}}">{{incarico.gruppo.acronym}} - {{incarico.gruppo.name}}</a></p>
-        <p><b>Partito:</b> {{incarico.partito.acronym}} - {{incarico.partito.name}}</a></p>
-        <p ng-show="incarico.circoscrizione"><b>Circoscrizione:</b> <a ng-href="#/circoscrizioni/{{incarico.circoscrizione}}">{{incarico.circoscrizione}}</a></p>
-      </div>
-    </div> <!-- panel-body -->
-    <div class="panel-body col-md-4">
-      <p>Seleziona anno dichiarazione:</p>
-      <ul class="nav nav-pills nav-justified">
-        <li ng-repeat="dichiarazione in schede" ng-class="{'active': scheda.anno_dichiarazione === dichiarazione.anno_dichiarazione}" ng-click="selectYear($index)" role="presentation"><a href="">{{dichiarazione.anno_dichiarazione}}</a></li>
-      </ul>
-      <br>
-      <p><b>Completezza:</b> <star-rating stars-number="scheda.indice_completezza" max=3></star-rating></p>
-      <p><a href="" ng-click="scrollTo('modello-redditi')"><b>Totale reddito:</b></a> {{scheda.totale_730|currency:"€"}}</p>
-      <p><a href="" ng-click="scrollTo('beni-immobili')"><b>Numero immobili:</b></a> {{scheda.beni_immobili.length}}</p>
-      <p><a href="" ng-click="scrollTo('beni-mobili')"><b>Numero beni mobili:</b></a> {{scheda.beni_mobili.length}}</p>
-      <p><a href="" ng-click="scrollTo('partecipazioni-soc')"><b>Partecipazioni:</b></a> {{scheda.partecipazioni_soc.length}}</p>
-      <p><a href="" ng-click="scrollTo('amministrazioni-soc')"><b>Amministrazioni:</b></a> {{scheda.amministrazioni_soc.length}}</p>
-      <p><a href="" ng-click="scrollTo('contributi-elettorali')"><b>Contributi elettorali:</b></a> {{scheda.totale_contributi_elettorali|currency:"€"}}</p>
-      <p><a href="" ng-click="scrollTo('spese-elettorali')"><b>Spese elettorali:</b></a> {{scheda.totale_spese_elettorali|currency:"€"}}</p>
-    </div> <!-- panel-body -->
+    <div ng-show="spinner" class="PT-dialog-msg">
+        <p>
+            <span class="glyphicon glyphicon-refresh spinning"></span> Recupero la scheda...
+        </p>
+    </div>
 
-    <div class="panel-heading" id="modello-redditi" style="clear:both">Voci reddito {{scheda.anno_dichiarazione}}</div>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Voce</th>
-          <th>Dichiarante</th>
-          <th>Coniuge</th>
-          <th>Totali</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="voce in scheda.reddito_730">
-          <td ng-repeat="(k, v) in voce">
-            {{v|currency:"€"}}
-          </td>
-        </tr>
-        <tr>
-          <td>Totale dichiarato</td>
-          <td></td>
-          <td></td>
-          <td>{{scheda.totale_730|currency:"€"}}</td>
-        </tr>
-      </tbody>
-    </table> <!-- reddito -->
-    <div class="panel-heading" id="beni-immobili">Beni immobili {{scheda.anno_dichiarazione}}: {{scheda.beni_immobili.length}}</div>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Persona</th>
-          <th>Diritto</th>
-          <th>Descrizione</th>
-          <th>Provincia</th>
-          <th>Comune</th>
-          <th>Rendita</th>
-          <th>Categoria</th>
-          <th>Annotazioni</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="voce in scheda.beni_immobili">
-          <td ng-repeat="(k, v) in voce">
-            {{v}}
-          </td>
-        </tr>
-      </tbody>
-    <table> <!-- immobili -->
-    <div class="panel-heading" id="beni-mobili">Beni mobili {{scheda.anno_dichiarazione}}: {{scheda.beni_mobili.length}}</div>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Persona</th>
-          <th>Tipologia</th>
-          <th>Cavalli fiscali</th>
-          <th>Anno immatr.</th>
-          <th>Annotazioni</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="voce in scheda.beni_mobili">
-          <td ng-repeat="(k, v) in voce">
-            {{v}}
-          </td>
-        </tr>
-      </tbody>
-    </table> <!-- mobili -->
-    <div class="panel-heading" id="partecipazioni-soc">Partecipazioni in società {{scheda.anno_dichiarazione}}: {{scheda.partecipazioni_soc.length}}</div>
-    <table ng-show="scheda.partecipazioni_soc.length" class="table">
-      <thead>
-        <tr>
-          <th>Persona</th>
-          <th>Tipologia</th>
-          <th>Cavalli fiscali</th>
-          <th>Anno immatr.</th>
-          <th>Annotazioni</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="voce in scheda.partecipazioni_soc">
-          <td ng-repeat="(k, v) in voce">
-            {{v}}
-          </td>
-        </tr>
-      </tbody>
-    </table> <!-- partecipazioni_soc -->
-    <div class="panel-heading" id="amministrazioni-soc">Amministrazioni di società {{scheda.anno_dichiarazione}}: {{scheda.amministrazioni_soc.length}}</div>
-    <table ng-show="scheda.amministrazioni_soc.length" class="table">
-      <thead>
-        <tr>
-          <th>Persona</th>
-          <th>Tipologia</th>
-          <th>Cavalli fiscali</th>
-          <th>Anno immatr.</th>
-          <th>Annotazioni</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="voce in scheda.amministrazioni_soc">
-          <td ng-repeat="(k, v) in voce">
-            {{v}}
-          </td>
-        </tr>
-      </tbody>
-    </table> <!-- amministrazioni_soc -->
-    <div class="panel-heading" id="contributi-elettorali">Contributi elettorali {{scheda.anno_dichiarazione}}: {{scheda.totale_contributi_elettorali|currency:"€"}}</div>
-    <table ng-show="scheda.totale_contributi_elettorali" class="table">
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th>Elezione</th>
-          <th>Anno</th>
-          <th>Importo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="voce in scheda.contributi_elettorali">
-          <td ng-repeat="(k, v) in voce">
-            {{v}}
-          </td>
-        </tr>
-      </tbody>
-    </table> <!-- contributi_elettorali -->
-    <div class="panel-heading" id="spese-elettorali">Spese elettorali {{scheda.anno_dichiarazione}}: {{scheda.totale_spese_elettorali|currency:"€"}}</div>
-    <table ng-show="scheda.totale_spese_elettorali" class="table">
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th>Elezione</th>
-          <th>Anno</th>
-          <th>Importo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="voce in scheda.spese_elettorali">
-          <td ng-repeat="(k, v) in voce">
-            {{v}}
-          </td>
-        </tr>
-      </tbody>
-    </table> <!-- spese_elettorali -->
-    <div class="panel-footer">
-      <a href="{{scheda.filename_url}}"><p>Scarica documento originale<p></a>
-      <!-- <li ng-repeat="(key, value) in scheda">{{key}}: {{value}}</li> -->
-    </div> <!-- panel-footer -->
-  </div> <!-- panel-default -->
+    <div ng-show="errors" class="PT-dialog-msg alert alert-danger" role="alert">
+        <p>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Errore durante il recupero della scheda, riprova più tardi.
+        </p>
+    </div>
+
+    <div ng-show="scheda">
+        <a ng-show="scheda.indice_completezza < 3" href="#/campagna"
+           style="position: absolute; top: 0px; right: 0px; border: 0; z-index:1000">
+            <img alt="Dichiarazione incompleta" ng-src="assets/images/incompleta_rigth_red_aa0000.png">
+        </a>
+        <div class="container" style="position: relative;">
+            <div class="row">
+                <div id="scheda-basic" class="col-md-3">
+                    <div class="portrait-picture">
+                        <img ng-src="http://op_openparlamento_images.s3.amazonaws.com/big/{{scheda.op_id}}.jpg"
+                             alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
+                    </div>
+                    <div class="scheda-items">
+                        <p>Data di nascita: <b>{{scheda.data_nascita | date:'dd-MM-yyyy'}}</b></p>
+
+                        <p>Residenza: <b>{{scheda.comune_residenza|capitalize:all}}
+                            ({{scheda.provincia_residenza|capitalize:team}})</b></p>
+
+                        <p>Stato civile: <b>{{scheda.stato_civile}}</b></p>
+
+                        <p>Professione: <b>{{scheda.professione}}</b></p>
+
+                        <br/>
+
+                        <h4>Incarichi</h4>
+
+                        <div class="well" ng-repeat="incarico in scheda.incarichi">
+                            <p>
+                                Istituzione: <strong><a ng-href="#/istituzioni/{{incarico.istituzione}}">{{incarico.istituzione}}</a></strong>
+                            </p>
+
+                            <p>
+                                Incarico: <strong>{{incarico.incarico}}</strong>
+                            </p>
+
+                            <p ng-show="incarico.gruppo.acronym">
+                                Gruppo: <strong><a ng-href="#/gruppo/{{incarico.gruppo.acronym}}">{{incarico.gruppo.acronym}} - {{incarico.gruppo.name}}</a></strong>
+                            </p>
+
+                            <p>
+                                Partito: <strong>{{incarico.partito.acronym}} - {{incarico.partito.name}}</strong>
+                            </p>
+
+                            <p ng-show="incarico.circoscrizione">
+                                Circoscrizione: <strong><a ng-href="#/circoscrizioni/{{incarico.circoscrizione}}">{{incarico.circoscrizione}}</a></strong>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <a href="#" class="highlight-link">VISUALIZZA LA SUA ATTIVITÀ PARLAMENTARE</a>
+
+                </div>
+                <div class="col-md-9" style="position:relative">
+                    <h3>Dichiarazioni</h3>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li ng-repeat="dichiarazione in schede"
+                            ng-class="{'active': scheda.anno_dichiarazione === dichiarazione.anno_dichiarazione}"
+                            ng-click="selectYear($index)" role="presentation">
+                            <a href="" role="tab" data-toggle="tab">{{dichiarazione.anno_dichiarazione}}</a>
+                        </li>
+                    </ul>
+                    <br>
+
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-md-2"><strong>Completezza</strong></div>
+                            <div class="col-md-3">
+                                <div class="progress">
+                                    <!-- scheda.indice_completezza deve essere un valore da 0 a 100
+                                         ora è da 0 a 3 per cui viene moltiplicato per 33
+                                     -->
+                                    <div class="progress-bar" role="progressbar"
+                                         aria-valuenow="{{scheda.indice_completezza*33}}" aria-valuemin="0"
+                                         aria-valuemax="100" style="width: {{scheda.indice_completezza*33}}%;">
+                                        <span class="sr-only">{{scheda.indice_completezza*33}}% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <p class="font-size-medium"><b>Non rispetta gli adempimenti di legge.</b><br/>
+                                    La dichiarazione dei redditi non è completa ma c'è solo il quadro di riepilogo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><a href="" ng-click="scrollTo('modello-redditi')">Totale reddito: <b>{{scheda.totale_730|currency:"€"}}</b></a>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><a href="" ng-click="scrollTo('partecipazioni-soc')">Partecipazioni: <b>{{scheda.partecipazioni_soc.length}}</b></a>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><a href="" ng-click="scrollTo('spese-elettorali')">Spese elettorali: <b>{{scheda.totale_spese_elettorali|currency:"€"}}</b></a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><a href="" ng-click="scrollTo('beni-immobili')">Numero immobili: <b>{{scheda.beni_immobili.length}}</b></a>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><a href="" ng-click="scrollTo('amministrazioni-soc')">Amministrazioni: <b>{{scheda.amministrazioni_soc.length}}</b></a>
+                            </p>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><a href="" ng-click="scrollTo('beni-mobili')">Numero beni mobili: <b>{{scheda.beni_mobili.length}}</b></a>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p><a href="" ng-click="scrollTo('contributi-elettorali')">Contributi elettorali: <b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></a>
+                            </p>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+
+                    <hr/>
+
+                    <!--
+                    *
+                    *    VOCI REDDITO
+                    *
+                    -->
+
+                    <div id="modello-redditi">
+                        <h3>Voci di reddito {{scheda.anno_dichiarazione}}</h3>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Voce</th>
+                            <th>Dichiarante</th>
+                            <th>Coniuge</th>
+                            <th>Totali</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.reddito_730">
+                            <td ng-repeat="(k, v) in voce">
+                                {{v|currency:"€"}}
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td><b>Totale dichiarato</b></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{scheda.totale_730|currency:"€"}}</b></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                    <!--
+                    *
+                    *    BENI IMMOBILI
+                    *
+                    -->
+
+                    <div id="beni-immobili">
+                        <h3>Beni immobili {{scheda.anno_dichiarazione}}</h3>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Persona</th>
+                            <th>Diritto</th>
+                            <th>Descrizione</th>
+                            <th>Provincia</th>
+                            <th>Comune</th>
+                            <th>Rendita</th>
+                            <th>Categoria</th>
+                            <th>Annotazioni</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.beni_immobili">
+                            <td ng-repeat="(k, v) in voce">
+                                {{v}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--
+                    *
+                    *    BENI MOBILI
+                    *
+                    -->
+
+                    <div id="beni-mobili">
+                        <h3>Beni mobili {{scheda.anno_dichiarazione}}</h3>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Persona</th>
+                            <th>Tipologia</th>
+                            <th>Cavalli fiscali</th>
+                            <th>Anno immatr.</th>
+                            <th>Annotazioni</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.beni_mobili">
+                            <td ng-repeat="(k, v) in voce">
+                                {{v}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--
+                    *
+                    *    PARTECIPAZIONI SOCIETA'
+                    *
+                    -->
+
+                    <div id="partecipazioni-soc">
+                        <h3>Partecipazioni in società {{scheda.anno_dichiarazione}}</h3>
+                    </div>
+                    <table ng-show="scheda.partecipazioni_soc.length" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Persona ???</th>
+                            <th>Tipologia ???</th>
+                            <th>Cavalli fiscali ???</th>
+                            <th>Anno immatr. ???</th>
+                            <th>Annotazioni ???</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.partecipazioni_soc">
+                            <td ng-repeat="(k, v) in voce">
+                                {{v}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    <!--
+                    *
+                    *    AMMINISTRAZIONI SOCIETA'
+                    *
+                    -->
+
+                    <div id="amministrazioni-soc">
+                        <h3>Amministrazioni di società {{scheda.anno_dichiarazione}}</h3>
+                    </div>
+                    <table ng-show="scheda.amministrazioni_soc.length" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Persona ???</th>
+                            <th>Tipologia ???</th>
+                            <th>Cavalli fiscali ???</th>
+                            <th>Anno immatr. ???</th>
+                            <th>Annotazioni ???</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.amministrazioni_soc">
+                            <td ng-repeat="(k, v) in voce">
+                                {{v}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--
+                    *
+                    *    CONTRIBUTI ELETTORALI
+                    *
+                    -->
+
+                    <div id="contributi-elettorali">
+                        <h3>Contributi elettorali {{scheda.anno_dichiarazione}}:
+                            {{scheda.totale_contributi_elettorali|currency:"€"}}</h3>
+                    </div>
+                    <table ng-show="scheda.totale_contributi_elettorali" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Elezione</th>
+                            <th>Anno</th>
+                            <th>Importo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.contributi_elettorali">
+                            <td ng-repeat="(k, v) in voce">
+                                {{v}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!--
+                    *
+                    *    SPESE ELETTORALI
+                    *
+                    -->
+
+                    <div id="spese-elettorali">
+                        <h3>Spese elettorali {{scheda.anno_dichiarazione}}:
+                            {{scheda.totale_spese_elettorali|currency:"€"}}</h3>
+                    </div>
+                    <table ng-show="scheda.totale_spese_elettorali" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Elezione</th>
+                            <th>Anno</th>
+                            <th>Importo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.spese_elettorali">
+                            <td ng-repeat="(k, v) in voce">
+                                {{v}}
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td><b>Totale dichiarato</b></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{scheda.totale_spese_elettorali|currency:"€"}}</b></td>
+                        </tr>
+                        </tfoot>
+                    </table> <!-- spese_elettorali -->
+
+                    <hr/>
+                    <br/>
+                    <div>
+                        <p><a href="{{scheda.filename_url}}" class="highlight-link">Scarica documento originale</a></p>
+                        <!-- <li ng-repeat="(key, value) in scheda">{{key}}: {{value}}</li> -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>

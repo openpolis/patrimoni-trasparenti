@@ -1,18 +1,73 @@
-<div class ="home-wrapper">
-  <h1>Patrimoni trasparenti</h1>
-  <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+<div id="PT-hero" class="home-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="PT-hero-title1">Patrimoni</div>
+                <br/>
 
-  <form ng-controller="SearchController as searchCtl" ng-submit="searchCtl.search()">
-    <div class="input-group">
-      <span class="input-group-addon" id="basic-addon1">
-      <span ng-show="searchCtl.spinner" class="glyphicon glyphicon-refresh spinning"></span>
-      <span ng-hide="searchCtl.spinner" class="glyphicon glyphicon-search"></span>
-      </span>
-      <input ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text" placeholder="Inizia a cercare..." class="form-control" >
-      <span class="input-group-btn">
-        <button ng-click="searchCtl.search()" class="btn btn-default" type="button">Cerca</button>
-      </span>
-    </div><!-- /input-group -->
-  </form>
+                <div class="PT-hero-title2"><span>Trasparenti</span></div>
 
+                <p class="PT-hero-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras posuere,
+                    lectus eget interdum congue,
+                    arcu justo varius neque, non suscipit risus augue a ipsum.</p>
+            </div>
+            <div class="col-md-6">
+                <div class="PT-search-box">
+                    <p><img class="PT-search-id" src="../assets/images/ico_person.png" alt="Cerca parlamentare" >
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras posuere, lectus eget interdum congue, arcu justo varius neque, non suscipit risus augue a ipsum.
+                    </p>
+
+                    <form class="PT-hero-search" ng-controller="SearchController as searchCtl" ng-submit="searchCtl.search()">
+                        <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon1">
+                          <span ng-show="searchCtl.spinner" class="glyphicon glyphicon-refresh spinning"></span>
+                          <span ng-hide="searchCtl.spinner" class="glyphicon glyphicon-search"></span>
+                      </span>
+                            <input ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text"
+                                   placeholder="Inizia a cercare..." class="form-control">
+
+                        </div><!-- /input-group -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<section class="container">
+    <div class="PT-news-section">
+        <div class="row">
+            <div class="col-md-4 col">
+                <p class="date"><a href="#" class="btn btn-primary">26 ottobre 2015</a></p>
+
+                <p class="headline">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.</p>
+                <hr/>
+                <p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras posuere, lectus eget
+                    interdum congue, arcu justo varius neque, non suscipit risus augue a ipsum.</p>
+
+                <p><a href="#" class="post-link pull-right">Continua</a></p>
+            </div>
+            <div class="col-md-4 col">
+                <p class="date"><a href="#" class="btn btn-primary">26 ottobre 2015</a></p>
+
+                <p class="headline">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.</p>
+                <hr/>
+                <p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras posuere, lectus eget
+                    interdum congue, arcu justo varius neque, non suscipit risus augue a ipsum.</p>
+
+                <p><a href="#" class="post-link pull-right">Continua</a></p>
+            </div>
+            <div class="col-md-4 col">
+                <p class="date"><a href="#" class="btn btn-primary">26 ottobre 2015</a></p>
+
+                <p class="headline">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do.</p>
+                <hr/>
+                <p class="excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras posuere, lectus eget
+                    interdum congue, arcu justo varius neque, non suscipit risus augue a ipsum.</p>
+
+                <p><a href="#" class="post-link pull-right">Continua</a></p>
+            </div>
+        </div>
+        <div class="read-all"><hr/><a href="#" class="post-link">Leggi tutti</a>
+        </div>
+    </div>
+</section><!-- /container -->
