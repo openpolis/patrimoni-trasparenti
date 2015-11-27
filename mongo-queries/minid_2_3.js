@@ -29,13 +29,36 @@ result.forEach( function(i) {
 });
 
 result = db['all'].aggregate(
-		{ $match: { "anno_dichiarazione": 2014}},
+		{ $match: { "anno_dichiarazione": 2014, "beni_immobili": { $not: {$size: 0} } } },
+
+		{ $unwind: "$incarichi"},
+		{ $group: {
+                _id : { istituzione: "$incarichi.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1 }}
+);
+
+print("dichiarano beni immobili")
+print( "istituzione", "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i.count);
+});
+
+//
+//
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "beni_immobili": { $not: {$size: 0} } } },
     // NOTE
-    // "beni_immobili.$.rendita_catastale": { $ne: 0} | match all
+    // "beni_immobili.$.rendita_catastale": { $ne: 0 } | match all
+    // "beni_immobili.categoria_catastale": { $ne:  "" } | match also empty arrays, exclude them.
     { $match: { $or: [
-                { "beni_immobili.rendita_catastale": { $gt: 0} },
-                { "beni_immobili.reddito_dominicale": { $gt: 0} }
-    ]}},
+                { "beni_immobili.categoria_catastale": { $ne:  "" } },
+                { "beni_immobili.rendita_catastale": { $gt: 0 } },
+                { "beni_immobili.reddito_agrario": { $gt: 0 } },
+                { "beni_immobili.reddito_dominicale": { $gt: 0 } }
+    ] } },
 
 		{ $unwind: "$incarichi"},
 		{ $group: {
