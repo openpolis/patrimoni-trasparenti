@@ -14,9 +14,14 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
 
 		{ $unwind: "$incarichi"},
+		{ $group: {
+                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+               beni_mobili: { $last: "$beni_mobili" }
+              }
+    },
 		{ $unwind: "$beni_mobili"},
 		{ $group: {
-                _id : { tipologia: "$beni_mobili.tipologia", istituzione: "$incarichi.istituzione" },
+                _id : { tipologia: "$beni_mobili.tipologia", istituzione: "$_id.istituzione" },
                count: { $sum: 1}
               }
     },

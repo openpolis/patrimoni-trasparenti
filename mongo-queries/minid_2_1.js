@@ -17,7 +17,12 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
+               totale_730_dichiarante: { $last: "$totale_730_dichiarante" }
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione" },
                count: { $sum: 1},
                total: { $sum: "$totale_730_dichiarante"}
               }
@@ -39,7 +44,12 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
 		{ $group: {
-                _id : {partito: "$incarichi.partito.acronym", istituzione: "$incarichi.istituzione" },
+                _id : {op_id: "$op_id", partito: "$incarichi.partito.acronym", istituzione: "$incarichi.istituzione" },
+               totale_730_dichiarante: { $last: "$totale_730_dichiarante" }
+              }
+    },
+		{ $group: {
+                _id : {partito: "$_id.partito", istituzione: "$_id.istituzione" },
                count: { $sum: 1},
                total: { $sum: "$totale_730_dichiarante"}
               }

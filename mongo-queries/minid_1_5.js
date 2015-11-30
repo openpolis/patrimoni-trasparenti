@@ -16,7 +16,7 @@ result = db['all'].aggregate(
 
     // select only declarations with "persona" different from "dichiarante"
     // FIXME verify $ effectiveness
-    // NOTE 
+    // NOTE
     // "beni_immobili.persona": {$ne: "coniuge"} | matches beni_immobili = [] (empty array), we could refactor excluding empty array "beni_immobili": {$not: {$size: 0}}
     // "beni_immobili.$.persona": {$ne: "dichiarante"} | matches all
 
@@ -29,7 +29,11 @@ result = db['all'].aggregate(
     ]}},
 		{ $unwind: "$incarichi"},
 		{ $group: {
-                _id : { gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
+              }
+    },
+		{ $group: {
+                _id : { gruppo: "$_id.gruppo", istituzione: "$_id.istituzione" },
                count: { $sum: 1}
               }
     },

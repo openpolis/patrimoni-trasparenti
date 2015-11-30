@@ -14,9 +14,14 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
 
 		{ $unwind: "$incarichi"},
+		{ $group: {
+                _id : { op_id:"$op_id", istituzione: "$incarichi.istituzione" },
+               amministrazioni_soc: { $last: "$amministrazioni_soc"},
+              }
+    },
 		{ $unwind: "$amministrazioni_soc"},
 		{ $group: {
-                _id : { istituzione: "$incarichi.istituzione", incarico: "$amministrazioni_soc.natura_incarico" },
+                _id : { istituzione: "$_id.istituzione", incarico: "$amministrazioni_soc.natura_incarico" },
                count: { $sum: 1},
               }
     },

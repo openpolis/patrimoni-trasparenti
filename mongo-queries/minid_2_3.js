@@ -14,9 +14,14 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
 
 		{ $unwind: "$incarichi"},
+		{ $group: {
+                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+               beni_immobili: { $last: "$beni_immobili" }
+              }
+    },
 		{ $unwind: "$beni_immobili"},
 		{ $group: {
-                _id : { tipologia: "$beni_immobili.descrizione", istituzione: "$incarichi.istituzione" },
+                _id : { tipologia: "$_id.tipologia", tipologia: "$beni_immobili.descrizione", istituzione: "$_id.istituzione" },
                count: { $sum: 1}
               }
     },
@@ -33,7 +38,11 @@ result = db['all'].aggregate(
 
 		{ $unwind: "$incarichi"},
 		{ $group: {
-                _id : { istituzione: "$incarichi.istituzione" },
+                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+              }
+    },
+		{ $group: {
+                _id : { istituzione: "$_id.istituzione" },
                count: { $sum: 1}
               }
     },
@@ -62,7 +71,11 @@ result = db['all'].aggregate(
 
 		{ $unwind: "$incarichi"},
 		{ $group: {
-                _id : { istituzione: "$incarichi.istituzione" },
+                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+              }
+    },
+		{ $group: {
+                _id : { istituzione: "$_id.istituzione" },
                count: { $sum: 1}
               }
     },

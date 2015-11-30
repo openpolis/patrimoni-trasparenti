@@ -17,8 +17,13 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
-               count: { $sum: 1},
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
+               roles_count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione"},
+               count: { $sum: 1}
               }
     },
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
@@ -37,8 +42,13 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
-               count: { $sum: 1},
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
+               roles_count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione"},
+               count: { $sum: 1}
               }
     },
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
@@ -58,8 +68,13 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
-               count: { $sum: 1},
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
+               roles_count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione"},
+               count: { $sum: 1}
               }
     },
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
@@ -79,8 +94,13 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
-               count: { $sum: 1},
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
+               roles_count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione"},
+               count: { $sum: 1}
               }
     },
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
@@ -99,8 +119,13 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
-               count: { $sum: 1},
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
+               roles_count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione"},
+               count: { $sum: 1}
               }
     },
 		{ $sort: { "_id.gruppo":-1, "_id.istituzione":-1}}

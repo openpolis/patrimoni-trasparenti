@@ -15,7 +15,11 @@ result = db['all'].aggregate(
 
 		{ $unwind: "$incarichi"},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
+                _id : { op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione" },
                count: { $sum: 1},
               }
     },

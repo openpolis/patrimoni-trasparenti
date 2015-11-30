@@ -13,8 +13,14 @@ print("######################################")
 result = db['all'].aggregate(
 		{ $match: {"anno_dichiarazione": 2014}},
 		{ $unwind: "$incarichi"},
+    // Aggregate multiple roles in same institution.
 		{ $group: {
-               _id : {istituzione: "$incarichi.istituzione", indice_completezza: "$indice_completezza"},
+                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione", indice_completezza: "$indice_completezza"},
+               role_count: { $sum: 1}
+              }
+    },
+		{ $group: {
+               _id : { istituzione: "$_id.istituzione", indice_completezza: "$_id.indice_completezza"},
                count: { $sum: 1}
               }
     },

@@ -16,7 +16,12 @@ result = db['all'].aggregate(
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
-                _id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione", indice_completezza: "$indice_completezza"},
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", indice_completezza: "$indice_completezza"},
+               roles_count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                _id : {gruppo: "$_id.gruppo", indice_completezza: "$_id.indice_completezza"},
                count: { $sum: 1}
               }
     },
@@ -24,7 +29,7 @@ result = db['all'].aggregate(
 );
 
 
-print( "gruppo", ",", "istituzione", ",", "indice_completezza", ",", "totale");
+print( "gruppo", ",", "indice_completezza", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ",",i._id.istituzione, ",", i._id.indice_completezza, ",", i.count);
+          print( i._id.gruppo, ",", i._id.indice_completezza, ",", i.count);
 });
