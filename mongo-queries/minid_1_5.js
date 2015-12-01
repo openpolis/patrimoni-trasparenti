@@ -15,7 +15,6 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
 
     // select only declarations with "persona" different from "dichiarante"
-    // FIXME verify $ effectiveness
     // NOTE
     // "beni_immobili.persona": {$ne: "coniuge"} | matches beni_immobili = [] (empty array), we could refactor excluding empty array "beni_immobili": {$not: {$size: 0}}
     // "beni_immobili.$.persona": {$ne: "dichiarante"} | matches all
