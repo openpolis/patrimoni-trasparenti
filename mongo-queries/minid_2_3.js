@@ -87,3 +87,22 @@ print( "istituzione", "totale");
 result.forEach( function(i) {
           print(i._id.istituzione, ",", i.count);
 });
+
+// tipologia vuota
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$beni_immobili"},
+		{ $match: { "beni_immobili.descrizione": { $eq: "" } } },
+		{ $group: {
+                _id : {op_id: "$op_id" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" }
+              }
+    }
+);
+
+print("no descrizione");
+result.forEach( function(i) {
+          print( i._id.op_id, ",", i.nome, ",", i.cognome);
+});

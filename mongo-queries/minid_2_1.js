@@ -37,6 +37,7 @@ result.forEach( function(i) {
           print( i._id.gruppo, ";", i._id.istituzione, ";", i.media_reddito);
 });
 
+
 // Governo
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
@@ -62,4 +63,45 @@ result = db['all'].aggregate(
 print( "partito", ";", "istituzione", ";", "totale");
 result.forEach( function(i) {
           print( i._id.partito, ";", i._id.istituzione, ";", i.media_reddito);
+});
+
+// gruppo "vuoto"
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+		{ $group: {
+                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" }
+              }
+    },
+		{ $match: { "_id.gruppo": { $eq: ""}}}
+);
+
+print("no gruppo");
+result.forEach( function(i) {
+          print( i._id.op_id, ",", i.nome, ",", i.cognome);
+});
+
+// partito "vuoto"
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $ne: "camera" } } },
+		{ $match: { "incarichi.istituzione": { $ne: "senato" } } },
+		{ $group: {
+                _id : {op_id: "$op_id", partito: "$incarichi.partito.acronym", istituzione: "$incarichi.istituzione" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" }
+              }
+    },
+		{ $match: { "_id.partito": { $eq: ""}}}
+);
+
+print("no partito");
+result.forEach( function(i) {
+          print( i._id.op_id, ",", i.nome, ",", i.cognome);
 });
