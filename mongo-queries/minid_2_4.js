@@ -55,3 +55,28 @@ print( "istituzione", ",", "tipologia", ",", "numero", ",", "totale");
 result.forEach( function(i) {
           print(i._id.istituzione, ",", i._id.tipologia, ",", i._id.count, ",", i.count);
 });
+
+// hanno campi vuoti
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$incarichi"},
+		{ $group: {
+                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+               nome: { $last: "$nome" },
+               cognome: { $last: "$cognome" },
+               beni_mobili: { $last: "$beni_mobili" }
+              }
+    },
+		{ $unwind: "$beni_mobili"},
+		{ $match: { "beni_mobili.tipologia": { $eq: ""}}},
+		{ $group: {
+                _id : { op_id:"$_id.op_id", nome: "$nome", cognome: "$cognome"},
+              }
+    }
+);
+
+print("hanno campi vuoti");
+result.forEach( function(i) {
+          print(i._id.op_id, ",", i._id.nome, ",", i._id.cognome);
+});

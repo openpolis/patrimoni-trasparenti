@@ -33,3 +33,22 @@ print( "istituzione", ",", "indice_completezza", ",", "totale");
 resultsArray.forEach( function(i) {
           print( i._id.istituzione, ",", i._id.indice_completezza, ",", i.count);
 });
+
+// debug
+result = db['all'].aggregate(
+		{ $match: {"anno_dichiarazione": 2014}},
+		{ $unwind: "$incarichi"},
+    // Aggregate multiple roles in same institution.
+		{ $group: {
+                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione", indice_completezza: "$indice_completezza"},
+               role_count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.op_id":-1}}
+);
+
+resultsArray = result.toArray();
+print( "op_id" );
+resultsArray.forEach( function(i) {
+          print( i._id.op_id );
+});

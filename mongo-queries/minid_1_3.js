@@ -33,3 +33,25 @@ print( "gruppo", ",", "istituzione", ",","completezza", ",", "totale");
 result.forEach( function(i) {
           print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.completezza, ",", i.count);
 });
+
+result = db['all'].aggregate(
+		{ $match: {"anno_dichiarazione": 2014}},
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+		{ $match: { "incarichi.partito.acronym": { $ne: ""}}},
+		{ $group: {
+                _id : {op_id: "$op_id", partito: "$incarichi.partito.acronym", completezza_redditi: "$completezza_redditi"},
+              }
+    },
+		{ $group: {
+                _id : { partito: "$_id.partito", completezza_redditi: "$_id.completezza_redditi"},
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.partito": -1 ,"_id.completezza_redditi": -1}}
+);
+
+print( "partito", ",","completezza", ",", "totale");
+result.forEach( function(i) {
+          print( i._id.partito, ",", i._id.completezza_redditi, ",", i.count);
+});
