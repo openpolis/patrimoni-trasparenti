@@ -28,6 +28,23 @@ result = db['all'].aggregate(
 		{ $sort: {"_id.gruppo":-1, "_id.indice_completezza": 1}}
 );
 
+// debug
+result = db['all'].aggregate(
+  { $match: {"anno_dichiarazione": 2014}},
+  { $unwind: "$incarichi"},
+  { $match: { "incarichi.istituzione": { $ne: "governo"}}},
+  { $group: {
+    _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", indice_completezza: "$indice_completezza"},
+    roles_count: { $sum: 1}
+    }
+  },
+  { $sort: {"_id.op_id": 1}}
+);
+//print( "op_id" );
+//result.forEach( function(i) {
+//            print( i._id.op_id );
+//});
+
 result = db['all'].aggregate(
 		{ $match: {"anno_dichiarazione": 2014}},
 		{ $unwind: "$incarichi"},
