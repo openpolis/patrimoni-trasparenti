@@ -61,7 +61,7 @@ result = db['all'].aggregate(
 );
 
 
-print("governo");
+print("chi ha acronimo partito vuoto");
 print( "partito", ",", "indice_completezza", ",", "totale");
 result.forEach( function(i) {
           print( i.op_id, ",", i.nome, ",", i.cognome);
