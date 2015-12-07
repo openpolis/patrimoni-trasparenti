@@ -107,7 +107,7 @@ result.forEach( function(i) {
           print( i._id.op_id, ",", i.nome, ",", i.cognome);
 });
 
-// quante persone corrispondono le occorrenze di "terreni" e "fabbricati"
+// a chi corrispondono le occorrenze di "terreni" e "fabbricati"
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
 
@@ -116,20 +116,15 @@ result = db['all'].aggregate(
       { "beni_immobili.descrizione": { $eq: "terreni"}},
       { "beni_immobili.descrizione": { $eq: "fabbricati"}}
     ]}},
-		{ $unwind: "$incarichi"},
 		{ $group: {
-                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione", descrizione: "$beni_immobili.descrizione" },
-              }
-    },
-		{ $group: {
-                _id : {descrizione: "$_id.descrizione", istituzione: "$_id.istituzione" },
-               count: { $sum: 1}
+                _id : {op_id: "$op_id" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" }
               }
     }
 );
 
-print("quante persone corrispondono le occorrenze di terreni e fabbricati");
-print("descrizione", ",", "istituzione", ",", "totale");
+print("persone con le occorrenze di terreni e fabbricati");
 result.forEach( function(i) {
-          print(i._id.descrizione, ",", i._id.istituzione, ",", i.count);
+          print( i._id.op_id, ",", i.nome, ",", i.cognome);
 });
