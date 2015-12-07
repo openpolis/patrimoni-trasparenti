@@ -212,9 +212,9 @@ func updateSingle(ep string, year int) {
 	InfoLogger.Println("retrieve data for", ep)
 	switch ep {
 	case "camera":
-		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=4&date=", strconv.Itoa(year))
+		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=4&charge_type_id=5&date=", strconv.Itoa(year))
 	case "senato":
-		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=5&date=", strconv.Itoa(year))
+		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=5&charge_type_id=20,6&date=", strconv.Itoa(year))
 	case "governo":
 		target = fmt.Sprintf("%s%s%s-12-1", incomes.OpApi, "/politici/instcharges?institution_id=3&date=", strconv.Itoa(year))
 	default:
