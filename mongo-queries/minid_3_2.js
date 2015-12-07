@@ -11,13 +11,21 @@ print( "Starting analysis");
 print("######################################")
 
 result = db['all'].aggregate(
-		//{ $match: { "anno_dichiarazione": 2013, "totale_contributi_elettorali":{ $gt: 0}}},
-		{ $match: { "anno_dichiarazione": 2013 }},
+		{ $sort: {"anno_dichiarazione": 1}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                // this will get 2013 data with sorting above
+                contributi_elettorali: { $first: "$contributi_elettorali"},
+                // this will get 2014 data with sorting above
+                incarichi: { $last: "$incarichi"}
+              }
+    },
 
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter multiple roles
 		{ $group: {
-                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione"},
+                _id : {op_id: "$_id.op_id", istituzione: "$incarichi.istituzione"},
                contributi: { $last: "$contributi_elettorali" }
               }
     },
@@ -35,13 +43,21 @@ result.forEach( function(i) {
 });
 
 result = db['all'].aggregate(
-		//{ $match: { "anno_dichiarazione": 2013, "totale_contributi_elettorali":{ $gt: 0}}},
-		{ $match: { "anno_dichiarazione": 2013 }},
+		{ $sort: {"anno_dichiarazione": 1}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                // this will get 2013 data with sorting above
+                totale_contributi_elettorali: { $first: "$totale_contributi_elettorali"},
+                // this will get 2014 data with sorting above
+                incarichi: { $last: "$incarichi"}
+              }
+    },
 
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter multiple roles
 		{ $group: {
-                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
+                _id : {op_id: "$_id.op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
                totale_contributi: { $last: "$totale_contributi_elettorali" }
               }
     },

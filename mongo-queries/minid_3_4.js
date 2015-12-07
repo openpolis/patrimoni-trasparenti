@@ -11,13 +11,22 @@ print( "Starting analysis");
 print("######################################")
 
 result = db['all'].aggregate(
-		//{ $match: { "anno_dichiarazione": 2013, "totale_contributi_elettorali":{ $gt: 0}}},
-		{ $match: { "anno_dichiarazione": 2013 }},
+		{ $match: {"totale_spese_elettorali":{ $gt: 0}}},
+		{ $sort: {"anno_dichiarazione": 1}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                // this will get 2013 data with sorting above
+                spese_elettorali: { $first: "$spese_elettorali"},
+                // this will get 2014 data with sorting above
+                incarichi: { $last: "$incarichi"}
+              }
+    },
 
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter multiple roles
 		{ $group: {
-                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione"},
+                _id : {op_id: "$_id.op_id", istituzione: "$incarichi.istituzione"},
                spese: { $last: "$spese_elettorali" }
               }
     },

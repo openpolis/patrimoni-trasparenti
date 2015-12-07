@@ -12,16 +12,25 @@ print("######################################")
 
 //_id : {gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione", indice_completezza: "$indice_completezza"},
 result = db['all'].aggregate(
-		{ $match: {"anno_dichiarazione": 2013}},
+		{ $sort: {"anno_dichiarazione": 1}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                // this will get 2013 data with sorting above
+                dichiarazione_elettorale: { $first: "$dichiarazione_elettorale"},
+                // this will get 2014 data with sorting above
+                incarichi: { $last: "$incarichi"}
+              }
+    },
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter multiple roles
 		{ $group: {
-                _id : {op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione", dichiarazione_elettorale: "$dichiarazione_elettorale"},
-               roles_count: { $sum: 1}
+                _id : {op_id: "$_id.op_id",  gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
+                dichiarazione_elettorale: { $last: "$dichiarazione_elettorale"},
               }
     },
 		{ $group: {
-                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione", dichiarazione_elettorale: "$_id.dichiarazione_elettorale"},
+                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione", dichiarazione_elettorale: "$dichiarazione_elettorale"},
                count: { $sum: 1}
               }
     },
@@ -35,16 +44,26 @@ result.forEach( function(i) {
 });
 
 result = db['all'].aggregate(
-		{ $match: {"anno_dichiarazione": 2013}},
+		{ $sort: {"anno_dichiarazione": 1}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                // this will get 2013 data with sorting above
+                dichiarazione_elettorale: { $first: "$dichiarazione_elettorale"},
+                // this will get 2014 data with sorting above
+                incarichi: { $last: "$incarichi"}
+              }
+    },
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
-		{ $match: { "incarichi.partito.acronym": { $ne: ""}}},
+		//{ $match: { "incarichi.partito.acronym": { $ne: ""}}},
+    // filter multiple roles
 		{ $group: {
-                _id : { op_id: "$op_id", partito: "$incarichi.partito.acronym",  dichiarazione_elettorale: "$dichiarazione_elettorale" },
+                _id : { op_id: "$_id.op_id", partito: "$incarichi.partito.acronym"  },
+                dichiarazione_elettorale: { $last: "$dichiarazione_elettorale"}
               }
     },
 		{ $group: {
-                _id : {  partito: "$_id.partito", dichiarazione_elettorale: "$_id.dichiarazione_elettorale"},
+                _id : {  partito: "$_id.partito", dichiarazione_elettorale: "$dichiarazione_elettorale"},
                count: { $sum: 1}
               }
     },

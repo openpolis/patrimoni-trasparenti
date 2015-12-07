@@ -72,6 +72,10 @@ Create text index on all fields::
 
         db.all.createIndex({ "$**": "text" }, { name: "TextIndex" })
 
+Remove political data::
+
+        db.all.update({},{$unset: {incarichi:1}},false,true)
+
 ES commands
 ===========
 
