@@ -339,6 +339,10 @@ footer strong {
   border-radius: 6px;
   border: 2px solid #cccccc;
   padding: 0;
+  max-height: 200px;
+  min-height: 50px;
+  overflow-y: auto;
+  z-index: 9999;
 }
 .ui-autocomplete li {
   font-size: 12px;

@@ -9,6 +9,7 @@ angular.module('PatrimoniTrasparenti')
             html: true,
             focusOpen: true,
             onlySelectValid: true,
+            outHeight: 100,
             source: function (request, response) {
                 var data = [];
                 //console.log("making req to autocompl, spinner and $scope:", $scope.Spinner, $scope)
