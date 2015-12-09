@@ -27,4 +27,17 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ui.autocomplete'])
         return result.join(' ');
       }
     };
+  })
+  .filter('format_note_completezza', function() {
+    return function (input, format) {
+      if (!input) {
+        return input;
+      }
+      if (format === 'title') {
+        return input.split(":")[0].trim();
+      } else if (format === 'body') {
+        return input.split(":")[1].trim();
+      }
+      return input;
+    };
   });

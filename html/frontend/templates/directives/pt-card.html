@@ -96,8 +96,8 @@
                                 </div>
                             </div>
                             <div class="col-md-7">
-                                <p class="font-size-medium"><b>Non rispetta gli adempimenti di legge.</b><br/>
-                                    La dichiarazione dei redditi non è completa ma c'è solo il quadro di riepilogo.</p>
+                              <p class="font-size-medium"><b>{{scheda.note_completezza | format_note_completezza:'title' | capitalize:'first' }}</b><br/>
+                                {{scheda.note_completezza | format_note_completezza:'body' | capitalize:'first'}}.</p>
                             </div>
                         </div>
                     </div>
