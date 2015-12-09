@@ -1,0 +1,13 @@
+<div class="PT-news-section">
+    <div class="row">
+        <div ng-repeat="article in articles" class="col-md-4 col">
+          <p class="date"><a href="{{article.link}}" class="btn btn-primary">{{article.pubDate | date:'medium'}}</a></p>
+          <p class="headline">{{article.title}}</p>
+            <hr/>
+            <p class="excerpt">{{article.description}}</p>
+            <p><a href="{{article.link}}" class="post-link pull-right">Continua</a></p>
+        </div>
+    </div>
+    <div class="read-all"><hr/><a href="http://blog.openpolis.it" class="post-link">Leggi tutti</a>
+    </div>
+</div>
