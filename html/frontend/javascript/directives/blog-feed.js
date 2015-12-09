@@ -24,7 +24,7 @@ angular.module("PatrimoniTrasparenti")
                   // Only display last 3 articles.
                   if (i < 3) {
                     i++;
-                    console.log(item);
+                    //console.log(item);
                     scope.articles.push(item);
                   };
               });
