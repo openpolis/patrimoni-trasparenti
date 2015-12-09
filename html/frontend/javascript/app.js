@@ -34,9 +34,17 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ui.autocomplete'])
         return input;
       }
       if (format === 'title') {
-        return input.split(":")[0].trim();
+        if (input.split(":").length >= 2) {
+          return input.split(":")[0].trim();
+        } else {
+          return input;
+        }
       } else if (format === 'body') {
-        return input.split(":")[1].trim();
+        if (input.split(":").length >= 2) {
+          return input.split(":")[1].trim();
+        } else {
+          return '';
+        }
       }
       return input;
     };
