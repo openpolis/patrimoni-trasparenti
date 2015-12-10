@@ -5,8 +5,8 @@ angular.module("PatrimoniTrasparenti")
       templateUrl: "templates/directives/blog-feed.html",
       scope: {},
       link: function(scope, element, attributes) {
-        console.log('fetching blog feed...');
-        $.get('http://blog.openpolis.it/feed/', function(data) {
+        //console.log('fetching blog feed...');
+        $.get('http://blog.openpolis.it/categorie/campagne/patrimonitrasparenti/feed/', function(data) {
             $timeout(function(){
               scope.articles = [];
               var i = 0;

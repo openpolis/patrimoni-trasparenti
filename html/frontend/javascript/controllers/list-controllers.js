@@ -1,6 +1,5 @@
 angular.module('PatrimoniTrasparenti')
   .controller('ListController', ['$scope', '$filter', 'Declarations', function($scope, $filter, Declarations){
-    console.log('ctrl start');
     $scope.orderK = "cognome";
     $scope.selectOrder = function(k) {
     // this function is no more used
