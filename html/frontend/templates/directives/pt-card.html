@@ -52,15 +52,15 @@
                             </p>
 
                             <p ng-show="incarico.gruppo.acronym">
-                                Gruppo: <strong><a ng-href="#/gruppo/{{incarico.gruppo.acronym}}">{{incarico.gruppo.acronym}} - {{incarico.gruppo.name}}</a></strong>
+                                Gruppo: <strong><a ng-href="#/gruppo/{{incarico.gruppo.acronym}}">{{incarico.gruppo.acronym|capitalize:'first'}} - {{incarico.gruppo.name}}</a></strong>
                             </p>
 
                             <p>
-                                Partito: <strong>{{incarico.partito.acronym}} - {{incarico.partito.name}}</strong>
+                                Partito: <strong>{{incarico.partito.acronym|capitalize:'first'}} - {{incarico.partito.name}}</strong>
                             </p>
 
                             <p ng-show="incarico.circoscrizione">
-                                Circoscrizione: <strong><a ng-href="#/circoscrizioni/{{incarico.circoscrizione}}">{{incarico.circoscrizione}}</a></strong>
+                                Circoscrizione: <strong><a ng-href="#/circoscrizioni/{{incarico.circoscrizione}}">{{incarico.circoscrizione|capitalize:'first'}}</a></strong>
                             </p>
                         </div>
                     </div>

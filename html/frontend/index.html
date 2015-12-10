@@ -47,8 +47,8 @@
                  deve essere visualizzato con codice angular nei rooting in cui è necessario
                  (tutti tranne la home ???)
              -->
-            <form ng-controller="SearchController as searchCtl" class="navbar-form navbar-left" style="display: none;">
-                <div class="form-group">
+            <form ng-controller="SearchController as searchCtl" class="navbar-form navbar-left">
+                <div class="form-group" ng-show="showMiniSearch">
                     <label ng-show="searchCtl.spinner"><span class="glyphicon glyphicon-refresh spinning white"></span></label>
                     <input ng-model="searchCtl.searchObj" ui-autocomplete="myOption" type="text" placeholder="Cerca..." class="form-control" >
                 </div>
@@ -58,7 +58,7 @@
 </nav>
 
 <div class="container">
-    <div ng-controller="BreadCrumbController as breadCtl" class="breadcrumbs-box">
+    <div ng-controller="BreadCrumbController as breadCtl" ng-show="showBread" class="breadcrumbs-box">
         <hr/>
         <ol class="breadcrumb">
             <li><a href="#/">Home</a></li>

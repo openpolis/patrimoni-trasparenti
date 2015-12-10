@@ -2,6 +2,13 @@ angular.module('PatrimoniTrasparenti')
   .controller('SearchController', ['$scope', '$compile', '$location', '$filter', 'Declarations', function($scope, $compile, $location, $filter, Declarations) {
     this.searchObj = {id:'', value:''};
     var controller = this;
+    $scope.$on('$locationChangeSuccess', function(){
+      if ($location.path() === '/') {
+        $scope.showMiniSearch = false;
+      } else {
+        $scope.showMiniSearch = true;
+      };
+    });
     controller.spinner = false;
     /* config object */
     $scope.myOption = {
@@ -13,7 +20,7 @@ angular.module('PatrimoniTrasparenti')
             source: function (request, response) {
                 var data = [];
                 //console.log("making req to autocompl, spinner and $scope:", $scope.Spinner, $scope)
-                console.log("req:", request)
+                //console.log("req:", request)
                 // Do not make remote call if term is too short.
                 if (request.term.length < 2) {
                   rData = [];
@@ -71,10 +78,10 @@ angular.module('PatrimoniTrasparenti')
         },
         events : {
             select: function( event, ui ) {
-                console.log("selected!");
-                console.log(controller.searchObj);
-                console.log('ui:', ui);
-                console.log(ui.item);
+                //console.log("selected!");
+                //console.log(controller.searchObj);
+                //console.log('ui:', ui);
+                //console.log(ui.item);
                 if ('acronym' in ui.item) {
                   $location.path('/gruppo/'+ui.item.acronym);
                 } else if ('istitution' in ui.item) {
@@ -86,8 +93,8 @@ angular.module('PatrimoniTrasparenti')
                 };
             },
             close: function( event, ui ) {
-                console.log("closed!");
-                console.log('searchObj:', controller.searchObj);
+                //console.log("closed!");
+                //console.log('searchObj:', controller.searchObj);
             }
         },
         methods: {}
