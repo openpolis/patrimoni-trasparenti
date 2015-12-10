@@ -1,5 +1,5 @@
 angular.module("PatrimoniTrasparenti")
-  .directive("ptList", function() {
+  .directive("ptList", [ '$timeout', function($timeout) {
     return {
       restrict: "E",
       scope: {
@@ -7,7 +7,12 @@ angular.module("PatrimoniTrasparenti")
         key: "@"
       },
       templateUrl: "templates/directives/pt-list.html",
+      link: function(scope, element, attributes) {
+        $timeout(function(){
+          $('.selectpicker').selectpicker();
+        });
+      },
       controller: 'ListController',
       controllerAs: 'listCtrl'
     };
-});
+}]);
