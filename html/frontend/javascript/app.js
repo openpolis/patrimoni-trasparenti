@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('PatrimoniTrasparenti', ['ngRoute', 'ui.autocomplete'])
+angular.module('PatrimoniTrasparenti', ['ngRoute', 'ngSanitize', 'ui.autocomplete'])
   .config(function(DeclarationsProvider){
     DeclarationsProvider.setEndPoint('//patrimoni.staging.openpolis.it/api');
   })

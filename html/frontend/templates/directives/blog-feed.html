@@ -1,10 +1,10 @@
 <div class="PT-news-section">
     <div class="row">
         <div ng-repeat="article in articles" class="col-md-4 col">
-          <p class="date"><a href="{{article.link}}" class="btn btn-primary">{{article.pubDate | date:'medium'}}</a></p>
+          <p class="date"><a href="{{article.link}}" class="btn btn-primary">{{article.pubDate | date:'dd//MM/yyyy'}}</a></p>
           <p class="headline">{{article.title}}</p>
             <hr/>
-            <p class="excerpt">{{article.description}}</p>
+            <p ng-bind-html="article.description" class="excerpt"></p>
             <p><a href="{{article.link}}" class="post-link pull-right">Continua</a></p>
         </div>
     </div>
