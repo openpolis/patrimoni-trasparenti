@@ -408,6 +408,11 @@ footer strong {
   color: #35a578;
   background-color: #35a578;
 }
+
+.progress-step { position: absolute; z-index: 1; width: 1px; background-color: #206448; height: 15px; }
+.progress-step-1_3 { left: 36% }
+.progress-step-2_3 { left: 64% }
+
 .media .media-heading a {
   color: #2fb06d;
   font-size: 14px;
