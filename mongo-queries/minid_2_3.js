@@ -21,7 +21,7 @@ result = db['all'].aggregate(
     },
 		{ $unwind: "$beni_immobili"},
 		{ $group: {
-                _id : { tipologia: "$_id.tipologia", tipologia: "$beni_immobili.descrizione", istituzione: "$_id.istituzione" },
+                _id : { tipologia: "$beni_immobili.descrizione", istituzione: "$_id.istituzione" },
                count: { $sum: 1}
               }
     },
@@ -128,3 +128,25 @@ print("persone con le occorrenze di terreni e fabbricati");
 result.forEach( function(i) {
           print( i._id.op_id, ",", i.nome, ",", i.cognome);
 });
+
+// a quanti corrispondono le occorrenze di "terreni" e "fabbricati"
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$beni_immobili"},
+    { $match: { $or: [
+      { "beni_immobili.descrizione": { $eq: "terreni"}},
+      { "beni_immobili.descrizione": { $eq: "fabbricati"}}
+    ]}},
+		{ $group: {
+                _id : {op_id: "$op_id" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" }
+              }
+    }
+);
+
+resultsArray = result.toArray();
+
+print("occorrenze di terreni e fabbricati");
+print(resultsArray.length );
