@@ -89,7 +89,7 @@ angular.module('PatrimoniTrasparenti')
                 } else if ('district' in ui.item) {
                   $location.path('/circoscrizioni/'+ui.item.district);
                 } else {
-                  $location.path('/scheda/'+ui.item.id);
+                  $location.path('/scheda/'+ui.item.value.replace(/ /g,'-')+'/'+ui.item.id);
                 };
             },
             close: function( event, ui ) {

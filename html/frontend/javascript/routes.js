@@ -9,7 +9,7 @@ angular.module('PatrimoniTrasparenti')
     .when('/campagna', {
     templateUrl: '/templates/pages/campagna/index.html'
   })
-    .when('/scheda/:id', {
+    .when('/scheda/:name/:id', {
     templateUrl: '/templates/pages/scheda/index.html',
     controller: function($routeParams) {
       this.opId = $routeParams.id;

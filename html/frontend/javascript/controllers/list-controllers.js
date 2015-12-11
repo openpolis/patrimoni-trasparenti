@@ -1,5 +1,5 @@
 angular.module('PatrimoniTrasparenti')
-  .controller('ListController', ['$scope', '$filter', 'Declarations', function($scope, $filter, Declarations){
+  .controller('ListController', ['$scope', '$location', '$filter', 'Declarations', function($scope, $location, $filter, Declarations){
     $scope.orderK = "cognome";
     $scope.selectOrder = function(k) {
     // this function is no more used
@@ -13,6 +13,7 @@ angular.module('PatrimoniTrasparenti')
       window.scrollBy(0, 1);
     });
     $scope.spinner = true;
+    $scope.listLabel = $location.path().split('/')[1];
 
     Declarations.getBy($scope.type, $scope.key)
       .success(function(results){

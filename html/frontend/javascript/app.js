@@ -40,6 +40,15 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ngSanitize', 'ui.autocomplet
       };
     };
   })
+  .filter('hypenize', function() {
+    return function (input, format) {
+      if (!input) {
+        return input;
+      } else {
+        return input.replace(/ /g,'-');
+      };
+    };
+  })
   .filter('format_note_completezza', function() {
     return function (input, format) {
       if (!input) {

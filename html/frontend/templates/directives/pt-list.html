@@ -20,7 +20,7 @@
             <div class="PT-results-controls">
                 <div class="row">
                     <div class="col-md-4">
-                        <b>{{results.length}}</b> risultati in <b>{{type}} / {{key|capitalize:all}}</b>
+                        <b>{{results.length}}</b> risultati in <b>{{listLabel}} / {{key|capitalize:all}}</b>
                     </div>
                     <div class="col-md-8">
 
@@ -104,7 +104,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading">
-                                            <a href="#/scheda/{{result.op_id}}">
+                                            <a href="#/scheda/{{result.cognome|hypenize}}-{{result.nome|hypenize}}/{{result.op_id}}">
                                                 {{result.nome|capitalize:all}}
                                                 {{result.cognome|capitalize:all}}
                                             </a>
