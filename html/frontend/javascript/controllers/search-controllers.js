@@ -2,7 +2,7 @@ angular.module('PatrimoniTrasparenti')
   .controller('SearchController', ['$scope', '$compile', '$location', '$filter', 'Declarations', function($scope, $compile, $location, $filter, Declarations) {
     this.searchObj = {id:'', value:''};
     var controller = this;
-    $scope.$on('$locationChangeSuccess', function(){
+    $scope.$on('$locationChangeSuccess', function() {
       if ($location.path() === '/') {
         $scope.showMiniSearch = false;
       } else {

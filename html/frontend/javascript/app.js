@@ -28,6 +28,18 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ngSanitize', 'ui.autocomplet
       }
     };
   })
+  .filter('no_data', function() {
+    return function (input, format) {
+      if (!input) {
+        return '-'
+      };
+      if (input <= 0 || input === '' || input === '€0.00') {
+        return '-'
+      } else {
+        return input;
+      };
+    };
+  })
   .filter('format_note_completezza', function() {
     return function (input, format) {
       if (!input) {

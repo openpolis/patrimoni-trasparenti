@@ -1,13 +1,13 @@
 <div class="PT-news-section">
     <div class="row">
         <div ng-repeat="article in articles" class="col-md-4 col">
-          <p class="date"><a href="{{article.link}}" class="btn btn-primary">{{article.pubDate | date:'dd//MM/yyyy'}}</a></p>
+          <p class="date"><a href="{{article.link}}" target="_blank" class="btn btn-primary">{{article.pubDate | date:'dd//MM/yyyy'}}</a></p>
           <p class="headline">{{article.title}}</p>
             <hr/>
             <p ng-bind-html="article.description" class="excerpt"></p>
-            <p><a href="{{article.link}}" class="post-link pull-right">Continua</a></p>
+            <p><a href="{{article.link}}" target="_blank" class="post-link pull-right">Continua</a></p>
         </div>
     </div>
-    <div class="read-all"><hr/><a href="http://blog.openpolis.it" class="post-link">Leggi tutti</a>
+    <div class="read-all"><hr/><a href="http://blog.openpolis.it" target="_blank" class="post-link">Leggi tutti</a>
     </div>
 </div>

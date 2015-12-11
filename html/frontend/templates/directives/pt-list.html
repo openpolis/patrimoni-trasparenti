@@ -112,7 +112,7 @@
 
                                         <p>
                                             Data nascita: <b>{{result.data_nascita|date:'d/M/yyyy'}}</b><br>
-                                            Istituzioni: <b>{{result.istituzioni}}</b><br>
+                                            Istituzioni: <b ng-repeat="ist in result.istituzioni">{{ist}} </b><br>
                                             Professione: <b>{{result.professione}}</b><br>
                                             Media reddito: <b>{{result.reddito_medio|currency:"€"}}</b>
                                         </p>
