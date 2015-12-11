@@ -403,6 +403,7 @@ footer strong {
   border-radius: 7px;
   background-color: #e3e3e3;
   margin-top: 2px;
+  position: relative;
 }
 .progress-bar {
   color: #35a578;
@@ -410,8 +411,8 @@ footer strong {
 }
 
 .progress-step { position: absolute; z-index: 1; width: 1px; background-color: #206448; height: 15px; }
-.progress-step-1_3 { left: 36% }
-.progress-step-2_3 { left: 64% }
+.progress-step-1_3 { left: 33.33% }
+.progress-step-2_3 { left: 66.66% }
 
 .media .media-heading a {
   color: #2fb06d;
