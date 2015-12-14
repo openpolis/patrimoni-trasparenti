@@ -92,7 +92,7 @@
                             <div class="panel-body">
                                 <div class="media">
                                     <div class="media-left">
-                                        <a href="#/scheda/{{result.op_id}}">
+                                        <a href="#/scheda/{{result.cognome|hypenize}}-{{result.nome|hypenize}}/{{result.op_id}}">
                                             <img
                                                     bn-lazy-src="http://op_openparlamento_images.s3.amazonaws.com/parlamentari/picture/{{result.op_id}}.jpeg"
                                                     alt="{{result.nome|capitalize:all}} {{result.cognome|capitalize:all}}"
