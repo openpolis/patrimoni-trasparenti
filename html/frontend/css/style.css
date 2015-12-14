@@ -304,9 +304,11 @@ footer strong {
   text-align: center;
   padding-top: 10px;
 }
+/*do not stretch footer images
 .funding-campaign img {
   padding: 0 6px;
 }
+*/
 .funding-campaign p {
   margin: 0;
 }
