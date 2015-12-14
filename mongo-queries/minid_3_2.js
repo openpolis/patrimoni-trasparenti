@@ -37,9 +37,9 @@ result = db['all'].aggregate(
     }
 );
 
-print( "voce", ";", "totale");
+print( "voce", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.voce, ";", i.total);
+          print( i._id.voce, ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });
 
 result = db['all'].aggregate(
@@ -82,7 +82,7 @@ result = db['all'].aggregate(
     { $limit: 10 }
 );
 
-print( "nome", ";", "cognome", ";", "totale");
+print( "nome", ",", "cognome", ",", "totale");
 result.forEach( function(i) {
           print( i.nome, ",", i.cognome, ', "'+ i.totale_contributi_elettorali.toString().replace(/\./, ',') +'"');
 });
