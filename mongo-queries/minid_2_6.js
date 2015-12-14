@@ -20,6 +20,7 @@ result = db['all'].aggregate(
               }
     },
 		{ $unwind: "$amministrazioni_soc"},
+    { $match: { "amministrazioni_soc.persona": "dichiarante" } },
 		{ $group: {
                 _id : { istituzione: "$_id.istituzione", incarico: "$amministrazioni_soc.natura_incarico" },
                count: { $sum: 1},
@@ -37,6 +38,7 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
 
 		{ $unwind: "$amministrazioni_soc"},
+    { $match: { "amministrazioni_soc.persona": "dichiarante" } },
 		{ $match: { "amministrazioni_soc.natura_incarico": { $eq: ""}}},
 		{ $group: {
                 _id : { op_id:"$op_id", nome: "$nome", cognome: "$cognome"},
@@ -46,7 +48,7 @@ result = db['all'].aggregate(
 		{ $sort: {"_id.istituzione":-1, "count":-1}}
 );
 
-print( "natura_incarico"),
+print( "natura_incarico vuoto"),
 result.forEach( function(i) {
           print( i._id.op_id, ",", i._id.nome, ",", i._id.cognome);
 });

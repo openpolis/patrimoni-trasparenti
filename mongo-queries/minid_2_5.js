@@ -14,6 +14,8 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "partecipazioni_soc": { $not: {$size: 0} } } },
 
 		{ $unwind: "$incarichi"},
+		{ $unwind: "$partecipazioni_soc"},
+    { $match: { "partecipazioni_soc.persona": "dichiarante" } },
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
                 _id : { op_id: "$op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione" },
@@ -36,6 +38,8 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "partecipazioni_soc": { $not: {$size: 0} } } },
 
 		{ $unwind: "$incarichi"},
+		{ $unwind: "$partecipazioni_soc"},
+    { $match: { "partecipazioni_soc.persona": "dichiarante" } },
 		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
 		{ $match: { "incarichi.partito.acronym": { $ne: ""}}},
 		{ $group: {

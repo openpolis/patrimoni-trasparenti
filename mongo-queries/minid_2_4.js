@@ -20,6 +20,7 @@ result = db['all'].aggregate(
               }
     },
 		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
 		{ $group: {
                 _id : { tipologia: "$beni_mobili.tipologia", istituzione: "$_id.istituzione" },
                count: { $sum: 1}
@@ -38,6 +39,7 @@ result = db['all'].aggregate(
 
 		{ $unwind: "$incarichi"},
 		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
 		{ $group: {
                  _id: { op_id:"$op_id", tipologia: "$beni_mobili.tipologia", istituzione: "$incarichi.istituzione" },
                count: { $sum: 1}
@@ -69,6 +71,7 @@ result = db['all'].aggregate(
               }
     },
 		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
 		{ $match: { "beni_mobili.tipologia": { $eq: ""}}},
 		{ $group: {
                 _id : { op_id:"$_id.op_id", nome: "$nome", cognome: "$cognome"},

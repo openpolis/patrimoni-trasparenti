@@ -20,6 +20,7 @@ result = db['all'].aggregate(
               }
     },
 		{ $unwind: "$beni_immobili"},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
 		{ $group: {
                 _id : { tipologia: "$beni_immobili.descrizione", istituzione: "$_id.istituzione" },
                count: { $sum: 1}
@@ -36,6 +37,8 @@ result.forEach( function(i) {
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "beni_immobili": { $not: {$size: 0} } } },
 
+		{ $unwind: "$beni_immobili"},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
 		{ $unwind: "$incarichi"},
 		{ $group: {
                 _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
@@ -70,6 +73,8 @@ result = db['all'].aggregate(
     ] } },
 
 		{ $unwind: "$incarichi"},
+		{ $unwind: "$beni_immobili"},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
 		{ $group: {
                 _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
               }
@@ -94,6 +99,7 @@ result = db['all'].aggregate(
 
 		{ $unwind: "$beni_immobili"},
 		{ $match: { "beni_immobili.descrizione": { $eq: "" } } },
+    { $match: { "beni_immobili.persona": "dichiarante" } },
 		{ $group: {
                 _id : {op_id: "$op_id" },
                 nome: { $last: "$nome" },
@@ -112,6 +118,7 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
 
 		{ $unwind: "$beni_immobili"},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
     { $match: { $or: [
       { "beni_immobili.descrizione": { $eq: "terreni"}},
       { "beni_immobili.descrizione": { $eq: "fabbricati"}}
@@ -134,6 +141,7 @@ result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
 
 		{ $unwind: "$beni_immobili"},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
     { $match: { $or: [
       { "beni_immobili.descrizione": { $eq: "terreni"}},
       { "beni_immobili.descrizione": { $eq: "fabbricati"}}
