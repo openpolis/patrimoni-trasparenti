@@ -52,3 +52,23 @@ print( "natura_incarico vuoto"),
 result.forEach( function(i) {
           print( i._id.op_id, ",", i._id.nome, ",", i._id.cognome);
 });
+
+// hanno annotazioni in amministrazioni_soc
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
+
+		{ $unwind: "$amministrazioni_soc"},
+    { $match: { "amministrazioni_soc.persona": "dichiarante" } },
+		{ $match: { "amministrazioni_soc.annotazioni": { $ne: ""}}},
+		{ $group: {
+                _id : { op_id:"$op_id", nome: "$nome", cognome: "$cognome"},
+               count: { $sum: 1},
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "count":-1}}
+);
+
+print( "amministrazioni_soc con annotazioni"),
+result.forEach( function(i) {
+          print( i._id.op_id, ",", i._id.nome, ",", i._id.cognome);
+});
