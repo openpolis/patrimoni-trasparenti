@@ -32,9 +32,9 @@ result = db['all'].aggregate(
 );
 
 
-print( "gruppo", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.media_reddito);
+          print( i._id.gruppo, ",", i._id.istituzione, ', "'+ i.media_reddito.toString().replace(/\./, ',') +'"');
 });
 
 
@@ -60,9 +60,9 @@ result = db['all'].aggregate(
 );
 
 
-print( "partito", ";", "istituzione", ";", "totale");
+print( "partito", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.partito, ";", i._id.istituzione, ";", i.media_reddito);
+          print( i._id.gruppo, ",", i._id.istituzione, ', "'+ i.media_reddito.toString().replace(/\./, ',')+'"');
 });
 
 // gruppo "vuoto"

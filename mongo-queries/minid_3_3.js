@@ -40,7 +40,7 @@ result = db['all'].aggregate(
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
 );
 
-print( "gruppo", ";", "istituzione", ";", "totale", ";", "media");
+print( "gruppo", ",", "istituzione", ",", "totale", ",", "media");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.count, ";", i.media_spese);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count, ', "'+ i.media_spese.toString().replace(/\./, ',') +'"');
 });

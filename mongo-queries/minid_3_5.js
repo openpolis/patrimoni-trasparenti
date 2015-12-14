@@ -24,9 +24,9 @@ result = db['all'].aggregate(
 		{ $sort: {"count":-1} }
 );
 
-print( "voce", ";", "numero");
+print( "voce", ",", "numero");
 result.forEach( function(i) {
-          print( i._id.voce, ";", i.count);
+          print( i._id.voce, ",", i.count);
 });
 
 result = db['all'].aggregate(
@@ -43,9 +43,9 @@ result = db['all'].aggregate(
 		{ $sort: {"count":-1} }
 );
 
-print( "voce", ";", "numero");
+print( "voce", ",", "numero");
 result.forEach( function(i) {
-          print( i._id.voce, ";", i.count);
+          print( i._id.voce, ",", i.count);
 });
 
 result = db['all'].aggregate(

@@ -30,9 +30,9 @@ result = db['all'].aggregate(
 );
 
 print("0-80k");
-print( "gruppo", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // 80k-150k
@@ -56,9 +56,9 @@ result = db['all'].aggregate(
 
 
 print("80k-150k");
-print( "gruppo", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // 150k-500k
@@ -82,9 +82,9 @@ result = db['all'].aggregate(
 
 
 print("150k-500k");
-print( "gruppo", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // 500k-1M
@@ -107,9 +107,9 @@ result = db['all'].aggregate(
 );
 
 print("500k-1M");
-print( "gruppo", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // >1M
@@ -132,9 +132,9 @@ result = db['all'].aggregate(
 );
 
 print(">1M");
-print( "gruppo", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // ======= Governo ===========
@@ -158,9 +158,9 @@ result = db['all'].aggregate(
 );
 
 print("0-80k");
-print( "partito", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.partito, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // 80k-150k
@@ -184,9 +184,9 @@ result = db['all'].aggregate(
 
 
 print("80k-150k");
-print( "partito", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.partito, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // 150k-500k
@@ -209,9 +209,9 @@ result = db['all'].aggregate(
 );
 
 print("150k-500k");
-print( "partito", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.partito, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // 500k-1M
@@ -234,9 +234,9 @@ result = db['all'].aggregate(
 );
 
 print("500k-1M");
-print( "partito", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.partito, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });
 
 // >1M
@@ -259,7 +259,7 @@ result = db['all'].aggregate(
 );
 
 print(">1M");
-print( "partito", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.partito, ";", i._id.istituzione, ";", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i.count);
 });

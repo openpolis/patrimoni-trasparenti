@@ -69,9 +69,9 @@ result = db['all'].aggregate(
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
 );
 
-print( "gruppo", ";", "istituzione", ";", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ";", i._id.istituzione, ";", i.total);
+          print( i._id.gruppo, ",", i._id.istituzione, ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });
 
 result = db['all'].aggregate(
@@ -84,5 +84,5 @@ result = db['all'].aggregate(
 
 print( "nome", ";", "cognome", ";", "totale");
 result.forEach( function(i) {
-          print( i.nome, ";", i.cognome, ";", i.totale_contributi_elettorali);
+          print( i.nome, ",", i.cognome, ', "'+ i.totale_contributi_elettorali.toString().replace(/\./, ',') +'"');
 });

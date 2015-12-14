@@ -38,7 +38,7 @@ result = db['all'].aggregate(
     }
 );
 
-print( "voce", ";", "totale");
+print( "voce", ",", "totale");
 result.forEach( function(i) {
-          print( i._id.voce, ";", i.total);
+          print( i._id.voce, ', "' +i.total.toString().replace(/\./, ',')+'"');
 });
