@@ -65,6 +65,14 @@ Test it with::
 
         $ bin/rest-docs -api "http://openpatrimoni.deppsviluppo.org"
 
+Dump data for OpenData page
+---------------------------
+
+From ``./mongo-queries``::
+
+        $ ./export_csv.sh
+        $ ./export_json.sh
+
 MongoDB commands
 ================
 
