@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"bitbucket.org/eraclitux/op-incomes"
 	"github.com/eraclitux/httph"
+	"github.com/eraclitux/stracer"
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -104,6 +106,45 @@ func ListHandlerGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err = json.NewEncoder(w).Encode(results)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		ErrorLogger.Println("encoding declarations in json", err)
+		return
+	}
+	return
+}
+
+func DownloadAllGet(w http.ResponseWriter, r *http.Request) {
+	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
+	if !ok {
+		ErrorLogger.Println("cannot find a db session")
+		http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+		return
+	}
+	vars := mux.Vars(r)
+	session := sessionInterface.(*mgo.Session)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	results := []bson.M{}
+	year, err := strconv.Atoi(vars["year"])
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		ErrorLogger.Println("decoding year", err)
+		return
+	}
+	pipe := coll.Pipe([]bson.M{
+		{"$match": bson.M{"anno_dichiarazione": year}},
+	})
+	iter := pipe.Iter()
+	err = iter.All(&results)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		ErrorLogger.Println("retrieving declarations from db", err)
+		return
+	}
+	stracer.Traceln(year)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Content-Disposition", "attachment; filename=\""+vars["year"]+".json\"")
 	err = json.NewEncoder(w).Encode(results)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

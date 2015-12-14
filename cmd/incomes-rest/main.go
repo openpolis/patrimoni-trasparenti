@@ -348,6 +348,11 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, ListHandlerGet))))).Methods("GET")
+	router.HandleFunc("/api/all/{year}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, DownloadAllGet))))).Methods("GET")
 	// FIXME old, delete it.
 	router.HandleFunc("/api/politici/{op_id}",
 		httph.WithLog(InfoLogger,
