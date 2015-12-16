@@ -12,7 +12,8 @@ print("######################################")
 
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
-
+    // il governo da parte
+		{ $match: { "incarichi.istituzione": { $ne:"governo"}}},
 		{ $unwind: "$incarichi"},
 		{ $group: {
                 _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
@@ -34,8 +35,36 @@ result.forEach( function(i) {
           print(i._id.istituzione, ",", i._id.tipologia, ",", i.count);
 });
 
+// solo governo
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+		{ $group: {
+                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+               beni_immobili: { $last: "$beni_immobili" }
+              }
+    },
+		{ $unwind: "$beni_immobili"},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
+		{ $group: {
+                _id : { tipologia: "$beni_immobili.descrizione", istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "_id.tipologia":-1 }}
+);
+
+print( "istituzione", ",","tipologia", ",", "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i._id.tipologia, ",", i.count);
+});
+
+// parlamento
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "beni_immobili": { $not: {$size: 0} } } },
+		{ $match: { "incarichi.istituzione": { $ne:"governo"}}},
 
 		{ $unwind: "$beni_immobili"},
     { $match: { "beni_immobili.persona": "dichiarante" } },
@@ -52,7 +81,34 @@ result = db['all'].aggregate(
 		{ $sort: {"_id.istituzione":-1 }}
 );
 
-print("dichiarano beni immobili")
+print("dichiarano beni immobili parlamento")
+print( "istituzione", "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i.count);
+});
+//
+// governo
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "beni_immobili": { $not: {$size: 0} } } },
+		{ $match: { "incarichi.istituzione": { $eq:"governo"}}},
+
+		{ $unwind: "$beni_immobili"},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq:"governo"}}},
+		{ $group: {
+                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+              }
+    },
+		{ $group: {
+                _id : { istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1 }}
+);
+
+print("dichiarano beni immobili governo")
 print( "istituzione", "totale");
 result.forEach( function(i) {
           print(i._id.istituzione, ",", i.count);
@@ -113,6 +169,20 @@ result.forEach( function(i) {
           print( i._id.op_id, ",", i.nome, ",", i.cognome);
 });
 
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+		{ $match: { "incarichi.istituzione": { $eq:"camera"}}},
+    { $match: { "beni_immobili.persona": "dichiarante" } },
+		{ $match: { "beni_immobili.descrizione": { $eq:""}}}
+);
+
+resultsArray = result.toArray();
+print("no descrizione alla camera");
+print(resultsArray.length );
+resultsArray.forEach( function(i) {
+          print( i.op_id, ",", i.nome, ",", i.cognome);
+});
+
 // a chi corrispondono le occorrenze di "terreni" e "fabbricati"
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
@@ -158,3 +228,4 @@ resultsArray = result.toArray();
 
 print("occorrenze di terreni e fabbricati");
 print(resultsArray.length );
+
