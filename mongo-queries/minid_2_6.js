@@ -72,3 +72,16 @@ print( "amministrazioni_soc con annotazioni"),
 result.forEach( function(i) {
           print( i._id.op_id, ",", i._id.nome, ",", i._id.cognome);
 });
+
+// hanno più di un incarico
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
+		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 1} } } }
+);
+
+resultsArray = result.toArray();
+print( "hanno più di un incarico"),
+print(resultsArray.length );
+resultsArray.forEach( function(i) {
+          print( i.op_id, ",", i.nome, ",", i.cognome);
+});
