@@ -48,6 +48,7 @@ result = db['all'].aggregate(
                 _id : {op_id: "$op_id"},
                 // this will get 2013 data with sorting above
                 totale_contributi_elettorali: { $first: "$totale_contributi_elettorali"},
+                contributi_elettorali: { $first: "$contributi_elettorali"},
                 // this will get 2014 data with sorting above
                 incarichi: { $last: "$incarichi"}
               }
@@ -58,18 +59,25 @@ result = db['all'].aggregate(
     // filter multiple roles
 		{ $group: {
                 _id : {op_id: "$_id.op_id", gruppo: "$incarichi.gruppo.acronym", istituzione: "$incarichi.istituzione"},
-               totale_contributi: { $last: "$totale_contributi_elettorali" }
+               totale_contributi: { $last: "$totale_contributi_elettorali" },
+               contributi_elettorali: { $last: "$contributi_elettorali"}
               }
     },
+		{ $unwind: "$contributi_elettorali"},
+    { $match: { $or: [
+      { "contributi_elettorali.fonte": { $eq: "contributi da terzi"}},
+      { "contributi_elettorali.fonte": { $eq: "servizi da terzi"}},
+      { "contributi_elettorali.fonte": { $eq: "debiti"}}
+    ]}},
 		{ $group: {
                 _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione"},
-               total: { $sum: "$totale_contributi"}
+               total: { $sum: "$contributi_elettorali.importo"}
               }
     },
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
 );
 
-print( "gruppo", ",", "istituzione", ",", "totale");
+print( "gruppo", ",", "istituzione", ",", "totale (contributi + servizi + debiti)");
 result.forEach( function(i) {
           print( i._id.gruppo, ",", i._id.istituzione, ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });

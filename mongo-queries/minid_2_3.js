@@ -226,6 +226,6 @@ result = db['all'].aggregate(
 
 resultsArray = result.toArray();
 
-print("occorrenze di terreni e fabbricati");
+print("numero di \"dichiarante\" con terreni e fabbricati");
 print(resultsArray.length );
 

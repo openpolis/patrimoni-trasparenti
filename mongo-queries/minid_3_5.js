@@ -24,9 +24,37 @@ result = db['all'].aggregate(
 		{ $sort: {"count":-1} }
 );
 
-print( "voce", ",", "numero");
+result = db['all'].aggregate(
+		{ $sort: {"anno_dichiarazione": 1}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                // this will get 2013 data with sorting above
+                contributi_elettorali: { $first: "$contributi_elettorali"},
+                // this will get 2014 data with sorting above
+                incarichi: { $last: "$incarichi"}
+              }
+    },
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter multiple roles
+		{ $group: {
+                _id : {op_id: "$_id.op_id", istituzione: "$incarichi.istituzione"},
+               gruppo: { $last: "$incarichi.gruppo.acronym" },
+               contributi: { $last: "$contributi_elettorali" }
+              }
+    },
+		{ $unwind: "$contributi"},
+		{ $group: {
+                _id : {voce: "$contributi.fonte", istituzione:"$_id.istituzione", gruppo: "$gruppo"},
+               total: { $sum: "$contributi.importo"}
+              }
+    }
+);
+
+print( "gruppo", ",", "istituzione", ",", "voce",",", "totale");
 result.forEach( function(i) {
-          print( i._id.voce, ",", i.count);
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce, ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });
 
 result = db['all'].aggregate(
@@ -47,6 +75,7 @@ print( "voce", ",", "numero");
 result.forEach( function(i) {
           print( i._id.voce, ",", i.count);
 });
+
 
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2013, "dichiarazione_elettorale": true }},
@@ -70,7 +99,6 @@ result = db['all'].aggregate(
 
 array = result.toArray()
 print( "totale no spese no contributi con dichiarazione_elettorale: ", array.length );
-//print( tojson(result) );
 
 print( "op_id, no spese no contributi con dichiarazione_elettorale");
 array.forEach( function(i) {

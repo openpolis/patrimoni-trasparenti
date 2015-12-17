@@ -43,9 +43,9 @@ result = db['all'].aggregate(
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
 );
 
-print( "gruppo", ",", "istituzione", ",", "voce", ",", "count", ",", "media");
+print( "gruppo", ",", "istituzione", ",", "voce", ",", "count", ",", "media", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce ,",", i.count, ', "'+ i.media.toString().replace(/\./, ',') +'"');
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce ,",", i.count, ', "'+ i.media.toString().replace(/\./, ',') +'"', ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });
 
 result = db['all'].aggregate(
@@ -81,7 +81,7 @@ result = db['all'].aggregate(
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
 );
 
-print( "gruppo", ",", "istituzione", ",", "voce", ",", "count", ",", "media");
+print( "gruppo", ",", "istituzione", ",", "voce", ",", "count", ",", "media", "totale");
 result.forEach( function(i) {
-          print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce ,",", i.count, ', "'+ i.media.toString().replace(/\./, ',') +'"');
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce ,",", i.count, ', "'+ i.media.toString().replace(/\./, ',') +'"', ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });
