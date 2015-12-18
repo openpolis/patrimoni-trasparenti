@@ -15,7 +15,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -59,10 +58,6 @@ type daemonConf struct {
 }
 
 var conf daemonConf
-
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Please, welcome.")
-}
 
 func GetObjectIdHex(s string) (bson.ObjectId, error) {
 	if !bson.IsObjectIdHex(s) {
@@ -311,6 +306,8 @@ func SetupLoggers(o io.Writer) {
 }
 
 func main() {
+	// It contains andpoint to print when /api is called
+	eps := []string{}
 	conf = daemonConf{
 		Httpport:  "8080",
 		Mongohost: "localhost",
@@ -341,8 +338,10 @@ func main() {
 	InfoLogger.Println("connected to mongo:", conf.Mongohost)
 
 	router := mux.NewRouter()
-	// ===== Public APIs
-	router.HandleFunc("/", httph.WithLog(InfoLogger, HomeHandler))
+	router.StrictSlash(true)
+
+	// ===== Public UI APIs
+	// This end point are used only by the ui
 	router.HandleFunc("/api/list/{type}/{key}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
@@ -353,12 +352,12 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, DownloadAllGet))))).Methods("GET")
-	// FIXME old, delete it.
-	router.HandleFunc("/api/politici/{op_id}",
+	// This ep is used by ui
+	router.HandleFunc("/api/politici-ui/{op_id}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
-					httph.WithMongo(mongoSession, PoliticoHandlerGet))))).Methods("GET")
+					httph.WithMongo(mongoSession, PoliticoUIHandlerGet))))).Methods("GET")
 	router.HandleFunc("/api/autocompleter",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
@@ -379,6 +378,23 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, TadaBoardHandlerTest)))))
+	// ===== Public REST APIs
+	pEp := "/api/politici/{op_id}"
+	eps = append(eps, pEp)
+	router.HandleFunc(pEp,
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, PoliticoHandlerGet))))).Methods("GET")
+	pEp = "/api"
+	eps = append(eps, pEp)
+	router.HandleFunc(pEp,
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					HomeHandler)))).Methods("GET")
+	//httph.WithGenericData(eps, HomeHandler))))).Methods("GET")
+	stracer.Traceln(eps)
 	// ===== Pivate APIs
 	privateRouter := router.PathPrefix("/api/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))

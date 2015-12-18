@@ -12,7 +12,7 @@ angular.module('PatrimoniTrasparenti')
         // Get all declarations for a given politician.
         // no more used.
         getFor: function(op_id) {
-          return $http.get(apiEndPoint + '/politici/' + op_id)
+          return $http.get(apiEndPoint + '/politici-ui/' + op_id)
         },
         getBy: function(type, key) {
           return $http.get(apiEndPoint + '/list/'+ type +'/' + key)
