@@ -11,20 +11,6 @@ print( "Starting analysis");
 print("######################################")
 
 result = db['all'].aggregate(
-		{ $match: { "anno_dichiarazione": 2013 }},
-
-		{ $unwind: "$contributi_elettorali"},
-    { $match: { "contributi_elettorali.importo": { $gt: 0 } } },
-		{ $group: { _id: { op_id: "$op_id", voce: "$contributi_elettorali.fonte" } } },
-		{ $group: {
-                _id : {voce: "$_id.voce" },
-               count: { $sum: 1 }
-              }
-    },
-		{ $sort: {"count":-1} }
-);
-
-result = db['all'].aggregate(
 		{ $sort: {"anno_dichiarazione": 1}},
 		{ $group: {
                 _id : {op_id: "$op_id"},
@@ -103,4 +89,37 @@ print( "totale no spese no contributi con dichiarazione_elettorale: ", array.len
 print( "op_id, no spese no contributi con dichiarazione_elettorale");
 array.forEach( function(i) {
           print( i._id.op_id);
+});
+
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2013 }},
+		{ $unwind: "$spese_elettorali"},
+    { $match: { "spese_elettorali.fonte": { $eq: "spese sostenute dal partito"}} },
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" },
+                contributi_elettorali: { $last: "$contributi_elettorali" },
+                spese: { $sum: "$spese_elettorali.importo" },
+              }
+    },
+		{ $unwind: "$contributi_elettorali"},
+    { $match: { "contributi_elettorali.fonte": { $eq: "contributi o servizi ricevuti dal partito"}} },
+		{ $group: {
+                _id : {op_id: "$_id.op_id"},
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" },
+                spese: { $last: "$spese" },
+                contributi: { $sum: "$contributi_elettorali.importo" },
+              }
+    },
+    { $project: { _id : 1, nome:1, cognome:1, 'totale': {$add: ["$contributi", "$spese"]}}},
+		{ $sort: {"totale": -1}},
+    { $limit: 10 }
+);
+
+print( "classifica (spese + contributi partito)");
+print( "op_id", ",", "nome", ",", "cognome", ",", "totale");
+result.forEach( function(i) {
+          print(i._id.op_id, "," , i.nome, ",", i.cognome, ', "'+ i.totale.toString().replace(/\./, ',') +'"');
 });

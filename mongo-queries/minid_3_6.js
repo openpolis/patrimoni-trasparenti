@@ -85,3 +85,40 @@ print( "gruppo", ",", "istituzione", ",", "voce", ",", "count", ",", "media", "t
 result.forEach( function(i) {
           print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce ,",", i.count, ', "'+ i.media.toString().replace(/\./, ',') +'"', ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });
+
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2013 }},
+		{ $unwind: "$contributi_elettorali"},
+    { $match: { "contributi_elettorali.fonte": { $eq: "erogazioni del candidato"}} },
+    { $project: { op_id : 1, nome:1, cognome:1, 'totale': "$contributi_elettorali.importo"}},
+		{ $sort: {"totale": -1}},
+    { $limit: 10 }
+);
+
+print( "classifica (erogazioni candidato)");
+print( "op_id", ",", "nome", ",", "cognome", ",", "totale");
+result.forEach( function(i) {
+          print(i.op_id, "," , i.nome, ",", i.cognome, ', "'+ i.totale.toString().replace(/\./, ',') +'"');
+});
+
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2013 }},
+		{ $unwind: "$spese_elettorali"},
+    { $match: { "spese_elettorali.fonte": { $eq: "contributo al partito"}} },
+    { $project: { op_id : 1, nome:1, cognome:1, 'totale': "$spese_elettorali.importo"}},
+		{ $sort: {"totale": -1}},
+    { $limit: 10 }
+);
+
+print( "classifica (contributo al partito)");
+print( "op_id", ",", "nome", ",", "cognome", ",", "totale");
+result.forEach( function(i) {
+          print(i.op_id, "," , i.nome, ",", i.cognome, ', "'+ i.totale.toString().replace(/\./, ',') +'"');
+});
+
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2013 }},
+    { $match: { "dichiarazione_elettorale": true }}
+);
+array = result.toArray()
+print( "totale dichiarazioni elettorali 2013: ", array.length );

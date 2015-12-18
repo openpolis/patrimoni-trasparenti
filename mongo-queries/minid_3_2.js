@@ -83,14 +83,26 @@ result.forEach( function(i) {
 });
 
 result = db['all'].aggregate(
-		//{ $match: { "anno_dichiarazione": 2013, "totale_contributi_elettorali":{ $gt: 0}}},
 		{ $match: { "anno_dichiarazione": 2013 }},
-
-		{ $sort: {"totale_contributi_elettorali":-1}},
+		{ $unwind: "$contributi_elettorali"},
+    { $match: { $or: [
+      { "contributi_elettorali.fonte": { $eq: "contributi da terzi"}},
+      { "contributi_elettorali.fonte": { $eq: "servizi da terzi"}},
+      { "contributi_elettorali.fonte": { $eq: "debiti"}}
+    ]}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" },
+                totale: { $sum: "$contributi_elettorali.importo"}
+              }
+    },
+		{ $sort: {"totale":-1}},
     { $limit: 10 }
 );
 
-print( "nome", ",", "cognome", ",", "totale");
+print( "classifica (contributi + servizi + debiti)");
+print( "op_id", ",", "nome", ",", "cognome", ",", "totale");
 result.forEach( function(i) {
-          print( i.nome, ",", i.cognome, ', "'+ i.totale_contributi_elettorali.toString().replace(/\./, ',') +'"');
+          print(i._id.op_id, "," , i.nome, ",", i.cognome, ', "'+ i.totale.toString().replace(/\./, ',') +'"');
 });
