@@ -31,6 +31,9 @@ result = db['all'].aggregate(
               }
     },
 		{ $unwind: "$contributi"},
+    { $match: { $or: [
+      { "contributi.fonte": { $eq: "contributi o servizi ricevuti dal partito"}}
+    ]}},
 		{ $group: {
                 _id : {voce: "$contributi.fonte", istituzione:"$_id.istituzione", gruppo: "$gruppo"},
                total: { $sum: "$contributi.importo"}
@@ -42,6 +45,44 @@ print( "gruppo", ",", "istituzione", ",", "voce",",", "totale");
 result.forEach( function(i) {
           print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce, ', "'+ i.total.toString().replace(/\./, ',') +'"');
 });
+
+result = db['all'].aggregate(
+		{ $sort: {"anno_dichiarazione": 1}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                // this will get 2013 data with sorting above
+                spese_elettorali: { $first: "$spese_elettorali"},
+                // this will get 2014 data with sorting above
+                incarichi: { $last: "$incarichi"}
+              }
+    },
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter multiple roles
+		{ $group: {
+                _id : {op_id: "$_id.op_id", istituzione: "$incarichi.istituzione"},
+               gruppo: { $last: "$incarichi.gruppo.acronym" },
+               spese: { $last: "$spese_elettorali" }
+              }
+    },
+		{ $unwind: "$spese"},
+    { $match: { $or: [
+      { "spese.fonte": { $eq: "spese sostenute dal partito"}},
+      { "spese.fonte": { $eq: "contributo al partito"}}
+    ]}},
+		{ $group: {
+                _id : {voce: "$spese.fonte", istituzione:"$_id.istituzione", gruppo: "$gruppo"},
+               total: { $sum: "$spese.importo"}
+              }
+    }
+);
+
+print( "gruppo", ",", "istituzione", ",", "voce",",", "totale");
+result.forEach( function(i) {
+          print( i._id.gruppo, ",", i._id.istituzione, ",", i._id.voce, ', "'+ i.total.toString().replace(/\./, ',') +'"');
+});
+
 
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2013 }},

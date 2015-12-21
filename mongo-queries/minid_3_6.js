@@ -122,3 +122,10 @@ result = db['all'].aggregate(
 );
 array = result.toArray()
 print( "totale dichiarazioni elettorali 2013: ", array.length );
+
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014 }},
+    { $match: { "dichiarazione_elettorale": true }}
+);
+array = result.toArray()
+print( "totale dichiarazioni elettorali 2014: ", array.length );
