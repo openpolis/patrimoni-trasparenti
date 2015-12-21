@@ -11,7 +11,6 @@ print( "Starting analysis");
 print("######################################")
 
 result = db['all'].aggregate(
-		{ $match: {"totale_contributi_elettorali":{ $gt: 0}}},
 		{ $sort: {"anno_dichiarazione": 1}},
 		{ $group: {
                 _id : {op_id: "$op_id"},
@@ -32,17 +31,26 @@ result = db['all'].aggregate(
     },
 		{ $unwind: "$contributi_elettorali"},
     { $match: { "contributi_elettorali.fonte": { $ne: "erogazioni del candidato"}}},
+    // sum al fields
 		{ $group: {
-                _id : {gruppo: "$_id.gruppo", istituzione: "$_id.istituzione"},
+                _id : {op_id: "$_id.op_id" },
+                gruppo: { $last: "$_id.gruppo"},
+                istituzione: { $last: "$_id.istituzione"},
+                somma_contributi: { $sum: "$contributi_elettorali.importo"}
+              }
+    },
+    { $match: {"somma_contributi":{ $gt: 0}}},
+		{ $group: {
+                _id : {gruppo: "$gruppo", istituzione: "$istituzione"},
                count: { $sum: 1},
-               total: { $sum: "$contributi_elettorali.importo"}
+               total: { $sum: "$somma_contributi"}
               }
     },
     { $project: {"media_contributi": { $divide: [ "$total", "$count" ] }, total:1, count:1}},
 		{ $sort: {"_id.gruppo":-1, "_id.istituzione":-1}}
 );
 
-print( "gruppo", ",", "istituzione", ",", "totale", ",", "media (escluso \"erogazioni del candidato\")");
+print( "gruppo", ",", "istituzione", ",", "totale voci", ",", "media (escluso \"erogazioni del candidato\")");
 result.forEach( function(i) {
           print( i._id.gruppo, ",", i._id.istituzione, ",", i.count, ', "'+ i.media_contributi.toString().replace(/\./, ',')+'"');
 });

@@ -73,15 +73,74 @@ result.forEach( function(i) {
           print( i._id.op_id, ",", i._id.nome, ",", i._id.cognome);
 });
 
-// hanno più di un incarico
+// distribuzionei incarichi amministrazioni_soc
+// camera
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
-		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 1} } } }
+
+		{ $unwind: "$amministrazioni_soc"},
+    { $match: { "amministrazioni_soc.persona": "dichiarante" } },
+    // calcola numero degli incarichi
+		{ $group: {
+                _id : { op_id:"$op_id"},
+                incarichi: { $last: "$incarichi"},
+                count: { $sum: 1}
+              }
+    },
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter multiple roles
+		{ $group: {
+                _id : {op_id: "$_id.op_id", istituzione: "$incarichi.istituzione"},
+                count: { $last: "$count"}
+              }
+    },
+		{ $group: {
+                 _id: { count: "$count", istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "_id.count":-1}}
 );
 
-resultsArray = result.toArray();
-print( "hanno più di un incarico"),
-print(resultsArray.length );
-resultsArray.forEach( function(i) {
-          print( i.op_id, ",", i.nome, ",", i.cognome);
+print( "Distribuzione numero incarichi in amministrazioni_soc camera"),
+print( "istituzione", ",", "numero incarichi", ",", "totale"),
+result.forEach( function(i) {
+          print( i._id.istituzione, ",", i._id.count, ",", i.count);
+});
+
+// distribuzionei incarichi amministrazioni_soc
+// governo 
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
+
+		{ $unwind: "$amministrazioni_soc"},
+    { $match: { "amministrazioni_soc.persona": "dichiarante" } },
+    // calcola numero degli incarichi
+		{ $group: {
+                _id : { op_id:"$op_id"},
+                incarichi: { $last: "$incarichi"},
+                count: { $sum: 1}
+              }
+    },
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+    // filter multiple roles
+		{ $group: {
+                _id : {op_id: "$_id.op_id", istituzione: "$incarichi.istituzione"},
+                count: { $last: "$count"}
+              }
+    },
+		{ $group: {
+                 _id: { count: "$count", istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "_id.count":-1}}
+);
+
+print( "Distribuzione numero incarichi in amministrazioni_soc governo"),
+print( "istituzione", ",", "numero incarichi", ",", "totale"),
+result.forEach( function(i) {
+          print( i._id.istituzione, ",", i._id.count, ",", i.count);
 });
