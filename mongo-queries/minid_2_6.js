@@ -302,3 +302,31 @@ print( "istituzione", ",", "totale"),
 result.forEach( function(i) {
           print( i._id.istituzione, ",", i.count);
 });
+
+// chi amministra in governo
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
+
+		{ $unwind: "$amministrazioni_soc"},
+    { $match: { "amministrazioni_soc.persona": "dichiarante" } },
+    // calcola numero degli incarichi
+		{ $group: {
+                _id : { op_id:"$op_id"},
+                incarichi: { $last: "$incarichi"},
+                count: { $sum: 1}
+              }
+    },
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+    // filter multiple roles
+		{ $group: {
+                _id : {op_id: "$_id.op_id", istituzione: "$incarichi.istituzione"},
+                count: { $last: "$count"}
+              }
+    }
+);
+
+print( "amministrazioni_soc nel governo"),
+result.forEach( function(i) {
+          print( i._id.op_id);
+});
