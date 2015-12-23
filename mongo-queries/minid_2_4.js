@@ -171,3 +171,58 @@ print("hanno campi vuoti governo");
 result.forEach( function(i) {
           print(i._id.op_id, ",", i._id.nome, ",", i._id.cognome);
 });
+
+// tutte le combinazioni solo camera
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+
+		{ $unwind: "$incarichi"},
+		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
+		{ $group: {
+                 _id: { op_id:"$op_id", istituzione: "$incarichi.istituzione" },
+                set_tipologia: { $addToSet: "$beni_mobili.tipologia" },
+                count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                 _id: { count: "$count", set_tipologia: "$set_tipologia", istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "_id.count":-1 }}
+);
+
+print( "istituzione", ",", "tipologie", ",",  "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i._id.set_tipologia, ",", i.count);
+});
+
+// tutte le combinazioni governo
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
+		{ $group: {
+                 _id: { op_id:"$op_id", istituzione: "$incarichi.istituzione" },
+                set_tipologia: { $addToSet: "$beni_mobili.tipologia" },
+                count: { $sum: 1}
+              }
+    },
+		{ $group: {
+                 _id: { count: "$count", set_tipologia: "$set_tipologia", istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "_id.count":-1 }}
+);
+
+print( "istituzione", ",", "tipologie", ",",  "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i._id.set_tipologia, ",", i.count);
+});
+

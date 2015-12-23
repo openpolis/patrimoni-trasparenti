@@ -9,6 +9,9 @@ angular.module('PatrimoniTrasparenti')
     .when('/campagna', {
     templateUrl: '/templates/pages/campagna/index.html'
   })
+    .when('/opendata', {
+    templateUrl: '/templates/pages/opendata/index.html'
+  })
     .when('/scheda/:name/:id', {
     templateUrl: '/templates/pages/scheda/index.html',
     controller: function($routeParams) {
