@@ -10,7 +10,7 @@ print("######################################")
 print( "Starting analysis");
 print("######################################")
 
-// parlamento
+// camera
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
     // il governo da parte
@@ -18,7 +18,7 @@ result = db['all'].aggregate(
 
 		{ $unwind: "$incarichi"},
 		{ $group: {
-                _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+               _id : { op_id: "$op_id", istituzione: "$incarichi.istituzione" },
                beni_mobili: { $last: "$beni_mobili" }
               }
     },
@@ -226,3 +226,110 @@ result.forEach( function(i) {
           print(i._id.istituzione, ",", i._id.set_tipologia, ",", i.count);
 });
 
+// no beni mobili camera
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "beni_mobili": {$size: 0} } },
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+
+		{ $unwind: "$incarichi"},
+    // filter multiple roles
+		{ $group: {
+                 _id: { op_id:"$op_id", istituzione: "$incarichi.istituzione" },
+              }
+    },
+		{ $group: {
+               _id: { istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "count":-1 }}
+);
+
+print("nessun bene mobile camera");
+print( "istituzione", "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i.count);
+});
+
+// no beni mobili governo
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014, "beni_mobili": {$size: 0} } },
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+    // filter multiple roles
+		{ $group: {
+                 _id: { op_id:"$op_id", istituzione: "$incarichi.istituzione" },
+              }
+    },
+		{ $group: {
+               _id: { istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "count":-1 }}
+);
+
+print("nessun bene mobile governo");
+print( "istituzione", "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i.count);
+});
+
+// almeno un bene mobile camera
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+
+		{ $unwind: "$incarichi"},
+		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
+		{ $group: {
+                 _id: { op_id:"$op_id", istituzione: "$incarichi.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+    { $match: {"count": { $gt:0}}},
+		{ $group: {
+                 _id: { istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "count":-1 }}
+);
+
+print("almeno un bene mobile camera");
+print( "istituzione", "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i.count);
+});
+
+// almeno un bene mobile governo
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
+		{ $group: {
+                 _id: { op_id:"$op_id", istituzione: "$incarichi.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+    { $match: {"count": { $gt:0}}},
+		{ $group: {
+                 _id: { istituzione: "$_id.istituzione" },
+               count: { $sum: 1}
+              }
+    },
+		{ $sort: {"_id.istituzione":-1, "count":-1 }}
+);
+
+print("almeno un bene mobile governo");
+print( "istituzione", "totale");
+result.forEach( function(i) {
+          print(i._id.istituzione, ",", i.count);
+});
