@@ -15,7 +15,9 @@ import (
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Please, welcome.")
+	for _, s := range eps {
+		fmt.Fprintf(w, s+"\n")
+	}
 }
 
 func PoliticoUIHandlerGet(w http.ResponseWriter, r *http.Request) {
