@@ -13,28 +13,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// assembleMatch create map for "$match" pipe stage for
-// MongoDB aggregations.
-func assembleMatch(query map[string]string) bson.M {
-	match := bson.M{}
-	for k, v := range query {
-		if v == "" {
-			continue
-		}
-		if k == "anno_dichiarazione" {
-			match[k], _ = strconv.Atoi(v)
-			continue
-		}
-		if k == "acronimo_gruppo" {
-			match["gruppo.acronym"] = v
-			continue
-		}
-		match[k] = v
-	}
-	stracer.Traceln("match assembled:", match)
-	return match
-}
-
 func makeIncaricoList(coll *mgo.Collection) incomes.TBItem {
 	data := make([]interface{}, 0)
 	results := []bson.M{}

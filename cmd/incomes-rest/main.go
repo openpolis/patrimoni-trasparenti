@@ -55,9 +55,14 @@ type daemonConf struct {
 	S3path      string
 	LogFile     string
 	Version     bool `cfgp:"v,show version and exit,"`
+	// no http://, just the domain name
+	DomainName string
 }
 
 var conf daemonConf
+
+// It contains endpoints to print when /api is called
+var eps []string = make([]string, 0)
 
 func GetObjectIdHex(s string) (bson.ObjectId, error) {
 	if !bson.IsObjectIdHex(s) {
@@ -306,8 +311,6 @@ func SetupLoggers(o io.Writer) {
 }
 
 func main() {
-	// It contains andpoint to print when /api is called
-	eps := []string{}
 	conf = daemonConf{
 		Httpport:  "8080",
 		Mongohost: "localhost",
@@ -379,8 +382,15 @@ func main() {
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, TadaBoardHandlerTest)))))
 	// ===== Public REST APIs
-	pEp := "/api/politici/{op_id}"
+	pEp := "/api/politici"
 	eps = append(eps, pEp)
+	router.HandleFunc(pEp,
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, AllPoliticiHandlerGet))))).Methods("GET")
+	pEp = "/api/politici/{op_id}"
+	//eps = append(eps, pEp)
 	router.HandleFunc(pEp,
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
@@ -391,10 +401,7 @@ func main() {
 	router.HandleFunc(pEp,
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
-				httph.WithSharedData(
-					HomeHandler)))).Methods("GET")
-	//httph.WithGenericData(eps, HomeHandler))))).Methods("GET")
-	stracer.Traceln(eps)
+				HomeHandler))).Methods("GET")
 	// ===== Pivate APIs
 	privateRouter := router.PathPrefix("/api/p").Subrouter()
 	privateRouter.HandleFunc("/", httph.WithCORS(HomeHandler))
