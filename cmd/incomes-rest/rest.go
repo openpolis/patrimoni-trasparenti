@@ -136,3 +136,136 @@ func AllPoliticiHandlerGet(w http.ResponseWriter, r *http.Request) {
 	}
 	return
 }
+
+func OrganiHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
+	if !ok {
+		msg := "cannot find a db session"
+		ErrorLogger.Println(msg)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	session := sessionInterface.(*mgo.Session)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	results := []bson.M{}
+	baseQuery := []bson.M{
+		{"$unwind": "$incarichi"},
+		{"$group": bson.M{"_id": "$incarichi.istituzione"}},
+		{"$project": bson.M{"_id": 0, "istitutione": "$_id"}},
+	}
+	pipe := coll.Pipe(baseQuery)
+	iter := pipe.Iter()
+	err := iter.All(&results)
+	if err != nil {
+		msg := "retrieving declarations from db"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	err = json.NewEncoder(w).Encode(results)
+	if err != nil {
+		msg := "encoding declarations in json"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	return
+}
+
+func GruppiHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
+	if !ok {
+		msg := "cannot find a db session"
+		ErrorLogger.Println(msg)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	err := r.ParseForm()
+	if err != nil {
+		msg := "decoding parameters in url"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusBadRequest)
+		return
+	}
+	filters := GetFilters(r)
+	session := sessionInterface.(*mgo.Session)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	results := []bson.M{}
+	baseQuery := []bson.M{
+		{"$match": assembleMatch(filters)},
+		{"$unwind": "$incarichi"},
+		{"$group": bson.M{
+			"_id":  "$incarichi.gruppo.acronym",
+			"nome": bson.M{"$last": "$incarichi.gruppo.name"},
+		},
+		},
+		{"$project": bson.M{"_id": 0, "acronimo_gruppo": "$_id", "nome_gruppo": "$nome"}},
+	}
+	pipe := coll.Pipe(baseQuery)
+	iter := pipe.Iter()
+	err = iter.All(&results)
+	if err != nil {
+		msg := "retrieving declarations from db"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	err = json.NewEncoder(w).Encode(results)
+	if err != nil {
+		msg := "encoding declarations in json"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	return
+}
+
+func CircoscrizioniHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
+	if !ok {
+		msg := "cannot find a db session"
+		ErrorLogger.Println(msg)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	err := r.ParseForm()
+	if err != nil {
+		msg := "decoding parameters in url"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusBadRequest)
+		return
+	}
+	filters := GetFilters(r)
+	session := sessionInterface.(*mgo.Session)
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	results := []bson.M{}
+	baseQuery := []bson.M{
+		{"$match": assembleMatch(filters)},
+		{"$unwind": "$incarichi"},
+		{"$group": bson.M{
+			"_id": "$incarichi.circoscrizione",
+		},
+		},
+		{"$project": bson.M{"_id": 0, "circoscrizione": "$_id"}},
+	}
+	pipe := coll.Pipe(baseQuery)
+	iter := pipe.Iter()
+	err = iter.All(&results)
+	if err != nil {
+		msg := "retrieving declarations from db"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	err = json.NewEncoder(w).Encode(results)
+	if err != nil {
+		msg := "encoding declarations in json"
+		ErrorLogger.Println(msg, err)
+		JSONErrorW(w, msg, http.StatusInternalServerError)
+		return
+	}
+	return
+}

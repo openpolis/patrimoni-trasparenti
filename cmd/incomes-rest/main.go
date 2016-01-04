@@ -396,6 +396,27 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, PoliticoHandlerGet))))).Methods("GET")
+	pEp = "/api/organi"
+	eps = append(eps, pEp)
+	router.HandleFunc(pEp,
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, OrganiHandler))))).Methods("GET")
+	pEp = "/api/gruppi"
+	eps = append(eps, pEp)
+	router.HandleFunc(pEp,
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, GruppiHandler))))).Methods("GET")
+	pEp = "/api/circoscrizioni"
+	eps = append(eps, pEp)
+	router.HandleFunc(pEp,
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, CircoscrizioniHandler))))).Methods("GET")
 	pEp = "/api"
 	eps = append(eps, pEp)
 	router.HandleFunc(pEp,
