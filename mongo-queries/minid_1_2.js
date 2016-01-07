@@ -81,10 +81,27 @@ result = db['all'].aggregate(
 		{ $match: { "incarichi.partito.acronym": { $eq: ""}}}
 );
 
-
 print("chi ha acronimo partito vuoto");
 result.forEach( function(i) {
           print( i.op_id, ",", i.nome, ",", i.cognome);
+});
+
+// chi sono i membri del governo
+result = db['all'].aggregate(
+		{ $match: {"anno_dichiarazione": 2014}},
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+		{ $group: {
+                _id : {op_id: "$op_id"},
+                nome: { $last: "$nome"},
+                cognome: { $last: "$cognome"}
+              }
+    }
+);
+
+print("chi sono i membri del governo");
+result.forEach( function(i) {
+          print( i._id.op_id, ",", i.nome, ",", i.cognome);
 });
 
 result = db['all'].aggregate(
