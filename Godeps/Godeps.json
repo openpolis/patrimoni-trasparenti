@@ -46,6 +46,10 @@
 			"Rev": "47e8f450ef38c857cdd922ec08862ca9d65a1c6d"
 		},
 		{
+			"ImportPath": "github.com/hashicorp/golang-lru",
+			"Rev": "5c7531c003d8bf158b0fe5063649a2f41a822146"
+		},
+		{
 			"ImportPath": "github.com/mattn/go-colorable",
 			"Rev": "40e4aedc8fabf8c23e040057540867186712faa5"
 		},
@@ -88,6 +92,11 @@
 		{
 			"ImportPath": "gopkg.in/mgo.v2",
 			"Rev": "c9fd3712fbf3e92924c974dce16da2d322508fe2"
+		},
+		{
+			"ImportPath": "gopkg.in/throttled/throttled.v2",
+			"Comment": "v2.0.3",
+			"Rev": "b5675e93f9d999b22f92d859a5bf2138d3641af4"
 		}
 	]
 }

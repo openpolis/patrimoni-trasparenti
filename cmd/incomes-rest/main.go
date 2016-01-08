@@ -29,6 +29,8 @@ import (
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"gopkg.in/throttled/throttled.v2"
+	"gopkg.in/throttled/throttled.v2/store/memstore"
 )
 
 // Version is populated at compile time
@@ -56,7 +58,8 @@ type daemonConf struct {
 	LogFile     string
 	Version     bool `cfgp:"v,show version and exit,"`
 	// no http://, just the domain name
-	DomainName string
+	DomainName     string
+	MaxRequestsMin int
 }
 
 var conf daemonConf
@@ -312,8 +315,9 @@ func SetupLoggers(o io.Writer) {
 
 func main() {
 	conf = daemonConf{
-		Httpport:  "8080",
-		Mongohost: "localhost",
+		Httpport:       "8080",
+		Mongohost:      "localhost",
+		MaxRequestsMin: 50,
 	}
 	err := cfgp.Parse(&conf)
 	if err != nil {
@@ -439,7 +443,22 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, DichiarazioneHandler)))))
-	http.Handle("/", router)
+	//=== Rate limit
+	store, err := memstore.New(65536)
+	if err != nil {
+		log.Fatal(err)
+	}
+	quota := throttled.RateQuota{throttled.PerMin(conf.MaxRequestsMin), 5}
+	rateLimiter, err := throttled.NewGCRARateLimiter(store, quota)
+	if err != nil {
+		log.Fatal(err)
+	}
+	httpRateLimiter := throttled.HTTPRateLimiter{
+		RateLimiter: rateLimiter,
+		VaryBy:      &throttled.VaryBy{Path: true},
+	}
+	http.Handle("/", httpRateLimiter.RateLimit(router))
+
 	InfoLogger.Println("listening on:", conf.Httpaddress, ":", conf.Httpport)
 	log.Fatalln(http.ListenAndServe(conf.Httpaddress+":"+conf.Httpport, nil))
 }
