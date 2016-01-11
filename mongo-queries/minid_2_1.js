@@ -105,3 +105,57 @@ print("no partito");
 result.forEach( function(i) {
           print( i._id.op_id, ",", i.nome, ",", i.cognome);
 });
+
+//===== Medie per istituzione =====
+
+// Camera e senato.
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
+    // filter duplicates roles
+		{ $group: {
+                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+               totale_730_dichiarante: { $last: "$totale_730_dichiarante" }
+              }
+    },
+		{ $group: {
+                _id : {istituzione: "$_id.istituzione" },
+               count: { $sum: 1},
+               total: { $sum: "$totale_730_dichiarante"}
+              }
+    },
+    { $project: {"media_reddito": { $divide: [ "$total", "$count" ] }, total:1}},
+		{ $sort: {"_id.istituzione":-1}}
+);
+
+
+print( "istituzione", ",", "media reddito");
+result.forEach( function(i) {
+          print( i._id.istituzione, ', "'+ i.media_reddito.toString().replace(/\./, ',') +'"');
+});
+// Governo
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq: "governo"}}},
+		{ $group: {
+                // filter duplicates roles
+                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione" },
+               totale_730_dichiarante: { $last: "$totale_730_dichiarante" }
+              }
+    },
+		{ $group: {
+                _id : {istituzione: "$_id.istituzione" },
+               count: { $sum: 1},
+               total: { $sum: "$totale_730_dichiarante"}
+              }
+    },
+    { $project: {"media_reddito": { $divide: [ "$total", "$count" ] }, total:1}}
+);
+print( "istituzione", ",", "media reddito");
+result.forEach( function(i) {
+          print( i._id.istituzione, ', "'+ i.media_reddito.toString().replace(/\./, ',') +'"');
+});
