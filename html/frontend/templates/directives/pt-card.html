@@ -55,7 +55,13 @@
                                 Gruppo: <strong><a ng-href="#/gruppo/{{incarico.gruppo.acronym}}">{{incarico.gruppo.acronym|capitalize:'first'}} - {{incarico.gruppo.name}}</a></strong>
                             </p>
 
-                            <p>
+                            <p ng-show="incarico.istituzione == 'camera'">
+                                Lista di elezione: <strong>{{incarico.partito.acronym|capitalize:'first'}} - {{incarico.partito.name}}</strong>
+                            </p>
+                            <p ng-show="incarico.istituzione == 'senato'">
+                                Lista di elezione: <strong>{{incarico.partito.acronym|capitalize:'first'}} - {{incarico.partito.name}}</strong>
+                            </p>
+                            <p ng-show="incarico.istituzione == 'governo'">
                                 Partito: <strong>{{incarico.partito.acronym|capitalize:'first'}} - {{incarico.partito.name}}</strong>
                             </p>
 
