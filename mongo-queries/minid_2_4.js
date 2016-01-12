@@ -10,7 +10,7 @@ print("######################################")
 print( "Starting analysis");
 print("######################################")
 
-// camera
+// camera, aggragati
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014}},
     // il governo da parte
@@ -35,6 +35,38 @@ result = db['all'].aggregate(
 print( "istituzione", ",", "tipologia", ",", "totale");
 result.forEach( function(i) {
           print(i._id.istituzione, ",", i._id.tipologia, ",", i.count);
+});
+// camera, nomi
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+    // il governo da parte
+		{ $match: { "incarichi.istituzione": { $ne:"governo"}}},
+
+		{ $unwind: "$incarichi"},
+		{ $group: {
+                // filter duplicates
+                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione"},
+                beni_mobili: { $last: "$beni_mobili" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" }
+              }
+    },
+		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
+		{ $group: {
+                _id : { op_id: "$_id.op_id", tipologia: "$beni_mobili.tipologia" },
+                istituzione: { $last: "$_id.istituzione" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" },
+                count: { $sum: 1}
+              }
+    },
+    //{ $match: {"count": { $gt:2}}},
+		{ $sort: {"count":-1 }}
+);
+print( "op_id,", "cognome,", "istituzione,", "tipologia,", "totale");
+result.forEach( function(i) {
+          print( i._id.op_id, ",", i.cognome , ",", i.istituzione, ",", i._id.tipologia, ",", i.count);
 });
 
 // governo
@@ -63,6 +95,40 @@ result = db['all'].aggregate(
 print( "istituzione", ",", "tipologia", ",", "totale");
 result.forEach( function(i) {
           print(i._id.istituzione, ",", i._id.tipologia, ",", i.count);
+});
+
+// governo, nomi
+result = db['all'].aggregate(
+		{ $match: { "anno_dichiarazione": 2014}},
+    // il governo da parte
+		{ $match: { "incarichi.istituzione": { $eq:"governo"}}},
+
+		{ $unwind: "$incarichi"},
+		{ $match: { "incarichi.istituzione": { $eq:"governo"}}},
+		{ $group: {
+                // filter duplicates
+                _id : {op_id: "$op_id", istituzione: "$incarichi.istituzione"},
+                beni_mobili: { $last: "$beni_mobili" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" }
+              }
+    },
+		{ $unwind: "$beni_mobili"},
+    { $match: { "beni_mobili.persona": "dichiarante" } },
+		{ $group: {
+                _id : { op_id: "$_id.op_id", tipologia: "$beni_mobili.tipologia" },
+                istituzione: { $last: "$_id.istituzione" },
+                nome: { $last: "$nome" },
+                cognome: { $last: "$cognome" },
+                count: { $sum: 1}
+              }
+    },
+    //{ $match: {"count": { $gt:2}}},
+		{ $sort: {"count":-1 }}
+);
+print( "op_id,", "cognome,", "istituzione,", "tipologia,", "totale");
+result.forEach( function(i) {
+          print( i._id.op_id, ",", i.cognome , ",", i.istituzione, ",", i._id.tipologia, ",", i.count);
 });
 
 // solo parlamento
