@@ -448,6 +448,7 @@ result.forEach( function(i) {
 result = db['all'].aggregate(
 		{ $match: { "anno_dichiarazione": 2014, "amministrazioni_soc": { $not: {$size: 0} } } },
 
+		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $unwind: "$incarichi"},
 		{ $match: { "incarichi.istituzione": { $ne: "governo"}}},
 		{ $group: {
