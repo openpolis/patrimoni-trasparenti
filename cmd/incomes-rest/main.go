@@ -359,6 +359,11 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, DownloadAllGet))))).Methods("GET")
+	router.HandleFunc("/api/csvall/{year}",
+		httph.WithLog(InfoLogger,
+			httph.WithCORS(
+				httph.WithSharedData(
+					httph.WithMongo(mongoSession, DownloadAllCSVGet))))).Methods("GET")
 	// This ep is used by ui
 	router.HandleFunc("/api/politici-ui/{op_id}",
 		httph.WithLog(InfoLogger,
