@@ -76,7 +76,7 @@
 
                 </div>
                 <div class="col-md-9" style="position:relative">
-                    <h3>Dichiarazioni</h3>
+                    <h3>Dichiarazioni patrimoniali</h3>
                     <ul class="nav nav-tabs" role="tablist">
                         <li ng-repeat="dichiarazione in schede"
                             ng-class="{'active': scheda.anno_dichiarazione === dichiarazione.anno_dichiarazione}"
@@ -88,7 +88,7 @@
 
                     <div class="well">
                         <div class="row">
-                            <div class="col-md-2"><strong>Completezza</strong></div>
+                            <div class="col-md-2"><strong>Completezza della dichiarazione patrimoniale</strong></div>
                             <div class="col-md-3">
                                 <div class="progress">
                                     <span class="progress-step progress-step-1_3"></span><span class="progress-step progress-step-2_3"></span>
@@ -112,7 +112,7 @@
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('partecipazioni-soc')">Partecipazioni: <b>{{scheda.partecipazioni_soc.length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('partecipazioni-soc')">N. di partecipazioni (azioni/quote) in società: <b>{{scheda.partecipazioni_soc.length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4">
@@ -123,11 +123,13 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('beni-immobili')">Numero immobili: <b>{{scheda.beni_immobili.length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('lista-fabbricati')">N. fabbricati: <b>{{(scheda.beni_immobili| filter:{$:'fabbricato'}).length}}</b></a>
+                            </p>
+                            <p><a href="" ng-click="scrollTo('lista-terreni')">N. terreni: <b>{{(scheda.beni_immobili| filter:{$:'terreno'}).length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('amministrazioni-soc')">Amministrazioni: <b>{{scheda.amministrazioni_soc.length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('amministrazioni-soc')">N. di incarichi di amministratore di società: <b>{{scheda.amministrazioni_soc.length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4"></div>
@@ -185,34 +187,102 @@
 
                     <!--
                     *
-                    *    BENI IMMOBILI
+                    *    BENI IMMOBILI, the power of filter filter!
                     *
                     -->
 
-                    <div ng-show="scheda.beni_immobili.length" id="beni-immobili">
-                        <h3>Beni immobili {{scheda.anno_dichiarazione}}</h3>
+                    <!-- FABBRICATI-->
+                    <div ng-show="(scheda.beni_immobili| filter:{$:'fabbricato'}).length" id="lista-fabbricati">
+                        <h3>Fabbricati {{scheda.anno_dichiarazione}}</h3>
                     </div>
-                    <table ng-show="scheda.beni_immobili.length" class="table table-striped">
+                    <table ng-show="(scheda.beni_immobili| filter:{$:'fabbricato'}).length" class="table table-striped">
                         <thead>
                         <tr>
                             <th>Persona</th>
                             <th>Diritto</th>
-                            <th>Descrizione</th>
                             <th>Provincia</th>
                             <th>Comune</th>
                             <th>Rendita catastale</th>
                             <th>Codice utilizzo</th>
-                            <th>Reddito dominicale</th>
-                            <th>Reddito agrario</th>
                             <th>Categoria catastale</th>
                             <th>Quata possesso</th>
-                            <th>Annotazioni</th>
+                            <th>Note</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="voce in scheda.beni_immobili">
-                            <td ng-repeat="(k, v) in voce">
-                                {{v|no_data}}
+                        <tr ng-repeat="voce in scheda.beni_immobili| filter:{$:'fabbricato'}">
+                            <td>
+                                {{voce.persona|no_data}}
+                            </td>
+                            <td>
+                                {{voce.natura_diritto|no_data}}
+                            </td>
+                            <td>
+                                {{voce.provincia|no_data}}
+                            </td>
+                            <td>
+                                {{voce.comune|no_data}}
+                            </td>
+                            <td>
+                                {{voce.rendita_catastale|no_data}}
+                            </td>
+                            <td>
+                                {{voce.codice_utilizzo|no_data}}
+                            </td>
+                            <td>
+                                {{voce.categoria_catastale|no_data}}
+                            </td>
+                            <td>
+                                {{voce.quota_possesso|no_data}}
+                            </td>
+                            <td>
+                                {{voce.annotazioni|no_data}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div ng-show="(scheda.beni_immobili| filter:{$:'terreno'}).length" id="lista-terreni">
+                        <h3>Terreni {{scheda.anno_dichiarazione}}</h3>
+                    </div>
+                    <table ng-show="(scheda.beni_immobili| filter:{$:'terreno'}).length" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Persona</th>
+                            <th>Diritto</th>
+                            <th>Provincia</th>
+                            <th>Comune</th>
+                            <th>Reddito dominicale</th>
+                            <th>Reddito agrario</th>
+                            <th>Quota possesso</th>
+                            <th>Note</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="voce in scheda.beni_immobili| filter:{$:'terreno'}">
+                            <td>
+                                {{voce.persona|no_data}}
+                            </td>
+                            <td>
+                                {{voce.natura_diritto|no_data}}
+                            </td>
+                            <td>
+                                {{voce.provincia|no_data}}
+                            </td>
+                            <td>
+                                {{voce.comune|no_data}}
+                            </td>
+                            <td>
+                                {{voce.reddito_dominicale|no_data}}
+                            </td>
+                            <td>
+                                {{voce.reddito_agrario|no_data}}
+                            </td>
+                            <td>
+                                {{voce.quota_possesso|no_data}}
+                            </td>
+                            <td>
+                                {{voce.annotazioni|no_data}}
                             </td>
                         </tr>
                         </tbody>
