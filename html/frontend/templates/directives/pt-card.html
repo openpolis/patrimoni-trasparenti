@@ -232,7 +232,10 @@
                             <td>
                                 {{voce.categoria_catastale|no_data}}
                             </td>
-                            <td>
+                            <td ng-show="voce.natura_diritto == 'proprietà'">
+                                100%
+                            </td>
+                            <td ng-show="voce.natura_diritto != 'proprietà'">
                                 {{voce.quota_possesso|no_data}}
                             </td>
                             <td>
@@ -278,8 +281,14 @@
                             <td>
                                 {{voce.reddito_agrario|no_data}}
                             </td>
-                            <td>
+                            <td ng-show="voce.natura_diritto == 'proprietà'">
+                                100%
+                            </td>
+                            <td ng-show="voce.natura_diritto != 'proprietà'">
                                 {{voce.quota_possesso|no_data}}
+                            </td>
+                            <td>
+                                {{voce.annotazioni|no_data}}
                             </td>
                             <td>
                                 {{voce.annotazioni|no_data}}
