@@ -73,7 +73,7 @@ func countImmobili(l []interface{}) (f, t string) {
 		v := e.(bson.M)
 		if v["descrizione"] == "fabbricato" {
 			fI++
-		} else if v["descrizione"] == "fabbricato" {
+		} else if v["descrizione"] == "terreno" {
 			tI++
 		}
 	}
@@ -85,7 +85,6 @@ func countImmobili(l []interface{}) (f, t string) {
 func extractRoles(roles []interface{}) (i, l, g, c string) {
 	for _, v := range roles {
 		m := v.(bson.M)
-		stracer.Traceln(m)
 		i += m["istituzione"].(string) + ", "
 		party := m["partito"].(bson.M)
 		group := m["gruppo"].(bson.M)
@@ -100,29 +99,54 @@ func extractRoles(roles []interface{}) (i, l, g, c string) {
 	return
 }
 
+//    openpolis_id
+//    nome (mettere il campo tra apici ")
+//    cognome (mettere il campo tra apici ")
+//    data_nascita (con formattazione GG/MM/AAAA)
+//    professione
+//    incarichi. Se l'incarico non è più in corso mettere (incarico cessato il gg/mm/aaa). Per esempio: deputato (incarico cessato il 15/07/2014) (mettere il campo tra apici " - separare i valori con la virgola)
+//    lista di elezione/partito (mettere il campo tra apici " - separare i valori con la virgola)
+//    gruppo parlamentare (mettere il campo tra apici ")
+//    circoscrizione di elezione (mettere il campo tra apici ")
+//    totale_730_dichiarante
+//    totale_730_coniuge
+//    totale_contributi_elettorali
+//    totale_spese_elettorali
+//    indice_completezza
+//    note_completezza (mettere il campo tra apici ")
+//    numero fabbricati
+//    numero terreni
+//    numero beni mobili
+//    numero di partecipazioni (azioni/quote) in società
+//    numero di incarichi di amministratore di società
+func makeCSVHeader() []string {
+	return []string{
+		"openpolis_id",
+		"nome",
+		"cognome",
+		"data_nascita",
+		"professione",
+		"incarichi",
+		"lista di elezione/partito",
+		"gruppo parlamentare",
+		"circoscrizione di elezione",
+		"totale_730_dichiarante",
+		"totale_730_coniuge",
+		"totale_contributi_elettorali",
+		"totale_spese_elettorali",
+		"indice_completezza",
+		"note_completezza",
+		"numero beni fabbricati",
+		"numero beni terreni",
+		"numero beni mobili",
+		"numero di partecipazioni (azioni/quote) in società",
+		"numero di incarichi di amministratore di società",
+	}
+}
+
 func assembleCSVLine(m bson.M) []string {
 
 	l := make([]string, 20)
-	//    openpolis_id
-	//    nome (mettere il campo tra apici ")
-	//    cognome (mettere il campo tra apici ")
-	//    data_nascita (con formattazione GG/MM/AAAA)
-	//    professione
-	//    incarichi. Se l'incarico non è più in corso mettere (incarico cessato il gg/mm/aaa). Per esempio: deputato (incarico cessato il 15/07/2014) (mettere il campo tra apici " - separare i valori con la virgola)
-	//    lista di elezione/partito (mettere il campo tra apici " - separare i valori con la virgola)
-	//    gruppo parlamentare (mettere il campo tra apici ")
-	//    circoscrizione di elezione (mettere il campo tra apici ")
-	//    totale_730_dichiarante
-	//    totale_730_coniuge
-	//    totale_contributi_elettorali
-	//    totale_spese_elettorali
-	//    indice_completezza
-	//    note_completezza (mettere il campo tra apici ")
-	//    numero fabbricati
-	//    numero terreni
-	//    numero beni mobili
-	//    numero di partecipazioni (azioni/quote) in società
-	//    numero di incarichi di amministratore di società
 	l[0] = m["op_id"].(string)
 	l[1] = m["nome"].(string)
 	l[2] = m["cognome"].(string)

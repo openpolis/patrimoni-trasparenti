@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -188,13 +189,26 @@ func DownloadAllCSVGet(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("retrieving declarations from db", err)
 		return
 	}
-	stracer.Traceln(year)
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.Header().Set("Content-Disposition", "attachment; filename=\""+vars["year"]+".json\"")
-	err = json.NewEncoder(w).Encode(results)
-	if err != nil {
+	wCSV := csv.NewWriter(w)
+	wCSV.Comma = ';'
+	w.Header().Set("Content-Type", "application/csv; charset=utf-8")
+	w.Header().Set("Content-Disposition", "attachment; filename=\""+vars["year"]+".csv\"")
+	wCSV.Write(makeCSVHeader())
+	for _, result := range results {
+		l := assembleCSVLine(result)
+		if err := wCSV.Write(l); err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			ErrorLogger.Println("writing csv", err)
+			return
+		}
+	}
+
+	// Write any buffered data to the underlying writer
+	wCSV.Flush()
+
+	if err := wCSV.Error(); err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		ErrorLogger.Println("encoding declarations in json", err)
+		ErrorLogger.Println("writing csv", err)
 		return
 	}
 	return
