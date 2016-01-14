@@ -29,58 +29,14 @@
                         <select class="selectpicker" ng-model="orderK">
                             <option value="cognome" role="presentation">Cognome crescente</option>
                             <option value="-cognome" role="presentation">Cognome decrescente</option>
-                            <option value="-data_nascita" role="presentation">Età crescente</option>
-                            <option value="data_nascita" role="presentation">Età decrescente</option>
-                            <option value="reddito_medio" role="presentation">Reddito crescente</option>
-                            <option value="-reddito_medio" role="presentation">Reddito decrescente</option>
-                            <option value="-completezza_media" role="presentation">Completezza crescente</option>
-                            <option value="completezza_media" role="presentation">Completezza decrescente</option>
+                            <!--<option value="-data_nascita" role="presentation">Età crescente</option>
+                              <option value="data_nascita" role="presentation">Età decrescente</option>-->
+                            <option value="ultimo_reddito" role="presentation">Reddito crescente</option>
+                            <option value="-ultimo_reddito" role="presentation">Reddito decrescente</option>
+                            <option value="ultima_completezza" role="presentation">Completezza crescente</option>
+                            <option value="-ultima_completezza" role="presentation">Completezza decrescente</option>
                         </select>
 
-
-                        <!-- I controlli per l'ordinamento dei risultati devono essere applicati alla select box qui sopra -->
-
-                        <!--
-                          <ul class="nav nav-pills nav-justified">
-                            <li ng-class="{'active': orderK === 'cognome'}" ng-click="selectOrder('cognome')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Cognome</a>
-                            </li>
-                            <li ng-class="{'active': orderK === '-cognome'}" ng-click="selectOrder('-cognome')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                                Cognome</a>
-                            </li>
-                            <li ng-class="{'active': orderK === '-data_nascita'}" ng-click="selectOrder('-data_nascita')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Età</a>
-                            </li>
-                            <li ng-class="{'active': orderK === 'data_nascita'}" ng-click="selectOrder('data_nascita')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Età</a>
-                            </li>
-                            <li ng-class="{'active': orderK === 'reddito_medio'}" ng-click="selectOrder('reddito_medio')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Reddito</a>
-                            </li>
-                            <li ng-class="{'active': orderK === '-reddito_medio'}" ng-click="selectOrder('-reddito_medio')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                                Reddito</a>
-                            </li>
-                            <li ng-class="{'active': orderK === 'completezza_media'}"
-                                ng-click="selectOrder('completezza_media')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Completezza</a>
-                            </li>
-                            <li ng-class="{'active': orderK === '-completezza_media'}"
-                                ng-click="selectOrder('-completezza_media')"
-                                role="presentation">
-                              <a href=""><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                                Completezza</a>
-                            </li>
-                          </ul>
-                          -->
                     </div>
                 </div>
             </div>
@@ -111,10 +67,9 @@
                                         </h4>
 
                                         <p>
-                                            Data nascita: <b>{{result.data_nascita|date:'d/M/yyyy'}}</b><br>
                                             Istituzioni: <b ng-repeat="ist in result.istituzioni">{{ist}} </b><br>
-                                            Professione: <b>{{result.professione}}</b><br>
                                             Reddito: <b>{{result.ultimo_reddito|currency:"€"}}</b><br>
+                                            Completezza dichiarazione: <b>{{result.ultima_completezza}}</b><br>
                                             Gruppo: <b ng-repeat="ist in result.gruppo_acronym">{{ist}} </b><br>
                                         </p>
                                     </div>
