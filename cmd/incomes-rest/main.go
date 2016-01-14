@@ -317,7 +317,7 @@ func main() {
 	conf = daemonConf{
 		Httpport:       "8080",
 		Mongohost:      "localhost",
-		MaxRequestsMin: 50,
+		MaxRequestsMin: 500,
 	}
 	err := cfgp.Parse(&conf)
 	if err != nil {
