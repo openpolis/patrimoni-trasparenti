@@ -290,9 +290,6 @@
                             <td>
                                 {{voce.annotazioni|no_data}}
                             </td>
-                            <td>
-                                {{voce.annotazioni|no_data}}
-                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -404,22 +401,19 @@
                         <tr>
                             <th>Tipo</th>
                             <th>Elezione</th>
-                            <th>Anno</th>
                             <th>Importo</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="voce in scheda.contributi_elettorali">
-                            <td ng-repeat="(k, v) in voce">
-                                <div ng-if="isNumber(v)">{{v|currency:"€"|no_data}}</div>
-                                <div ng-if="!isNumber(v)">{{v}}</div>
-                            </td>
+                            <td>{{voce.fonte|no_data}}</td>
+                            <td>{{voce.tipo_elezione|no_data}}</td>
+                            <td>{{voce.importo|currency:"€"|no_data}}</td>
                         </tr>
                         </tbody>
                         <tfoot>
                         <tr>
                             <td><b>Totale dichiarato</b></td>
-                            <td></td>
                             <td></td>
                             <td><b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></td>
                         </tr>
@@ -441,22 +435,19 @@
                         <tr>
                             <th>Tipo</th>
                             <th>Elezione</th>
-                            <th>Anno</th>
                             <th>Importo</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="voce in scheda.spese_elettorali">
-                            <td ng-repeat="(k, v) in voce">
-                                <div ng-if="isNumber(v)">{{v|currency:"€"|no_data}}</div>
-                                <div ng-if="!isNumber(v)">{{v}}</div>
-                            </td>
+                            <td>{{voce.fonte|no_data}}</td>
+                            <td>{{voce.tipo_elezione|no_data}}</td>
+                            <td>{{voce.importo|currency:"€"|no_data}}</td>
                         </tr>
                         </tbody>
                         <tfoot>
                         <tr>
                             <td><b>Totale dichiarato</b></td>
-                            <td></td>
                             <td></td>
                             <td><b>{{scheda.totale_spese_elettorali|currency:"€"}}</b></td>
                         </tr>
