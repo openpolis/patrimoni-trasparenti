@@ -14,7 +14,7 @@ import (
 )
 
 func GetFilters(r *http.Request) map[string]string {
-	values := []string{"gruppo", "organo", "circoscrizione", "anno"}
+	values := []string{"gruppo", "istituzione", "circoscrizione", "anno"}
 	filters := make(map[string]string)
 	for _, k := range values {
 		if elem, ok := r.Form[k]; ok {
