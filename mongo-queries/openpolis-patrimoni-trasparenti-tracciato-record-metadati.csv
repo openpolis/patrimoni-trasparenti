@@ -1,0 +1,21 @@
+Campo,Formato,Nota
+openpolis_id,Numerico,ID univoco sui sistemi openpolis
+nome,Testo,Nome del politico
+cognome,Testo,Cognome del politico
+data_nascita,Data,Notazione: gg/mm/aaaa
+professione,Testo,Professione del politico
+incarichi,Testo,"Indica gli incarichi ricoperti, se cessato indica la data di cessazione"
+lista di elezione/partito,Testo,"Indica la lista di elezione per i parlamentari, il partito di appartenenza per i membri del Governo alla data di download del file o, per gli incarichi non più in corso, alla data di cessazione dell'incarico"
+gruppo parlamentare,Testo,"Indica il gruppo di appartenenza alla data di download del file o, per gli incarichi non più in corso, alla data di cessazione dell'incarico"
+circoscrizione di elezione,Testo,Per i parlamentari la circoscrizione di elezione
+totale_730_dichiarante,Numerico,Decimali separati da virgola
+totale_730_coniuge,Numerico,Decimali separati da virgola
+totale_contributi_elettorali,Numerico,Decimali separati da virgola
+totale_spese_elettorali,Numerico,Decimali separati da virgola
+indice_completezza,Numerico,"Indica la completezza della dichiarazione patrimoniale. Viene assegnato 3 a chi non rispetta gli obblighi di legge, 2 a chi è adempiente e 1 a chi oltre a quanto previsto dalle norme pubblica anche informazioni aggiuntive "
+note_completezza,Testo,Spiega come è stato assegnato il valore di indice_completezza
+numero fabbricati,Numerico,Indica il numero di fabbricati posseduti
+numero terreni,Numerico,Indica il numero di terreni posseduti
+numero beni mobili,Numerico,Indica il numero di beni mobili posseduti
+numero di partecipazioni (azioni/quote) in società,Numerico,Indica il numero di società di cui si posseggono azioni o quote di partecipazione
+numero di incarichi di amministratore di società,Numerico,Indica il numero di società di cui si è amministratore o membro del Cda
