@@ -191,10 +191,10 @@ func DownloadAllCSVGet(w http.ResponseWriter, r *http.Request) {
 		ErrorLogger.Println("retrieving declarations from db", err)
 		return
 	}
-	wCSV := csv.NewWriter(w)
-	wCSV.Comma = ';'
 	w.Header().Set("Content-Type", "application/csv; charset=utf-8")
 	w.Header().Set("Content-Disposition", "attachment; filename=\""+vars["year"]+".csv\"")
+	wCSV := csv.NewWriter(w)
+	wCSV.Comma = ';'
 	wCSV.Write(makeCSVHeader())
 	for _, result := range results {
 		l := assembleCSVLine(result)
