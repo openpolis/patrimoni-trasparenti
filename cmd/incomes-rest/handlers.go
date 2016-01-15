@@ -44,8 +44,9 @@ func PoliticoUIHandlerGet(w http.ResponseWriter, r *http.Request) {
 	for i, d := range results {
 		enhancedResults[i] = incomes.DeclarationEnhanced{
 			DeclarationPolitical: d,
-			UrlFileOrig:          createS3link(d.File),
-			UrlFileRect:          createS3link(d.FileRectification),
+			UrlFileOrig:          createS3link(d.OpId),
+			// No more used as pdf are packed in a zip.
+			//UrlFileRect:          createS3link(d.FileRectification),
 		}
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")

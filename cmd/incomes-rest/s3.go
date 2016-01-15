@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -9,22 +10,13 @@ import (
 	"github.com/eaigner/s3"
 )
 
-func createS3link(fileName string) string {
-	if fileName == "" {
+// createS3link creates a static url of
+// the zip files on S3.
+func createS3link(op_id string) string {
+	if op_id == "" {
 		return ""
 	}
-	s3c := &s3.S3{
-		Bucket:    conf.S3bucket,
-		AccessKey: conf.S3key,
-		Secret:    conf.S3secret,
-		Path:      conf.S3path,
-	}
-	obj := s3c.Object(fileName)
-	url, err := obj.ExpiringURL(time.Minute * 60)
-	if err != nil {
-		ErrorLogger.Println("unable to generate s3 url:", err)
-	}
-	return url.String()
+	return fmt.Sprintf("%s/dichiarazioni-patromoniali-%s.zip", conf.ZipUrl, op_id)
 }
 
 // DeclarationUploader get a declaration file via POST and

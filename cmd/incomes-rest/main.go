@@ -55,6 +55,7 @@ type daemonConf struct {
 	S3key       string
 	S3secret    string
 	S3path      string
+	ZipUrl      string `cfgp:",uri to prepend to zip files for download,"`
 	LogFile     string
 	Version     bool `cfgp:"v,show version and exit,"`
 	// no http://, just the domain name
@@ -354,11 +355,13 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, ListHandlerGet))))).Methods("GET")
+	// DO NOT make this public, performance concerns.
 	router.HandleFunc("/api/all/{year}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, DownloadAllGet))))).Methods("GET")
+	// DO NOT make this public, performance concerns.
 	router.HandleFunc("/api/csvall/{year}",
 		httph.WithLog(InfoLogger,
 			httph.WithCORS(
@@ -405,7 +408,7 @@ func main() {
 			httph.WithCORS(
 				httph.WithSharedData(
 					httph.WithMongo(mongoSession, PoliticoHandlerGet))))).Methods("GET")
-	pEp = "/api/organi"
+	pEp = "/api/istituzioni"
 	eps = append(eps, pEp)
 	router.HandleFunc(pEp,
 		httph.WithLog(InfoLogger,
