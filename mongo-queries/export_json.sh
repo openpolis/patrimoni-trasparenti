@@ -7,6 +7,7 @@ Export () {
 		-q "{\"anno_dichiarazione\":${1}}"\
 		--type=json --jsonArray \
 		--out ${1}.json
+	zip ${1}.zip ${1}.json
 }
 
 for year in $years; do
