@@ -116,7 +116,11 @@
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('spese-elettorali')">Spese elettorali: <b>{{scheda.totale_spese_elettorali|currency:"€"}}</b></a>
+                            <p ng-show="scheda.totale_spese_elettorali">
+                              <a href="" ng-click="scrollTo('spese-elettorali')">Spese elettorali: <b>{{scheda.totale_spese_elettorali|currency:"€"}}</b></a>
+                            </p>
+                            <p ng-hide="scheda.totale_spese_elettorali">
+                              <a href="" ng-click="selectAndScroll(lastSpeseYearIndex, 'spese-elettorali')">Spese elettorali: <b>{{getLastSpeseYear()}}</b></a>
                             </p>
                         </div>
                     </div>
@@ -141,7 +145,11 @@
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('contributi-elettorali')">Contributi elettorali: <b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></a>
+                            <p ng-show="scheda.totale_contributi_elettorali">
+                              <a href="" ng-click="scrollTo('contributi-elettorali')">Contributi elettorali: <b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></a>
+                            </p>
+                            <p ng-hide="scheda.totale_contributi_elettorali">
+                              <a href="" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4"></div>
