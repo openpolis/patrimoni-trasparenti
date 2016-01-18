@@ -29,8 +29,8 @@
                              alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
                     </div>
                     <div class="scheda-items">
-                        <p>Data di nascita: <b>{{scheda.data_nascita | date:'dd-MM-yyyy'}}</b></p>
-
+                        <p>Data di nascita: <b>{{scheda.data_nascita | date:'dd-MM-yyyy'}}</b> <button open-dialog="nascita-dialog" >dialog</button></p>
+ 
                         <p>Residenza: <b>{{scheda.comune_residenza|capitalize:all}}
                             ({{scheda.provincia_residenza|capitalize:team}})</b></p>
 
@@ -475,3 +475,9 @@
         </div>
     </div>
 </div>
+
+<div id="nascita-dialog" title="Data nascita">
+  <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+
+
