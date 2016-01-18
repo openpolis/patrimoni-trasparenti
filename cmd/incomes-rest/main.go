@@ -8,8 +8,7 @@
 // @APIVersion 0.1.0
 // @APITitle Patrimoni Trasparenti RESTapi
 // @APIDescription Openpolis Patrimoni trasparenti RESTapi. http://openpolis.it/
-// @SubApi TadaBoard API [/tdb]
-// @SubApi API politici [/api]
+// @SubApi politici API [/api]
 package main
 
 import (

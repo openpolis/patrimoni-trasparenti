@@ -15,6 +15,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// @Title Retrieve all endpoints
+// @Description Retrieve all endpoints
+// @Success 200 {object} string
+// @Failure 500 {object} string "Mhm, something went wrong"
+// @Resource /api
+// @Router /api [get]
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	for _, s := range eps {
 		fmt.Fprintf(w, s+"\n")

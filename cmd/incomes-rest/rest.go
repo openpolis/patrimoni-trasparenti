@@ -77,6 +77,16 @@ func PoliticoHandlerGet(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// @Title Retrieve data for all politicians
+// @Description Retrieve data for all politicians
+// @Accept json
+// @Param gruppo query string false "Un parametro"
+// @Param istituzione query string false "Un altro parametro"
+// @Param circoscrizione query string false "Un altro parametro"
+// @Success 200 {object} incomes.TBDashTest
+// @Failure 500 {object} string "Mhm, something went wrong"
+// @Resource /api
+// @Router /api/politici [get]
 func AllPoliticiHandlerGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	sessionInterface, ok := httph.SharedData.Get(r, httph.MongoSession)
