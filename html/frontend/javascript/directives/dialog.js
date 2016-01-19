@@ -5,16 +5,16 @@ angular.module("PatrimoniTrasparenti")
         link: function(scope, elem, attr, ctrl) {
             console.log("here");
             var dialogId = '#' + attr.openDialog;
-            $timeout(function(){
-                //position: { my: "center top", at: "top bottom", of: elem },
-              $(dialogId).dialog({
-                autoOpen: false,
-                modal: true,
-                resizable: false
-              });
+            $(dialogId).dialog({
+              position: { my: "center top", at: "top bottom", of: elem },
+              autoOpen: false,
+              modal: true,
+              resizable: false
             });
             elem.bind('click', function(e) {
                 $(dialogId).dialog('open');
+                // FIXME
+                //$(dialogId).position({ my: "center top", at: "top bottom", of: e });
             });
         }
     };
