@@ -4,16 +4,20 @@ angular.module("PatrimoniTrasparenti")
         restrict: 'A',
         link: function(scope, elem, attr, ctrl) {
             var dialogId = '#' + attr.openDialog;
-            $(dialogId).dialog({
-              position: { my: "center top", at: "top bottom", of: elem },
-              autoOpen: false,
-              modal: true,
-              resizable: false
+            $timeout(function(){
+                //position: { my: "center top", at: "top bottom", of: elem },
+              $(dialogId).dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false
+              });
             });
             elem.bind('click', function(e) {
+                //console.log(e);
+                //console.log(e.currentTarget);
                 $(dialogId).dialog('open');
                 // FIXME
-                //$(dialogId).position({ my: "center top", at: "top bottom", of: e });
+                //$(dialogId).position({of: e.currentTarget });
             });
         }
     };
