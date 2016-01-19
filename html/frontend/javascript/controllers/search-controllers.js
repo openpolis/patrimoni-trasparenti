@@ -93,8 +93,12 @@ angular.module('PatrimoniTrasparenti')
                 };
             },
             close: function( event, ui ) {
-                //console.log("closed!");
+                // clear search box
+                controller.searchObj = {id:'', value:''};
                 //console.log('searchObj:', controller.searchObj);
+            },
+            focus: function( event, ui ) {
+                //console.log("focused!");
             }
         },
         methods: {}

@@ -3,7 +3,6 @@ angular.module("PatrimoniTrasparenti")
     return {
         restrict: 'A',
         link: function(scope, elem, attr, ctrl) {
-            console.log("here");
             var dialogId = '#' + attr.openDialog;
             $(dialogId).dialog({
               position: { my: "center top", at: "top bottom", of: elem },
