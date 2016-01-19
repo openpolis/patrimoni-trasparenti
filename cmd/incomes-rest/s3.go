@@ -16,7 +16,7 @@ func createS3link(op_id string) string {
 	if op_id == "" {
 		return ""
 	}
-	return fmt.Sprintf("%s/dichiarazioni-patromoniali-%s.zip", conf.ZipUrl, op_id)
+	return fmt.Sprintf("%s/%s.zip", conf.ZipUrl, op_id)
 }
 
 // DeclarationUploader get a declaration file via POST and
