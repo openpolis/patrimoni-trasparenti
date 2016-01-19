@@ -53,17 +53,18 @@ To navigate and read full documentation use Go builtin doc system. Once cloned t
 
 and point your browser to ``http://localhost:8001/pkg/`` and choose desider package/command.
 
-Generate RESTapi swagger docs
------------------------------
+(Re)generate RESTapi swagger docs
+---------------------------------
 
 With github.com/yvasiyarov/swagger installed::
 
         $ cd cmd/rest-docs
         $ swagger -apiPackage="bitbucket.org/eraclitux/op-incomes" -mainApiFile="bitbucket.org/eraclitux/op-incomes/cmd/incomes-rest/main.go"
+        $ go build
 
 Test it with::
 
-        $ bin/rest-docs -api "http://openpatrimoni.deppsviluppo.org"
+        $ ./rest-docs -api "http://openpatrimoni.deppsviluppo.org"
 
 Dump data for OpenData page
 ---------------------------
@@ -74,7 +75,7 @@ From ``./mongo-queries``::
         $ ./export_json.sh
 
 MongoDB commands
-================
+----------------
 
 Create text index on all fields::
 
@@ -88,14 +89,14 @@ ES commands
 ===========
 
 Import data from MongoDB
-------------------------
+========================
 
 Use transporter (https://github.com/compose/transporter)::
 
         ./transporter run --config transporter-conf/config.yaml ./transporter-conf/application.js
 
 Change indexing parameters
---------------------------
+==========================
 
 It's not possible! We must reimport data or copy to a new index where we have changed mapping in advance.
 
@@ -115,6 +116,27 @@ Verify that is what we want::
 Reimport/copy data.
 
 An example mapping with ``"index" : "not_analyzed"`` is provided in ``conf`` dir in this repo.
+
+Deploy
+------
+
+There is nothing to install on the host (except nginx), binaries are ``bin`` and html data in ``html`` folder. Copy only the latest revision::
+
+        git clone git@gitlab.depp.it:depp/patrimoni-trasparenti.git --depth 1
+
+
+Debug
+-----
+
+For every commands this will build the debug version::
+
+        cd cmd/incomes-rest
+        go build -tags debug
+
+Generate data for OpenData page
+-------------------------------
+
+Use scripts ``mongo-queries/export_csv.sh`` and ``mongo-queries/export_json.sh``
 
 Note
 ----
