@@ -371,7 +371,28 @@ footer strong {
 .ui-dialog-titlebar-close:hover {
   background: url("http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_222222_256x240.png") repeat scroll -93px -128px rgba(0, 0, 0, 0);
 }
-
+/*fotter stats*/
+.stats-detail-box {
+  background-color: #EAEBED;
+  padding-top: 30px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.stats-detail-box .floating-stats {
+  text-align: center;
+  display:block;
+  width:100px;
+  height:100px;
+  float:left;
+  margin-left:auto;
+  margin-right:auto;
+  font-size: 12px;
+  line-height: 17.5px;
+}
+.stats-detail-box .floating-stats .big-text {
+  font-size: 30px;
+  line-height: 20px;
+}
 /*footer logo*/
 .footer-logo {
    display:block;
