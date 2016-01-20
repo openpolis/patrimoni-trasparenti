@@ -70,8 +70,6 @@
                             </p>
                         </div>
                     </div>
-
-
                     <a href="http://parlamento17.openpolis.it/parlamentare/{{scheda.op_id}}" class="highlight-link" target="_blank">VISUALIZZA LA SUA ATTIVITÀ PARLAMENTARE</a>
                     <br>
                     <div>
@@ -104,7 +102,7 @@
                                 </div>
                             </div>
                             <div class="col-md-7">
-                              <p class="font-size-medium"><b>{{scheda.note_completezza | format_note_completezza:'title' | capitalize:'first' }}</b><br/>
+                              <p class="font-size-medium"><b>{{scheda.indice_completezza|completeness_mapping}} - {{scheda.note_completezza | format_note_completezza:'title' | capitalize:'first' }}</b><br/>
                                 {{scheda.note_completezza | format_note_completezza:'body' | capitalize:'first'}}.</p>
                             </div>
                         </div>
@@ -153,7 +151,8 @@
                               <a href="" ng-click="scrollTo('contributi-elettorali')">Contributi elettorali: <b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></a>
                             </p>
                             <p ng-hide="scheda.totale_contributi_elettorali">
-                              <a href="" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></a>
+                              <a  ng-hide="getLastContributiYear()=='Nessuna voce'" href="" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></a>
+                              <span ng-show="getLastContributiYear()=='Nessuna voce'" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></span>
                             </p>
                         </div>
                         <div class="col-md-4"></div>

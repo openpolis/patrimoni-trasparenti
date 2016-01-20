@@ -49,6 +49,19 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ngSanitize', 'ui.autocomplet
       };
     };
   })
+  .filter('completeness_mapping', function() {
+    return function (input, format) {
+      var mapping = {};
+      mapping["1"]="Buona";
+      mapping["2"]="Sufficiente";
+      mapping["3"]="Scarsa";
+      if (!input) {
+        return input;
+      } else {
+        return mapping[input];
+      };
+    };
+  })
   .filter('format_note_completezza', function() {
     return function (input, format) {
       if (!input) {

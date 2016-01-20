@@ -33,8 +33,8 @@
                               <option value="data_nascita" role="presentation">Età decrescente</option>-->
                             <option value="ultimo_reddito" role="presentation">Reddito crescente</option>
                             <option value="-ultimo_reddito" role="presentation">Reddito decrescente</option>
-                            <option value="ultima_completezza" role="presentation">Completezza crescente</option>
-                            <option value="-ultima_completezza" role="presentation">Completezza decrescente</option>
+                            <option value="-ultima_completezza" role="presentation">Completezza crescente</option>
+                            <option value="ultima_completezza" role="presentation">Completezza decrescente</option>
                         </select>
 
                     </div>
@@ -69,7 +69,7 @@
                                         <p>
                                             Istituzioni: <b ng-repeat="ist in result.istituzioni">{{ist}} </b><br>
                                             Reddito: <b>{{result.ultimo_reddito|currency:"€"}}</b><br>
-                                            Completezza dichiarazione: <b>{{result.ultima_completezza}}</b><br>
+                                            Completezza dichiarazione: <b>{{result.ultima_completezza|completeness_mapping}}</b><br>
                                             Gruppo: <b ng-repeat="ist in result.gruppo_acronym">{{ist}} </b><br>
                                         </p>
                                     </div>
