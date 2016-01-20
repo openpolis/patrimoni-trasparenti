@@ -371,6 +371,19 @@ footer strong {
 .ui-dialog-titlebar-close:hover {
   background: url("http://code.jquery.com/ui/1.10.3/themes/smoothness/images/ui-icons_222222_256x240.png") repeat scroll -93px -128px rgba(0, 0, 0, 0);
 }
+
+/*footer logo*/
+.footer-logo {
+   display:block;
+   width: 154px;
+   height:40px;
+   background:transparent url('../assets/images/logo_off.png') center top no-repeat;
+}
+
+.footer-logo:hover {
+   background-image: url('../assets/images/logo_on.png');
+}
+
 /*
  * Bootstrap overrides
  *
