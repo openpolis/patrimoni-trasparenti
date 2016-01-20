@@ -29,7 +29,7 @@
                              alt="{{scheda.nome|capitalize:all}} {{scheda.cognome|capitalize:all}}"/>
                     </div>
                     <div class="scheda-items">
-                        <p>Data di nascita: <b>{{scheda.data_nascita | date:'dd-MM-yyyy'}}</b> <a href="" open-dialog="nascita-dialog" >?</a></p>
+                        <p>Data di nascita: <b>{{scheda.data_nascita | date:'dd-MM-yyyy'}}</b></p>
 
                         <p>Residenza: <b>{{scheda.comune_residenza|capitalize:all}}
                             ({{scheda.provincia_residenza|capitalize:team}})</b></p>
@@ -90,7 +90,8 @@
 
                     <div class="well">
                         <div class="row">
-                            <div class="col-md-2"><strong>Completezza della dichiarazione patrimoniale</strong> <a href="" open-dialog="completezza-dialog" >?</a></div>
+                          <div class="col-md-2"><strong>Completezza della dichiarazione patrimoniale</strong>
+                          </div>
                             <div class="col-md-3">
                                 <div class="progress">
                                     <span class="progress-step progress-step-1_3"></span><span class="progress-step progress-step-2_3"></span>
@@ -168,7 +169,7 @@
                     -->
 
                     <div id="modello-redditi">
-                        <h3>Voci di reddito {{scheda.anno_dichiarazione}}</h3>
+                        <h3>Voci di reddito {{scheda.anno_dichiarazione}} <a href="" custom-popover popover-html="Testo di aiuto <b>bold?</b>" popover-placement="bottom" popover-label="?"></a></h3>
                     </div>
                     <table class="table table-striped">
                         <thead>
@@ -475,12 +476,3 @@
         </div>
     </div>
 </div>
-
-<div id="nascita-dialog" title="Data nascita">
-  <p>Messaggio di spiegazione.</p>
-</div>
-<div id="completezza-dialog" title="Completezza">
-  <p>Messaggio di spiegazione.</p>
-</div>
-
-
