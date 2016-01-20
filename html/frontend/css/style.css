@@ -309,6 +309,9 @@ footer strong {
   padding: 0 6px;
 }
 */
+.no-contrib-expense b {
+      color: #26AD68;
+}
 .funding-campaign p {
   margin: 0;
 }

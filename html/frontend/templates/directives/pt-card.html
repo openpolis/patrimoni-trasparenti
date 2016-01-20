@@ -30,7 +30,7 @@
                     </div>
                     <div class="scheda-items">
                         <p>Data di nascita: <b>{{scheda.data_nascita | date:'dd-MM-yyyy'}}</b> <a href="" open-dialog="nascita-dialog" >?</a></p>
- 
+
                         <p>Residenza: <b>{{scheda.comune_residenza|capitalize:all}}
                             ({{scheda.provincia_residenza|capitalize:team}})</b></p>
 
@@ -122,7 +122,8 @@
                               <a href="" ng-click="scrollTo('spese-elettorali')">Spese elettorali: <b>{{scheda.totale_spese_elettorali|currency:"€"}}</b></a>
                             </p>
                             <p ng-hide="scheda.totale_spese_elettorali">
-                              <a href="" ng-click="selectAndScroll(lastSpeseYearIndex, 'spese-elettorali')">Spese elettorali: <b>{{getLastSpeseYear()}}</b></a>
+                              <a ng-hide="getLastSpeseYear()=='Nessuna voce'" ng-click="selectAndScroll(lastSpeseYearIndex, 'spese-elettorali')" href="" >Spese elettorali: <b>{{getLastSpeseYear()}}</b></a>
+                              <span ng-show="getLastSpeseYear()=='Nessuna voce'" class="no-contrib-expense">Spese elettorali: <b>{{getLastSpeseYear()}}</b></span>
                             </p>
                         </div>
                     </div>
@@ -151,8 +152,8 @@
                               <a href="" ng-click="scrollTo('contributi-elettorali')">Contributi elettorali: <b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></a>
                             </p>
                             <p ng-hide="scheda.totale_contributi_elettorali">
-                              <a  ng-hide="getLastContributiYear()=='Nessuna voce'" href="" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></a>
-                              <span ng-show="getLastContributiYear()=='Nessuna voce'" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></span>
+                              <a ng-hide="getLastContributiYear()=='Nessuna voce'" href="" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></a>
+                              <span ng-show="getLastContributiYear()=='Nessuna voce'" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')" class="no-contrib-expense" >Contributi elettorali: <b>{{getLastContributiYear()}}</b></span>
                             </p>
                         </div>
                         <div class="col-md-4"></div>
