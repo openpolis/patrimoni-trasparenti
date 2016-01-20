@@ -6,8 +6,11 @@ angular.module('PatrimoniTrasparenti')
     .when('/faq', {
     templateUrl: '/templates/pages/faq/index.html'
   })
-    .when('/campagna', {
-    templateUrl: '/templates/pages/campagna/index.html'
+    .when('/progetto', {
+    templateUrl: '/templates/pages/progetto/index.html'
+  })
+    .when('/minidossier', {
+    templateUrl: '/templates/pages/minidossier/index.html'
   })
     .when('/opendata', {
     templateUrl: '/templates/pages/opendata/index.html'
