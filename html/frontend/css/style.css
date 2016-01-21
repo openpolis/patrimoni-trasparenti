@@ -477,6 +477,18 @@ footer strong {
   height: 126px;
   overflow: hidden;
 }
+/*popover*/
+.popover .popover-title {
+	margin: 2px;
+	color:#FFFFFF;
+	background-color: #43BB99;
+	font-weight: bold;
+}
+.popover a {
+	color:#43BB99;
+	font-weight: bold;
+}
+
 /* Sticky footer
 -------------------------------------------------- */
 @media screen and (min-width: 990px) {
