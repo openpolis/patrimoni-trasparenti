@@ -85,7 +85,7 @@ func AutocompleterHandler(w http.ResponseWriter, r *http.Request) {
 	pipe = coll.Pipe([]bson.M{
 		{"$unwind": "$incarichi"},
 		{"$group": bson.M{
-			"_id":  "$incarichi.circoscrizione",
+			"_id":  bson.M{"circoscrizione": "$incarichi.circoscrizione", "elezione": "$incarichi.tipo_elezione"},
 			"name": bson.M{"$last": "$incarichi.circoscrizione"},
 			"type": bson.M{"$last": "$incarichi.tipo_elezione"},
 		},
