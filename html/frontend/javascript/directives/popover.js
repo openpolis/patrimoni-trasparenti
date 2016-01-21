@@ -10,6 +10,7 @@ angular.module("PatrimoniTrasparenti")
                   trigger: 'click',
                   html: true,
                   content: attrs.popoverHtml,
+                  title: attrs.popoverTitle,
                   placement: attrs.popoverPlacement
               });
           }
