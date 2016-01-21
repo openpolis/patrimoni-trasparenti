@@ -96,7 +96,13 @@
                     <div class="well">
                         <div class="row">
                           <div class="col-md-8">
-                            <strong>Completezza della dichiarazione patrimoniale</strong>
+                            <strong>Completezza della dichiarazione patrimoniale
+                            <a href="" 
+                            custom-popover popover-title="Completezza della dichiarazione patrimoniale" 
+                            popover-html="L’indice di completezza analizza i documenti pubblicati da ciascun politico.<br>
+                            <a href='/#/progetto#faqcompletezza'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?"></a>
+                            </strong>
                           </div>
                           <div class="col-md-4">
                           </div>
@@ -178,7 +184,13 @@
                     -->
 
                     <div id="modello-redditi">
-                        <h3>Voci di reddito {{scheda.anno_dichiarazione}} <a href="" custom-popover popover-title="Titolo" popover-html="Testo di aiuto <b>bold?</b>" popover-placement="bottom" popover-label="?"></a></h3>
+                        <h3>Voci di reddito {{scheda.anno_dichiarazione}} 
+                          <a href="" 
+                            custom-popover popover-title="Voci di reddito" 
+                            popover-html="Le fonti da cui è possibile avere entrate, riportate in apposite sezioni dei modelli di dichiarazione dei redditi.<br><a href='/#/progetto#faqreddito'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                        </h3>
                     </div>
                     <table class="table table-striped">
                         <thead>
@@ -215,7 +227,13 @@
 
                     <!-- FABBRICATI-->
                     <div ng-show="(scheda.beni_immobili| filter:{$:'fabbricato'}).length" id="lista-fabbricati">
-                        <h3>Fabbricati {{scheda.anno_dichiarazione}}</h3>
+                        <h3>Fabbricati {{scheda.anno_dichiarazione}}
+                          <a href="" 
+                            custom-popover popover-title="Fabbricati" 
+                            popover-html="I beni immobili di proprietà come case, palazzi o stabili di vario tipo.<br><a href='/#/progetto#faqfabbricati'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                        </h3>
                     </div>
                     <table ng-show="(scheda.beni_immobili| filter:{$:'fabbricato'}).length" class="table table-striped">
                         <thead>
@@ -268,7 +286,13 @@
                     </table>
 
                     <div ng-show="(scheda.beni_immobili| filter:{$:'terreno'}).length" id="lista-terreni">
-                        <h3>Terreni {{scheda.anno_dichiarazione}}</h3>
+                        <h3>Terreni {{scheda.anno_dichiarazione}}
+                          <a href="" 
+                            custom-popover popover-title="Le proprietà immobiliari relative ai terreni" 
+                            popover-html="Per i terreni sono indicati due valori: il reddito dominicale, riferito alla proprietà del fondo, e il reddito agrario, relativo alla sua possibile lavorazione agricola.<br><a href='/#/progetto#faqterreni'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                        </h3>
                     </div>
                     <table ng-show="(scheda.beni_immobili| filter:{$:'terreno'}).length" class="table table-striped">
                         <thead>
@@ -323,7 +347,13 @@
                     -->
 
                     <div ng-show="scheda.beni_mobili.length" id="beni-mobili">
-                        <h3>Beni mobili {{scheda.anno_dichiarazione}}</h3>
+                        <h3>Beni mobili {{scheda.anno_dichiarazione}}
+                          <a href="" 
+                            custom-popover popover-title="Beni mobili" 
+                            popover-html="Mezzi di trasporto di proprietà iscritti ai pubblici registri.<br><a href='/#/progetto#faqmobili'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                        </h3>
                     </div>
                     <table ng-show="scheda.beni_mobili.length" class="table table-striped">
                         <thead>
@@ -353,7 +383,13 @@
                     -->
 
                     <div ng-show="scheda.partecipazioni_soc.length" id="partecipazioni-soc">
-                        <h3>Partecipazioni in società {{scheda.anno_dichiarazione}}</h3>
+                        <h3>Partecipazioni in società {{scheda.anno_dichiarazione}}
+                          <a href="" 
+                            custom-popover popover-title="Partecipazioni in società" 
+                            popover-html="Le quote o le azioni societarie di proprietà.<br><a href='/#/progetto#faqpartecipazioni'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                        </h3>
                     </div>
                     <table ng-show="scheda.partecipazioni_soc.length" class="table table-striped">
                         <thead>
@@ -385,7 +421,13 @@
                     -->
 
                     <div ng-show="scheda.amministrazioni_soc.length" id="amministrazioni-soc">
-                        <h3>Amministrazioni di società {{scheda.anno_dichiarazione}}</h3>
+                        <h3>Amministrazioni di società {{scheda.anno_dichiarazione}}
+                          <a href="" 
+                            custom-popover popover-title="Amministrazioni di società" 
+                            popover-html="Gli incarichi ricoperti in aziende e società di vario tipo.<br><a href='/#/progetto#faqamministrazioni'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                        </h3>
                     </div>
                     <table ng-show="scheda.amministrazioni_soc.length" class="table table-striped">
                         <thead>
@@ -416,7 +458,13 @@
 
                     <div ng-show="scheda.totale_contributi_elettorali" id="contributi-elettorali">
                         <h3>Contributi elettorali {{scheda.anno_dichiarazione}}:
-                            {{scheda.totale_contributi_elettorali|currency:"€"}}</h3>
+                          <a href="" 
+                            custom-popover popover-title="Contributi elettorali" 
+                            popover-html="Le risorse a disposizione dei singoli candidati per svolgere la propria campagna elettorale.<br><a href='/#/progetto#faqcontributi'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                            {{scheda.totale_contributi_elettorali|currency:"€"}}
+                        </h3>
                     </div>
                     <table ng-show="scheda.totale_contributi_elettorali" class="table table-striped">
                         <thead>
@@ -450,7 +498,13 @@
 
                     <div ng-show="scheda.totale_spese_elettorali" id="spese-elettorali">
                         <h3>Spese elettorali {{scheda.anno_dichiarazione}}:
-                            {{scheda.totale_spese_elettorali|currency:"€"}}</h3>
+                          <a href="" 
+                            custom-popover popover-title="Spese elettorali" 
+                            popover-html="I soldi spesi dai singoli candidati per svolgere la propria campagna elettorale.<br><a href='/#/progetto#faqspese'>Maggiori info.</a>"
+                            popover-placement="bottom" popover-label="?">
+                          </a>
+                            {{scheda.totale_spese_elettorali|currency:"€"}}
+                        </h3>
                     </div>
                     <table ng-show="scheda.totale_spese_elettorali" class="table table-striped">
                         <thead>
