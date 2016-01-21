@@ -7,7 +7,7 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ngSanitize', 'ui.autocomplet
   // Dummy filter to configure minidossier link
   .filter('minid_link', function() {
     return function (input, format) {
-      return "http://parlamento17.openpolis.it/parlamentare/";
+      return "http://minidossier.openpolis.it/2016/01/PatrimoniTrasparenti";
     };
   })
   .filter('capitalize', function() {
