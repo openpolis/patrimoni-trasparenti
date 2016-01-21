@@ -1,0 +1,160 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Patrimoni trasparenti RESTapi",
+        "description": "Patrimoni trasparenti API",
+        "version": "0.1.0"
+    },
+    "host": "patrimoni.staging.openpolis.it",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/api",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/politici": {
+            "get": {
+                "summary": "Elenca politici con dichiarazioni",
+                "description": "Elenco dei politici. Filtrabile per gruppo, organo o circoscrizione.\n",
+                "parameters": [
+                    {
+                        "name": "gruppo",
+                        "in": "query",
+                        "description": "Gruppo parlamentare.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "istituzione",
+                        "in": "query",
+                        "description": "Istituzione di appartenenza.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "circoscrizione",
+                        "in": "query",
+                        "description": "Circoscrizione di elezione.",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un array of politici",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Politician"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/politici/{opId}": {
+            "get": {
+                "summary": "Elenca singolo politico con dichiarazione",
+                "description": "Dettagli anagrafici del politico ed elenco delle dichiarazioni del politico. \nSono mostrate tutte le dichiarazioni disponibili o quelle dell'anno indicato.\n",
+                "parameters": [
+                    {
+                        "name": "opId",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID openpolis",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of products",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Politician"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Politician": {
+            "type": "object",
+            "properties": {
+                "nome": {
+                    "type": "string",
+                    "description": "il nome"
+                },
+                "cognome": {
+                    "type": "string",
+                    "description": "il cognome"
+                },
+                "data_nascita": {
+                    "type": "string",
+                    "description": "data di nascita"
+                },
+                "op_id": {
+                    "type": "integer",
+                    "description": "ID Openpolis"
+                },
+                "dichiarazioni": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Dichiarazione"
+                    }
+                }
+            }
+        },
+        "Dichiarazione": {
+            "type": "object",
+            "properties": {
+                "anno": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "anno della dichiarazione"
+                },
+                "istituzine": {
+                    "type": "string",
+                    "description": "istituzione"
+                },
+                "gruppo_acronym": {
+                    "type": "string",
+                    "description": "gruppo di appartenenza"
+                },
+                "circoscrizione": {
+                    "type": "string",
+                    "description": "circoscrizione di elezione"
+                },
+                "dichiarazione": {
+                    "type": "string",
+                    "description": "link alla dichiarazione completa"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
