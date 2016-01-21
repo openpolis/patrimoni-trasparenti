@@ -115,7 +115,7 @@
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('partecipazioni-soc')">N. di partecipazioni (azioni/quote) in società: <b>{{scheda.partecipazioni_soc.length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('partecipazioni-soc')">N. di partecipazioni (azioni/quote) in società: <b>{{(scheda.partecipazioni_soc| filter:{$:'dichiarante'}).length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4">
@@ -131,13 +131,13 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('lista-fabbricati')">N. fabbricati: <b>{{(scheda.beni_immobili| filter:{$:'fabbricato'}).length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('lista-fabbricati')">N. fabbricati: <b>{{(scheda.beni_immobili| filter:{$:'dichiarante'} | filter:{$:'fabbricato'}).length}}</b></a>
                             </p>
-                            <p><a href="" ng-click="scrollTo('lista-terreni')">N. terreni: <b>{{(scheda.beni_immobili| filter:{$:'terreno'}).length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('lista-terreni')">N. terreni: <b>{{(scheda.beni_immobili| filter:{$:'dichiarante'} | filter:{$:'terreno'}).length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('amministrazioni-soc')">N. di incarichi di amministratore di società: <b>{{scheda.amministrazioni_soc.length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('amministrazioni-soc')">N. di incarichi di amministratore di società: <b>{{(scheda.amministrazioni_soc| filter:{$:'dichiarante'}).length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4"></div>
@@ -145,7 +145,7 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('beni-mobili')">Numero beni mobili: <b>{{scheda.beni_mobili.length}}</b></a>
+                            <p><a href="" ng-click="scrollTo('beni-mobili')">Numero beni mobili: <b>{{(scheda.beni_mobili| filter:{$:'dichiarante'}) .length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4">

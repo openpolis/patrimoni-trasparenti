@@ -64,13 +64,23 @@ func quote(s string) string {
 }
 
 func countEmbeddedElements(f []interface{}) string {
-	return strconv.Itoa(len(f))
+	tot := 0
+	for _, e := range f {
+		v := e.(bson.M)
+		if v["persona"] == "dichiarante" {
+			tot++
+		}
+	}
+	return strconv.Itoa(tot)
 }
 
 func countImmobili(l []interface{}) (f, t string) {
 	fI, tI := 0, 0
 	for _, e := range l {
 		v := e.(bson.M)
+		if v["persona"] != "dichiarante" {
+			continue
+		}
 		if v["descrizione"] == "fabbricato" {
 			fI++
 		} else if v["descrizione"] == "terreno" {
