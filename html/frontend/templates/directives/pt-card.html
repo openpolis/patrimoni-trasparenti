@@ -73,7 +73,12 @@
                     <a href="http://parlamento17.openpolis.it/parlamentare/{{scheda.op_id}}" class="highlight-link" target="_blank">VISUALIZZA LA SUA ATTIVITÀ PARLAMENTARE</a>
                     <br>
                     <div>
-                        <p><a href="{{scheda.filename_url}}" target="_blank" class="highlight-link">SCARICA I DOCUMENTI ORIGINALI DELLE DICHIARAZIONI PATRIMONIALI</a></p>
+                        <p>
+                          <a href="{{scheda.filename_url}}" target="_blank" class="highlight-link">
+                            <img src="assets/images/scarica_ico.png" alt="scarica" width="17" height="17" data-src2x="assets/images/scarica_ico@2x.png"> SCARICA I DOCUMENTI ORIGINALI DELLE DICHIARAZIONI PATRIMONIALI
+                          </a>
+                        </p>
+            
                     </div>
 
                 </div>
@@ -90,9 +95,15 @@
 
                     <div class="well">
                         <div class="row">
-                          <div class="col-md-2"><strong>Completezza della dichiarazione patrimoniale</strong>
+                          <div class="col-md-8">
+                            <strong>Completezza della dichiarazione patrimoniale</strong>
                           </div>
-                            <div class="col-md-3">
+                          <div class="col-md-4">
+                          </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-4">
                                 <div class="progress">
                                     <span class="progress-step progress-step-1_3"></span><span class="progress-step progress-step-2_3"></span>
                                     <div class="progress-bar" role="progressbar"
@@ -102,7 +113,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-8">
                               <p class="font-size-medium"><b>{{scheda.indice_completezza|completeness_mapping}} - {{scheda.note_completezza | format_note_completezza:'title' | capitalize:'first' }}</b><br/>
                                 {{scheda.note_completezza | format_note_completezza:'body' | capitalize:'first'}}.</p>
                             </div>
@@ -111,11 +122,33 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('modello-redditi')">Reddito: <b>{{scheda.totale_730_dichiarante|currency}}</b></a>
+                            <p>
+                              <a href="" ng-click="scrollTo('modello-redditi')">Reddito: <b>{{scheda.totale_730_dichiarante|currency}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('partecipazioni-soc')">N. di partecipazioni (azioni/quote) in società: <b>{{(scheda.partecipazioni_soc| filter:{$:'dichiarante'}).length}}</b></a>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p>
+                              <a href="" ng-click="scrollTo('lista-fabbricati')">N. fabbricati: <b>{{(scheda.beni_immobili| filter:{$:'dichiarante'} | filter:{$:'fabbricato'}).length}}</b></a>
+                            </p>
+                            <p>
+                              <a href="" ng-click="scrollTo('lista-terreni')">N. terreni: <b>{{(scheda.beni_immobili| filter:{$:'dichiarante'} | filter:{$:'terreno'}).length}}</b></a>
+                            </p>
+                            <p>
+                              <a href="" ng-click="scrollTo('beni-mobili')">N. beni mobili: <b>{{(scheda.beni_mobili| filter:{$:'dichiarante'}) .length}}</b></a>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>
+                              <a href="" ng-click="scrollTo('partecipazioni-soc')">N. di partecipazioni (azioni/quote) in società: <b>{{(scheda.partecipazioni_soc| filter:{$:'dichiarante'}).length}}</b></a>
+                            </p>
+                            <p>
+                              <a href="" ng-click="scrollTo('amministrazioni-soc')">N. di incarichi di amministratore di società: <b>{{(scheda.amministrazioni_soc| filter:{$:'dichiarante'}).length}}</b></a>
                             </p>
                         </div>
                         <div class="col-md-4">
@@ -126,29 +159,6 @@
                               <a ng-hide="getLastSpeseYear()=='Nessuna voce'" ng-click="selectAndScroll(lastSpeseYearIndex, 'spese-elettorali')" href="" >Spese elettorali: <b>{{getLastSpeseYear()}}</b></a>
                               <span ng-show="getLastSpeseYear()=='Nessuna voce'" class="no-contrib-expense">Spese elettorali: <b>{{getLastSpeseYear()}}</b></span>
                             </p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('lista-fabbricati')">N. fabbricati: <b>{{(scheda.beni_immobili| filter:{$:'dichiarante'} | filter:{$:'fabbricato'}).length}}</b></a>
-                            </p>
-                            <p><a href="" ng-click="scrollTo('lista-terreni')">N. terreni: <b>{{(scheda.beni_immobili| filter:{$:'dichiarante'} | filter:{$:'terreno'}).length}}</b></a>
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('amministrazioni-soc')">N. di incarichi di amministratore di società: <b>{{(scheda.amministrazioni_soc| filter:{$:'dichiarante'}).length}}</b></a>
-                            </p>
-                        </div>
-                        <div class="col-md-4"></div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p><a href="" ng-click="scrollTo('beni-mobili')">Numero beni mobili: <b>{{(scheda.beni_mobili| filter:{$:'dichiarante'}) .length}}</b></a>
-                            </p>
-                        </div>
-                        <div class="col-md-4">
                             <p ng-show="scheda.totale_contributi_elettorali">
                               <a href="" ng-click="scrollTo('contributi-elettorali')">Contributi elettorali: <b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></a>
                             </p>
@@ -157,7 +167,6 @@
                               <span ng-show="getLastContributiYear()=='Nessuna voce'" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')" class="no-contrib-expense" >Contributi elettorali: <b>{{getLastContributiYear()}}</b></span>
                             </p>
                         </div>
-                        <div class="col-md-4"></div>
                     </div>
 
                     <hr/>
@@ -218,7 +227,7 @@
                             <th>Rendita catastale</th>
                             <th>Codice utilizzo</th>
                             <th>Categoria catastale</th>
-                            <th>Quata possesso</th>
+                            <th>Quota possesso</th>
                             <th>Note</th>
                         </tr>
                         </thead>

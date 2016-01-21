@@ -210,6 +210,7 @@ b {
 .scheda-items p {
   border-top: 1px dashed #DEDEDE;
   padding-top: 5px;
+  font-size: 14px;
 }
 .scheda-items p:first-child {
   border-top: none;
@@ -436,7 +437,7 @@ footer strong {
   color: #3cba97;
 }
 .table {
-  font-size: 15px;
+  font-size: 13px;
 }
 .table tfoot b {
   color: #26ad68;
