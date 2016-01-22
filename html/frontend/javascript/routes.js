@@ -3,7 +3,9 @@ angular.module('PatrimoniTrasparenti')
     $routeProvider.when('/', {
     templateUrl: '/templates/pages/home/index.html',
     controller: function($scope, $location, $window) {
-      $window.ga('send', 'pageview', { page: $location.url()});
+      $scope.$on('$viewContentLoaded', function(event) {
+        $window.ga('send', 'pageview', { page: $location.url()});
+      })
     }
   })
     .when('/faq', {
@@ -12,22 +14,34 @@ angular.module('PatrimoniTrasparenti')
     .when('/progetto', {
     templateUrl: '/templates/pages/progetto/index.html',
     controller: function($scope, $location, $window) {
-      $window.ga('send', 'pageview', { page: $location.url()});
+      $scope.$on('$viewContentLoaded', function(event) {
+        $window.ga('send', 'pageview', { page: $location.url()});
+      })
     }
   })
     .when('/minidossier', {
     templateUrl: '/templates/pages/minidossier/index.html',
     controller: function($scope, $location, $window) {
-      $window.ga('send', 'pageview', { page: $location.url()});
+      $scope.$on('$viewContentLoaded', function(event) {
+        $window.ga('send', 'pageview', { page: $location.url()});
+      })
     }
   })
     .when('/opendata', {
-    templateUrl: '/templates/pages/opendata/index.html'
+    templateUrl: '/templates/pages/opendata/index.html',
+    controller: function($scope, $location, $window) {
+      $scope.$on('$viewContentLoaded', function(event) {
+        $window.ga('send', 'pageview', { page: $location.url()});
+      })
+    }
   })
     .when('/scheda/:name/:id', {
     templateUrl: '/templates/pages/scheda/index.html',
-    controller: function($routeParams) {
+    controller: function($routeParams, $scope, $location, $window) {
       this.opId = $routeParams.id;
+      $scope.$on('$viewContentLoaded', function(event) {
+        $window.ga('send', 'pageview', { page: $location.url()});
+      })
     },
     controllerAs: 'cardCtrl'
   })
