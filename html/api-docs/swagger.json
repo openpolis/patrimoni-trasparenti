@@ -44,7 +44,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Politician"
+                                "$ref": "#/definitions/Politico"
                             }
                         }
                     },
@@ -68,15 +68,106 @@
                         "required": true,
                         "description": "ID openpolis",
                         "type": "string"
+                    },
+                    {
+                        "name": "anno",
+                        "in": "query",
+                        "description": "anno dichiarazione",
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "An array of products",
+                        "description": "Un array di dichiarazioni",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Politician"
+                                "$ref": "#/definitions/Dichiarazione"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/istituzioni": {
+            "get": {
+                "summary": "Elenca istituzioni",
+                "description": "Elenco delle istituzioni",
+                "responses": {
+                    "200": {
+                        "description": "Un array di istutuzioni",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Istituzione"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/gruppi": {
+            "get": {
+                "summary": "Elenca gruppi",
+                "description": "Elenco dei gruppi.\n",
+                "parameters": [
+                    {
+                        "name": "istituzione",
+                        "in": "query",
+                        "description": "Istituzione.",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un array of politici",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Gruppo"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/circoscrizioni": {
+            "get": {
+                "summary": "Elenca circoscrizioni",
+                "description": "Elenco delle circoscrizioni.\n",
+                "parameters": [
+                    {
+                        "name": "istituzione",
+                        "in": "query",
+                        "description": "Istituzione.",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Un array of politici",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Circoscrizione"
                             }
                         }
                     },
@@ -91,7 +182,7 @@
         }
     },
     "definitions": {
-        "Politician": {
+        "Politico": {
             "type": "object",
             "properties": {
                 "nome": {
@@ -119,30 +210,16 @@
             }
         },
         "Dichiarazione": {
-            "type": "object",
-            "properties": {
-                "anno": {
-                    "type": "integer",
-                    "format": "int32",
-                    "description": "anno della dichiarazione"
-                },
-                "istituzine": {
-                    "type": "string",
-                    "description": "istituzione"
-                },
-                "gruppo_acronym": {
-                    "type": "string",
-                    "description": "gruppo di appartenenza"
-                },
-                "circoscrizione": {
-                    "type": "string",
-                    "description": "circoscrizione di elezione"
-                },
-                "dichiarazione": {
-                    "type": "string",
-                    "description": "link alla dichiarazione completa"
-                }
-            }
+            "type": "object"
+        },
+        "Istituzione": {
+            "type": "object"
+        },
+        "Gruppo": {
+            "type": "object"
+        },
+        "Circoscrizione": {
+            "type": "object"
         },
         "Error": {
             "type": "object",
