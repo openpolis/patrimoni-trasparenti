@@ -2,7 +2,7 @@
 
 angular.module('PatrimoniTrasparenti', ['ngRoute', 'ngSanitize', 'ui.autocomplete'])
   .config(function(DeclarationsProvider){
-    DeclarationsProvider.setEndPoint('//patrimoni.staging.openpolis.it/api');
+    DeclarationsProvider.setEndPoint('//patrimoni.openpolis.it/api');
   })
   // Dummy filter to configure minidossier link
   .filter('minid_link', function() {
