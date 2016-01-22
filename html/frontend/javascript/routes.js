@@ -1,16 +1,25 @@
 angular.module('PatrimoniTrasparenti')
   .config(function($routeProvider){
     $routeProvider.when('/', {
-    templateUrl: '/templates/pages/home/index.html'
+    templateUrl: '/templates/pages/home/index.html',
+    controller: function($scope, $location, $window) {
+      $window.ga('send', 'pageview', { page: $location.url()});
+    }
   })
     .when('/faq', {
     templateUrl: '/templates/pages/faq/index.html'
   })
     .when('/progetto', {
-    templateUrl: '/templates/pages/progetto/index.html'
+    templateUrl: '/templates/pages/progetto/index.html',
+    controller: function($scope, $location, $window) {
+      $window.ga('send', 'pageview', { page: $location.url()});
+    }
   })
     .when('/minidossier', {
-    templateUrl: '/templates/pages/minidossier/index.html'
+    templateUrl: '/templates/pages/minidossier/index.html',
+    controller: function($scope, $location, $window) {
+      $window.ga('send', 'pageview', { page: $location.url()});
+    }
   })
     .when('/opendata', {
     templateUrl: '/templates/pages/opendata/index.html'
