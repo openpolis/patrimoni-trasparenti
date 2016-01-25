@@ -21,6 +21,10 @@ Import notes files::
 
         incomes-importer -client-secret <google-privete-id> -parse-notes
 
+Update political data from  http://api3.openpolis.it (these shoud be a cronjob)::
+
+        $ ./bin/incomes-updater
+
 
 ``incomes-rest`` system daemon that exposes private and public REST APIs for *incomes service*.
 
@@ -56,15 +60,10 @@ and point your browser to ``http://localhost:8001/pkg/`` and choose desider pack
 (Re)generate RESTapi swagger docs
 ---------------------------------
 
-With github.com/yvasiyarov/swagger installed::
+Generate the dos using importing end exportingi doc in json format (``swagger.json``).
 
-        $ cd cmd/rest-docs
-        $ swagger -apiPackage="bitbucket.org/eraclitux/op-incomes" -mainApiFile="bitbucket.org/eraclitux/op-incomes/cmd/incomes-rest/main.go"
-        $ go build
+Put the file in ``html/api-docs/``
 
-Test it with::
-
-        $ ./rest-docs -api "http://openpatrimoni.deppsviluppo.org"
 
 Dump data for OpenData page
 ---------------------------
