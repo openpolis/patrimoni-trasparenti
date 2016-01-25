@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  var apiTarget = 'http://patrimoni.staging.openpolis.it/api/p/'; // main API endpoint
+  var apiTarget = 'http://patrimoni.openpolis.it/api/p/'; // main API endpoint
 
   var app = angular.module('dossierApp', ['ng-admin']);
 
