@@ -240,9 +240,59 @@ func updateSingle(ep string, year int) {
 	}
 }
 
+// ClearPoliticalData unset political data for all documents.
+// Necessary before updating political data.
+func ClearPoliticalData() error {
+	// MongoDB query
+	// db.all.update({},{$unset: {incarichi:1}},false,true)
+	session := mSession.Copy()
+	defer session.Close()
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	unsetData := bson.M{"incarichi": 1}
+	uQuery := bson.M{
+		"$unset": unsetData,
+	}
+	fQuery := bson.M{}
+	_, err := coll.UpdateAll(fQuery, uQuery)
+	if err != nil {
+		ErrorLogger.Println("dropping data", err)
+		return err
+	}
+	InfoLogger.Println("politial data dropped")
+	return nil
+}
+
+func getYearsFromMongo() []int {
+	years := make([]int, 0)
+	session := mSession.Copy()
+	defer session.Close()
+	coll := session.DB(incomes.DeclarationsDb).C(incomes.DeclarationsColl)
+	results := []bson.M{}
+	pipe := coll.Pipe([]bson.M{
+		{"$sort": bson.M{"anno_dichiarazione": 1}},
+		{"$group": bson.M{
+			"_id": "$anno_dichiarazione",
+		},
+		},
+	})
+	iter := pipe.Iter()
+	err := iter.All(&results)
+	if err != nil {
+		ErrorLogger.Println("getting remote data", err)
+		return nil
+	}
+	for _, v := range results {
+		if a, ok := v["_id"].(int); ok {
+			years = append(years, a)
+		}
+	}
+	return years
+}
+
 func updateAll() {
-	// FIXME get from MongoDB
-	years := []int{2013, 2014}
+	years := getYearsFromMongo()
+	ClearPoliticalData()
+	InfoLogger.Println("updating years:", years)
 	for _, y := range years {
 		updateSingle("camera", y)
 		updateSingle("senato", y)
