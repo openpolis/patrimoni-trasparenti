@@ -252,34 +252,34 @@
                         <tbody>
                         <tr ng-repeat="voce in scheda.beni_immobili| filter:{$:'fabbricato'}">
                             <td>
-                                {{voce.persona|no_data}}
+                                {{voce.persona|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.natura_diritto|no_data}}
+                                {{voce.natura_diritto|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.provincia|no_data}}
+                                {{voce.provincia|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.comune|no_data}}
+                                {{voce.comune|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.rendita_catastale|no_data}}
+                                {{voce.rendita_catastale|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.codice_utilizzo|no_data}}
+                                {{voce.codice_utilizzo|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.categoria_catastale|no_data}}
+                                {{voce.categoria_catastale|capitalize:all|no_data}}
                             </td>
                             <td ng-show="voce.natura_diritto == 'proprietà'">
                                 100%
                             </td>
                             <td ng-show="voce.natura_diritto != 'proprietà'">
-                                {{voce.quota_possesso|no_data}}
+                                {{voce.quota_possesso|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.annotazioni|no_data}}
+                                {{voce.annotazioni|capitalize:all|no_data}}
                             </td>
                         </tr>
                         </tbody>
@@ -310,31 +310,31 @@
                         <tbody>
                         <tr ng-repeat="voce in scheda.beni_immobili| filter:{$:'terreno'}">
                             <td>
-                                {{voce.persona|no_data}}
+                                {{voce.persona|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.natura_diritto|no_data}}
+                                {{voce.natura_diritto|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.provincia|no_data}}
+                                {{voce.provincia|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.comune|no_data}}
+                                {{voce.comune|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.reddito_dominicale|no_data}}
+                                {{voce.reddito_dominicale|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.reddito_agrario|no_data}}
+                                {{voce.reddito_agrario|capitalize:all|no_data}}
                             </td>
                             <td ng-show="voce.natura_diritto == 'proprietà'">
                                 100%
                             </td>
                             <td ng-show="voce.natura_diritto != 'proprietà'">
-                                {{voce.quota_possesso|no_data}}
+                                {{voce.quota_possesso|capitalize:all|no_data}}
                             </td>
                             <td>
-                                {{voce.annotazioni|no_data}}
+                                {{voce.annotazioni|capitalize:all|no_data}}
                             </td>
                         </tr>
                         </tbody>
@@ -370,7 +370,7 @@
                         <tbody>
                         <tr ng-repeat="voce in scheda.beni_mobili">
                             <td ng-repeat="(k, v) in voce">
-                                {{v|no_data}}
+                                {{v|capitalize:all|no_data}}
                             </td>
                         </tr>
                         </tbody>
@@ -407,7 +407,7 @@
                         <tbody>
                         <tr ng-repeat="voce in scheda.partecipazioni_soc">
                             <td ng-repeat="(k, v) in voce">
-                              {{v|no_data}}
+                              {{v|capitalize:'first'|no_data}}
                             </td>
                         </tr>
                         </tbody>
@@ -444,7 +444,7 @@
                         <tbody>
                         <tr ng-repeat="voce in scheda.amministrazioni_soc">
                             <td ng-repeat="(k, v) in voce">
-                                {{v|no_data}}
+                                {{v|capitalize:'first'|no_data}}
                             </td>
                         </tr>
                         </tbody>
@@ -476,8 +476,8 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="voce in scheda.contributi_elettorali">
-                            <td>{{voce.fonte|no_data}}</td>
-                            <td>{{voce.tipo_elezione|no_data}}</td>
+                            <td>{{voce.fonte|capitalize:'first'|no_data}}</td>
+                            <td>{{voce.tipo_elezione|capitalize:'first'|no_data}}</td>
                             <td>{{voce.importo|currency:"€"|no_data}}</td>
                         </tr>
                         </tbody>
@@ -516,8 +516,8 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="voce in scheda.spese_elettorali">
-                            <td>{{voce.fonte|no_data}}</td>
-                            <td>{{voce.tipo_elezione|no_data}}</td>
+                            <td>{{voce.fonte|capitalize:'first'|no_data}}</td>
+                            <td>{{voce.tipo_elezione|capitalize:'first'|no_data}}</td>
                             <td>{{voce.importo|currency:"€"|no_data}}</td>
                         </tr>
                         </tbody>

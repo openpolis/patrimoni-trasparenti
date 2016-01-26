@@ -15,6 +15,9 @@ angular.module('PatrimoniTrasparenti', ['ngRoute', 'ngSanitize', 'ui.autocomplet
       if (!input) {
         return input;
       }
+      if (!isNaN(input)) {
+        return input;
+      }
       format = format || 'all';
       if (format === 'first') {
         // Capitalize the first letter of a sentence
