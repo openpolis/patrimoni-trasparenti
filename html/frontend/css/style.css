@@ -489,6 +489,20 @@ footer strong {
 	font-weight: bold;
 }
 
+.centered-text {
+  text-align: center;
+}
+
+
+.single-card-project a.titolo-nero {
+  color:#000;
+}
+
+.single-card-project a.titolo-verde-bold {
+	font-weight: bold;
+  color: #35A578;
+}
+
 /* Sticky footer
 -------------------------------------------------- */
 @media screen and (min-width: 990px) {
