@@ -255,31 +255,31 @@
                                 {{voce.persona|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.natura_diritto|capitalize:all|no_data}}
+                                {{voce.natura_diritto|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.provincia|capitalize:all|no_data}}
+                                {{voce.provincia|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.comune|capitalize:all|no_data}}
+                                {{voce.comune|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.rendita_catastale|capitalize:all|no_data}}
+                                {{voce.rendita_catastale|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.codice_utilizzo|capitalize:all|no_data}}
+                                {{voce.codice_utilizzo|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.categoria_catastale|capitalize:all|no_data}}
+                                {{voce.categoria_catastale|capitalize:'first'|no_data}}
                             </td>
                             <td ng-show="voce.natura_diritto == 'proprietà'">
                                 100%
                             </td>
                             <td ng-show="voce.natura_diritto != 'proprietà'">
-                                {{voce.quota_possesso|capitalize:all|no_data}}
+                                {{voce.quota_possesso|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.annotazioni|capitalize:all|no_data}}
+                                {{voce.annotazioni|capitalize:'first'|no_data}}
                             </td>
                         </tr>
                         </tbody>
@@ -310,31 +310,31 @@
                         <tbody>
                         <tr ng-repeat="voce in scheda.beni_immobili| filter:{$:'terreno'}">
                             <td>
-                                {{voce.persona|capitalize:all|no_data}}
+                                {{voce.persona|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.natura_diritto|capitalize:all|no_data}}
+                                {{voce.natura_diritto|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.provincia|capitalize:all|no_data}}
+                                {{voce.provincia|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.comune|capitalize:all|no_data}}
+                                {{voce.comune|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.reddito_dominicale|capitalize:all|no_data}}
+                                {{voce.reddito_dominicale|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.reddito_agrario|capitalize:all|no_data}}
+                                {{voce.reddito_agrario|capitalize:'first'|no_data}}
                             </td>
                             <td ng-show="voce.natura_diritto == 'proprietà'">
                                 100%
                             </td>
                             <td ng-show="voce.natura_diritto != 'proprietà'">
-                                {{voce.quota_possesso|capitalize:all|no_data}}
+                                {{voce.quota_possesso|capitalize:'first'|no_data}}
                             </td>
                             <td>
-                                {{voce.annotazioni|capitalize:all|no_data}}
+                                {{voce.annotazioni|capitalize:'first'|no_data}}
                             </td>
                         </tr>
                         </tbody>
@@ -370,7 +370,7 @@
                         <tbody>
                         <tr ng-repeat="voce in scheda.beni_mobili">
                             <td ng-repeat="(k, v) in voce">
-                                {{v|capitalize:all|no_data}}
+                                {{v|capitalize:'first'|no_data}}
                             </td>
                         </tr>
                         </tbody>
