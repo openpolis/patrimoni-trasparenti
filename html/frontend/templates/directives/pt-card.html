@@ -457,13 +457,12 @@
                     -->
 
                     <div ng-show="scheda.totale_contributi_elettorali" id="contributi-elettorali">
-                        <h3>Contributi elettorali {{scheda.anno_dichiarazione}}:
+                        <h3>Contributi elettorali {{scheda.anno_dichiarazione}}
                           <a href="" 
                             custom-popover popover-title="Contributi elettorali" 
                             popover-html="Le risorse a disposizione dei singoli candidati per svolgere la propria campagna elettorale.<br><a href='/#/progetto#faqcontributi'>Maggiori info.</a>"
                             popover-placement="bottom" popover-label="?">
                           </a>
-                            {{scheda.totale_contributi_elettorali|currency:"€"}}
                         </h3>
                     </div>
                     <table ng-show="scheda.totale_contributi_elettorali" class="table table-striped">
@@ -497,13 +496,12 @@
                     -->
 
                     <div ng-show="scheda.totale_spese_elettorali" id="spese-elettorali">
-                        <h3>Spese elettorali {{scheda.anno_dichiarazione}}:
+                        <h3>Spese elettorali {{scheda.anno_dichiarazione}}
                           <a href="" 
                             custom-popover popover-title="Spese elettorali" 
                             popover-html="I soldi spesi dai singoli candidati per svolgere la propria campagna elettorale.<br><a href='/#/progetto#faqspese'>Maggiori info.</a>"
                             popover-placement="bottom" popover-label="?">
                           </a>
-                            {{scheda.totale_spese_elettorali|currency:"€"}}
                         </h3>
                     </div>
                     <table ng-show="scheda.totale_spese_elettorali" class="table table-striped">
