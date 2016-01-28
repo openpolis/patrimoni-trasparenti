@@ -1,0 +1,15 @@
+/var/log/incomes-rest/*.log {  
+        daily  
+        missingok  
+        rotate 7  
+        compress  
+        delaycompress  
+        notifempty  
+        create 0640 incomes incomes  
+        prerotate  
+                service incomes-rest stop  
+        endscript  
+        postrotate  
+                service incomes-rest start  
+        endscript  
+}  
