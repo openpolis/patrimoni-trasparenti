@@ -28,7 +28,7 @@ angular.module('PatrimoniTrasparenti')
       $scope.lastSpeseYear = 0;
       for (var i in $scope.schede) {
         scheda = $scope.schede[i];
-        if (scheda["totale_spese_elettorali"] != 0) {
+        if (scheda["dichiarazione_elettorale"] != false) {
           $scope.lastSpeseYear = scheda["anno_dichiarazione"];
           $scope.lastSpeseYearIndex = i;
         };
@@ -44,7 +44,7 @@ angular.module('PatrimoniTrasparenti')
       $scope.lastContributiYear = 0;
       for (var i in $scope.schede) {
         scheda = $scope.schede[i];
-        if (scheda["totale_contributi_elettorali"] != 0) {
+        if (scheda["dichiarazione_elettorale"] != false) {
           $scope.lastContributiYear = scheda["anno_dichiarazione"];
           $scope.lastContributiYearIndex = i;
         };

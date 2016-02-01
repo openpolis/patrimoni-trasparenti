@@ -161,17 +161,17 @@
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p ng-show="scheda.totale_spese_elettorali">
+                            <p ng-show="scheda.dichiarazione_elettorale">
                               <a href="" ng-click="scrollTo('spese-elettorali')">Spese elettorali: <b>{{scheda.totale_spese_elettorali|currency:"€"}}</b></a>
                             </p>
-                            <p ng-hide="scheda.totale_spese_elettorali">
+                            <p ng-hide="scheda.dichiarazione_elettorale">
                               <a ng-hide="getLastSpeseYear()=='Nessuna voce'" ng-click="selectAndScroll(lastSpeseYearIndex, 'spese-elettorali')" href="" >Spese elettorali: <b>{{getLastSpeseYear()}}</b></a>
                               <span ng-show="getLastSpeseYear()=='Nessuna voce'" class="no-contrib-expense">Spese elettorali: <b>{{getLastSpeseYear()}}</b></span>
                             </p>
-                            <p ng-show="scheda.totale_contributi_elettorali">
+                            <p ng-show="scheda.dichiarazione_elettorale">
                               <a href="" ng-click="scrollTo('contributi-elettorali')">Contributi elettorali: <b>{{scheda.totale_contributi_elettorali|currency:"€"}}</b></a>
                             </p>
-                            <p ng-hide="scheda.totale_contributi_elettorali">
+                            <p ng-hide="scheda.dichiarazione_elettorale">
                               <a ng-hide="getLastContributiYear()=='Nessuna voce'" href="" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')">Contributi elettorali: <b>{{getLastContributiYear()}}</b></a>
                               <span ng-show="getLastContributiYear()=='Nessuna voce'" ng-click="selectAndScroll(lastContributiYearIndex, 'contributi-elettorali')" class="no-contrib-expense" >Contributi elettorali: <b>{{getLastContributiYear()}}</b></span>
                             </p>
