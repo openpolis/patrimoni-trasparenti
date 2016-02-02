@@ -5,7 +5,7 @@
         "description": "Patrimoni trasparenti API",
         "version": "0.1.0"
     },
-    "host": "patrimoni.staging.openpolis.it",
+    "host": "patrimoni.openpolis.it",
     "schemes": [
         "http"
     ],
