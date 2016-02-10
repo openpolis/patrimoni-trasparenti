@@ -16,7 +16,8 @@ angular.module("PatrimoniTrasparenti")
                       item = {
                           title: $this.find("title").text(),
                           link: $this.find("link").text(),
-                          description: $this.find("description").text(),
+                          // not my coding style, js forces me to do this, sorry :(
+                          description: $($this.find('content\\:encoded').text()).text().split('\n')[0],
                           pubDate: new Date($this.find("pubDate").text()),
                           author: $this.find("author").text()
                   }
