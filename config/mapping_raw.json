@@ -8,22 +8,42 @@
               },
               "citta_sede" : {
                 "type" : "string",
-		"index" : "not_analyzed"
+                "fields": {
+                  "raw": { 
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               },
               "denominazione" : {
                 "type" : "string",
-		"index" : "not_analyzed"
+		"fields": {
+                  "raw": { 
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               },
               "natura_incarico" : {
                 "type" : "string",
-		"index" : "not_analyzed"
+                "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               },
               "persona" : {
                 "type" : "string"
               },
               "provincia_sede" : {
                 "type" : "string",
-		"index" : "not_analyzed"
+                "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               }
             }
           },
@@ -37,7 +57,12 @@
               },
               "comune" : {
                 "type" : "string",
-		"index" : "not_analyzed"
+                "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               },
               "descrizione" : {
                 "type" : "string"
@@ -83,11 +108,21 @@
           },
           "comune_nascita" : {
             "type" : "string",
-            "index" : "not_analyzed"
+            "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+            }
           },
           "comune_residenza" : {
             "type" : "string",
-            "index" : "not_analyzed"
+            "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+            }
           },
           "contributi_elettorali" : {
             "properties" : {
@@ -96,7 +131,12 @@
               },
               "fonte" : {
                 "type" : "string",
-                "index" : "not_analyzed"
+                "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               },
               "importo" : {
                 "type" : "long"
@@ -129,11 +169,21 @@
               },
               "citta_sede" : {
                 "type" : "string",
-		"index" : "not_analyzed"
+                "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               },
               "denominazione" : {
                 "type" : "string",
-		"index" : "not_analyzed"
+                "fields": {
+                  "raw": {
+                    "type":  "string",
+                     "index": "not_analyzed"
+                  }
+                }
               },
               "numero_azioni_quote" : {
                 "type" : "string",
