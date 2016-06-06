@@ -92,7 +92,7 @@ Import data from MongoDB
 
 Use transporter (https://github.com/compose/transporter)::
 
-        ./transporter run --config transporter-conf/config.yaml ./transporter-conf/application.js
+        ./transporter run --config patrimoni-trasparenti/transporter-conf/config.yaml ./patrimoni-trasparenti/transporter-conf/application.js
 
 Change indexing parameters
 ==========================
