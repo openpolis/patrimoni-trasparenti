@@ -58,6 +58,9 @@ angular.module('PatrimoniTrasparenti')
     Declarations.getFor($scope.opId)
       .success(function(schede){
         $scope.spinner = false;
+        if (schede[0].anno_dichiarazione === 2015) {
+            schede.shift();;
+        }
         $scope.schede = schede;
         $scope.scheda = schede[0];
       })
