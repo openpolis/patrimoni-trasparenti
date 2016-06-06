@@ -5,16 +5,14 @@
 #   pid: "something-static"
 nodes:
   localmongo:
-    type: mongo
+    type: mongodb
     uri: mongodb://localhost/declaration
-    namespace: declaration.parliamentarians
-    debug: true
   es:
     type: elasticsearch
     uri: http://localhost:9200
-  locales:
-    type: elasticsearch
-    uri: http://localhost:9200
+#  locales:
+#    type: elasticsearch
+#    uri: http://localhost:9200
   stdout:
     type: file
     uri: stdout://
